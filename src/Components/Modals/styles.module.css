@@ -1,0 +1,26 @@
+.confirmDeleteHeader {
+  background-color: var(--primary);
+  color: var(--light);
+}
+
+.confirmDeleteBody {
+  width: 100%;
+  text-align: center;
+  padding: 2em;
+}
+
+.loadingContainer {
+  width: 100%;
+  text-align: center;
+  padding: 2em;
+}
+
+.loadingHeader {
+  background-color: var(--primary);
+  color: var(--light);
+}
+
+.loadingImg {
+  display: block;
+  margin: 0 auto;
+}
