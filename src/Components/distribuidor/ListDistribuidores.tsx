@@ -24,9 +24,7 @@ import { IDLE, LOADING } from 'Store/constants';
 export default function ListDistribuidores() {
   const history = useHistory();
   const dispatch = useDispatch();
-  const { status, error, data: distribuidores } = useSelector(
-    selDistribuidores
-  );
+  const { status, error, distribuidores } = useSelector(selDistribuidores);
 
   const { confirmDelete } = useModals();
 

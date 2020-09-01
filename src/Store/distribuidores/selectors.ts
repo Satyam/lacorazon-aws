@@ -15,7 +15,16 @@ export const selDistribuidores = createSelector(
   selDistribuidoresStatus,
   selDistribuidoresError,
   selDistribuidoresData,
-  (status, error, data) => ({ status, error, data })
+  (status, error, distribuidores) => ({ status, error, distribuidores })
 );
 
-export const selDistribuidorData = selectors.selectById;
+export const selDistribuidoresHash = selectors.selectEntities;
+
+// export const selDistribuidorData = selectors.selectById;
+
+// export const selDistribuidor = createSelector(
+//   selDistribuidoresStatus,
+//   selDistribuidoresError,
+//   selDistribuidorData,
+//   (status, error, distribuidor) => ({ status, error, distribuidor })
+// )
