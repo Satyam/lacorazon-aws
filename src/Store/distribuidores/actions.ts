@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-export const listDistribuidores = createAsyncThunk<Array<DistribuidorType>>(
-  'listDistribuidores',
+export const loadDistribuidores = createAsyncThunk<Array<DistribuidorType>>(
+  'loadDistribuidores',
   async (_, { requestId }) =>
     import('./data').then((data) => data.distribuidores)
 );
