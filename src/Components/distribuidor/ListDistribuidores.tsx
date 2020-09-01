@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import { Table, ButtonGroup } from 'reactstrap';
 
 import {
@@ -15,7 +15,10 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import styles from './styles.module.css';
 import { selDistribuidores } from 'Store/distribuidores/selectors';
-import { listDistribuidores } from 'Store/distribuidores/actions';
+import {
+  listDistribuidores,
+  deleteDistribuidor,
+} from 'Store/distribuidores/actions';
 import { IDLE, LOADING } from 'Store/constants';
 
 export default function ListDistribuidores() {
@@ -25,7 +28,6 @@ export default function ListDistribuidores() {
     selDistribuidores
   );
 
-  // const deleteDistribuidor = useDeleteDistribuidor();
   const { confirmDelete } = useModals();
 
   useEffect(() => {
@@ -34,20 +36,12 @@ export default function ListDistribuidores() {
 
   if (status === LOADING) return <Loading>Cargando distribuidores</Loading>;
 
-  const onEdit: React.MouseEventHandler<HTMLButtonElement> = (ev) => {
-    ev.stopPropagation();
-    history.push(`/distribuidor/edit/${ev.currentTarget.dataset.id}`);
-  };
-  const onShow: React.MouseEventHandler<HTMLTableCellElement> = (ev) => {
-    ev.stopPropagation();
-    history.push(`/distribuidor/${ev.currentTarget.dataset.id}`);
-  };
   const onDelete: React.MouseEventHandler<HTMLButtonElement> = (ev) => {
+    const { nombre, id } = ev.currentTarget.dataset;
+    if (!id) return;
     ev.stopPropagation();
-    const { nombre, idDistribuidor } = ev.currentTarget.dataset;
-    confirmDelete(
-      `al distribuidor ${nombre}`,
-      () => null //deleteDistribuidor(id as ID)
+    confirmDelete(`al distribuidor ${nombre}`, () =>
+      dispatch(deleteDistribuidor(id))
     );
   };
   const onAdd: React.MouseEventHandler<HTMLButtonElement> = (ev) => {
@@ -58,13 +52,13 @@ export default function ListDistribuidores() {
     const idDistribuidor = distribuidor.idDistribuidor;
     return (
       <tr key={idDistribuidor}>
-        <td
-          onClick={onShow}
-          data-id={idDistribuidor}
-          className="link"
-          title={`Ver detalle:\n  ${distribuidor.nombre}`}
-        >
-          {distribuidor.nombre}
+        <td>
+          <Link
+            title={`Ver detalle:\n  ${distribuidor.nombre}`}
+            to={`/distribuidor/${idDistribuidor}`}
+          >
+            {distribuidor.nombre}
+          </Link>
         </td>
         <td>{distribuidor.contacto}</td>
         <td>{distribuidor.telefono}</td>
@@ -80,7 +74,10 @@ export default function ListDistribuidores() {
         <td align="right">{distribuidor.existencias}</td>
         <td align="center">
           <ButtonGroup size="sm">
-            <ButtonIconEdit outline onClick={onEdit} data-id={idDistribuidor} />
+            <ButtonIconEdit
+              outline
+              href={`/distribuidor/edit/${idDistribuidor}`}
+            />
             <ButtonIconDelete
               outline
               onClick={onDelete}

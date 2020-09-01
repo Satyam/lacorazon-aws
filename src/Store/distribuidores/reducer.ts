@@ -2,7 +2,7 @@ import { createReducer } from '@reduxjs/toolkit';
 import { IDLE, LOADING, LOADED, ThunkActionState } from 'Store/constants';
 import adapter from './adapter';
 
-import { listDistribuidores } from './actions';
+import { listDistribuidores, deleteDistribuidor } from './actions';
 
 const reducer = createReducer(
   adapter.getInitialState<ThunkActionState>({
@@ -20,6 +20,19 @@ const reducer = createReducer(
     [listDistribuidores.fulfilled.type]: (state, action) => {
       state.status = LOADED;
       adapter.setAll(state, action);
+    },
+    // deleteDistribuidor
+    [deleteDistribuidor.pending.type]: (state, action) => {
+      state.status = LOADING;
+      state.error = undefined;
+    },
+    [deleteDistribuidor.rejected.type]: (state, action) => {
+      state.status = IDLE;
+      state.error = action.error;
+    },
+    [deleteDistribuidor.fulfilled.type]: (state, action) => {
+      state.status = LOADED;
+      adapter.removeOne(state, action);
     },
   }
 );
