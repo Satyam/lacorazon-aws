@@ -16,11 +16,14 @@ export const useDistribuidores = () => {
 
 export const useDistribuidor = (idDistribuidor: ID) => {
   const dispatch = useDispatch();
-  const { status, error } = useSelector(selDistribuidores);
+  const { status, error, entities } = useSelector(selDistribuidoresHash);
 
   useEffect(() => {
     if (status === IDLE) dispatch(loadDistribuidores());
   }, [dispatch, status]);
-  const distribuidor = useSelector(selDistribuidoresHash)[idDistribuidor];
-  return { loading: status === LOADING, error, distribuidor };
+  return {
+    loading: status === LOADING,
+    error,
+    distribuidor: entities[idDistribuidor],
+  };
 };

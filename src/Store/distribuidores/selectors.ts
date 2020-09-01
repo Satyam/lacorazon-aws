@@ -5,7 +5,6 @@ const selectors = adapter.getSelectors<RootState>(
   (state) => state.distribuidores
 );
 
-export const selDistribuidoresData = selectors.selectAll;
 export const selDistribuidoresStatus = (state: RootState) =>
   state.distribuidores.status;
 export const selDistribuidoresError = (state: RootState) =>
@@ -14,17 +13,13 @@ export const selDistribuidoresError = (state: RootState) =>
 export const selDistribuidores = createSelector(
   selDistribuidoresStatus,
   selDistribuidoresError,
-  selDistribuidoresData,
+  selectors.selectAll,
   (status, error, distribuidores) => ({ status, error, distribuidores })
 );
 
-export const selDistribuidoresHash = selectors.selectEntities;
-
-// export const selDistribuidorData = selectors.selectById;
-
-// export const selDistribuidor = createSelector(
-//   selDistribuidoresStatus,
-//   selDistribuidoresError,
-//   selDistribuidorData,
-//   (status, error, distribuidor) => ({ status, error, distribuidor })
-// )
+export const selDistribuidoresHash = createSelector(
+  selDistribuidoresStatus,
+  selDistribuidoresError,
+  selectors.selectEntities,
+  (status, error, entities) => ({ status, error, entities })
+);
