@@ -1,30 +1,17 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Alert } from 'reactstrap';
 import { useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 
 import { LabeledText } from 'Components/Form';
 import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
-import {
-  selDistribuidores,
-  selDistribuidoresHash,
-} from 'Store/distribuidores/selectors';
-import { listDistribuidores } from 'Store/distribuidores/actions';
-import { IDLE, LOADING } from 'Store/constants';
+import { useDistribuidor } from 'Store/distribuidores/hooks';
 
 export default function ShowDistribuidor() {
-  const dispatch = useDispatch();
   const { idDistribuidor } = useParams<{ idDistribuidor: ID }>();
-  const { status, error } = useSelector(selDistribuidores);
+  const { loading, error, distribuidor } = useDistribuidor(idDistribuidor);
 
-  useEffect(() => {
-    if (status === IDLE) dispatch(listDistribuidores());
-  }, [dispatch, status]);
-
-  const distribuidor = useSelector(selDistribuidoresHash)[idDistribuidor];
-
-  if (status === LOADING) return <Loading>Cargando distribuidor</Loading>;
+  if (loading) return <Loading>Cargando distribuidor</Loading>;
 
   return (
     <Page

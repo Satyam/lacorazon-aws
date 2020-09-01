@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useHistory, Link } from 'react-router-dom';
 import { Table, ButtonGroup } from 'reactstrap';
 
@@ -11,28 +11,20 @@ import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
 import { useModals } from 'Providers/Modals';
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import styles from './styles.module.css';
-import { selDistribuidores } from 'Store/distribuidores/selectors';
-import {
-  listDistribuidores,
-  deleteDistribuidor,
-} from 'Store/distribuidores/actions';
-import { IDLE, LOADING } from 'Store/constants';
+import { useDistribuidores } from 'Store/distribuidores/hooks';
+import { deleteDistribuidor } from 'Store/distribuidores/actions';
 
 export default function ListDistribuidores() {
   const history = useHistory();
   const dispatch = useDispatch();
-  const { status, error, distribuidores } = useSelector(selDistribuidores);
+  const { loading, error, distribuidores } = useDistribuidores();
 
   const { confirmDelete } = useModals();
 
-  useEffect(() => {
-    if (status === IDLE) dispatch(listDistribuidores());
-  }, [dispatch, status]);
-
-  if (status === LOADING) return <Loading>Cargando distribuidores</Loading>;
+  if (loading) return <Loading>Cargando distribuidores</Loading>;
 
   const onDelete: React.MouseEventHandler<HTMLButtonElement> = (ev) => {
     const { nombre, id } = ev.currentTarget.dataset;
