@@ -2,7 +2,6 @@ import React from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { Alert, Form } from 'reactstrap';
 import * as yup from 'yup';
-import type { Schema } from 'yup';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers';
 
@@ -48,7 +47,7 @@ const EditDistribuidor2: React.FC<{
   const { openLoading, closeLoading, confirmDelete } = useModals();
 
   const methods = useForm<ShortDistribuidor>({
-    defaultValues: distribuidor,
+    defaultValues: { ...distribuidorSchema.default(), ...distribuidor },
     resolver: yupResolver(distribuidorSchema),
   });
   const onDeleteClick: React.MouseEventHandler<HTMLButtonElement> = (ev) => {
@@ -141,8 +140,6 @@ export default function EditDistribuidor() {
 
   if (loading) return <Loading>Cargando distribuidor</Loading>;
 
-  // delete distribuidor?.idDistribuidor
-  console.log(idDistribuidor, distribuidor);
   return (
     <Page
       title={`Distribuidor - ${distribuidor ? distribuidor.nombre : 'nuevo'}`}
@@ -154,11 +151,7 @@ export default function EditDistribuidor() {
       ) : (
         <EditDistribuidor2
           idDistribuidor={idDistribuidor}
-          distribuidor={
-            idDistribuidor && distribuidor
-              ? (distribuidor as Omit<DistribuidorType, 'idDistribuidor'>)
-              : distribuidorSchema.default()
-          }
+          distribuidor={distribuidor}
         />
       )}
     </Page>
