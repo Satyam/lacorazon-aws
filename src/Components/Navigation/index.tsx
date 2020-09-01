@@ -32,7 +32,7 @@ export function Navigation() {
       <Navbar expand="md" light className={styles.navbar}>
         <NavbarBrand href="/" className={styles.navbrand}>
           <img
-            src={process.env.PUBLIC_URL + 'lacorazon.png'}
+            src={process.env.PUBLIC_URL + '/lacorazon.png'}
             alt="La Corazón"
           />
           La Corazón
