@@ -14,11 +14,34 @@ import {
 } from 'react-icons/fa';
 
 import styles from './styles.module.css';
+import { Link } from 'react-router-dom';
 
 export type MyButtonProps = {
   color?: BootstrapColor;
+  href?: string;
 } & Omit<ButtonProps, 'color'>;
+
 const cx = classNames.bind(styles);
+
+export const MyButton: React.FC<MyButtonProps & { Icon: React.ReactType }> = ({
+  Icon,
+  href,
+  children,
+  color = 'primary',
+  title = 'Agregar',
+  ...props
+}) => (
+  <Button
+    tag={href ? Link : undefined}
+    color={color}
+    title={title}
+    {...props}
+    to={href}
+  >
+    <Icon />
+    {children && <span className={styles.label}>{children}</span>}
+  </Button>
+);
 
 export const Icon: React.FC<{
   Component: React.ReactType;
@@ -58,10 +81,9 @@ export const ButtonIconAdd: React.FC<MyButtonProps> = ({
   title = 'Agregar',
   ...props
 }) => (
-  <Button color={color} title={title} {...props}>
-    <FaPlusCircle />
-    <span className={styles.label}>{children}</span>
-  </Button>
+  <MyButton Icon={FaPlusCircle} color={color} title={title} {...props}>
+    {children}
+  </MyButton>
 );
 
 export const IconDelete: React.FC<{ color?: BootstrapColor }> = ({
@@ -75,10 +97,9 @@ export const ButtonIconDelete: React.FC<MyButtonProps> = ({
   title = 'Borrar',
   ...props
 }) => (
-  <Button color={color} title={title} {...props}>
-    <FaRegTrashAlt />
-    <span className={styles.label}>{children}</span>
-  </Button>
+  <MyButton Icon={FaRegTrashAlt} color={color} title={title} {...props}>
+    {children}
+  </MyButton>
 );
 
 export const IconEdit: React.FC<{ color?: BootstrapColor }> = ({
@@ -92,10 +113,9 @@ export const ButtonIconEdit: React.FC<MyButtonProps> = ({
   title = 'Modificar',
   ...props
 }) => (
-  <Button color={color} title={title} {...props}>
-    <FaRegEdit />
-    <span className={styles.label}>{children}</span>
-  </Button>
+  <MyButton Icon={FaRegEdit} color={color} title={title} {...props}>
+    {children}
+  </MyButton>
 );
 
 export const IconView: React.FC<{ color?: BootstrapColor }> = ({
@@ -109,10 +129,9 @@ export const ButtonIconView: React.FC<MyButtonProps> = ({
   title = 'Ver detalle',
   ...props
 }) => (
-  <Button color={color} title={title} {...props}>
-    <FaEye />
-    <span className={styles.label}>{children}</span>
-  </Button>
+  <MyButton Icon={FaEye} color={color} title={title} {...props}>
+    {children}
+  </MyButton>
 );
 
 export const IconCheck: React.FC<{ color?: BootstrapColor }> = ({
@@ -125,10 +144,9 @@ export const ButtonIconCheck: React.FC<MyButtonProps> = ({
   color = 'success',
   ...props
 }) => (
-  <Button color={color} {...props}>
-    <FaCheckCircle />
-    <span className={styles.label}>{children}</span>
-  </Button>
+  <MyButton Icon={FaCheckCircle} color={color} {...props}>
+    {children}
+  </MyButton>
 );
 
 export const IconNotCheck: React.FC<{ color?: BootstrapColor }> = ({
@@ -141,10 +159,9 @@ export const ButtonIconNotCheck: React.FC<MyButtonProps> = ({
   color = 'warning',
   ...props
 }) => (
-  <Button color={color} {...props}>
-    <FaTimesCircle />
-    <span className={styles.label}>{children}</span>
-  </Button>
+  <MyButton Icon={FaTimesCircle} color={color} {...props}>
+    {children}
+  </MyButton>
 );
 
 export const IconCalendar: React.FC<{ color?: BootstrapColor }> = ({
@@ -158,10 +175,9 @@ export const ButtonIconCalendar: React.FC<MyButtonProps> = ({
   title = 'Calendario',
   ...props
 }) => (
-  <Button color={color} title={title} {...props}>
-    <FaCalendarAlt />
-    <span className={styles.label}>{children}</span>
-  </Button>
+  <MyButton Icon={FaCalendarAlt} color={color} title={title} {...props}>
+    {children}
+  </MyButton>
 );
 
 export const IconWarning: React.FC<{ color?: BootstrapColor }> = ({
