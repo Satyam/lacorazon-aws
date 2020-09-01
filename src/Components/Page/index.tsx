@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Container, Row, Col } from 'reactstrap';
 // import { ApolloError } from '@apollo/client';
 
@@ -12,7 +12,9 @@ const Page: React.FC<{
   action?: React.ReactNode;
   error?: string;
 }> = ({ wide, children, title, heading, action, error }) => {
-  if (title) document.title = `La Corazón - ${title}`;
+  useEffect(() => {
+    if (title) document.title = `La Corazón - ${title}`;
+  }, [title]);
   return (
     <Container fluid>
       <Row>
