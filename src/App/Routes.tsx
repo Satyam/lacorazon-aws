@@ -5,7 +5,7 @@ import { Route, Switch } from 'react-router-dom';
 // import EditUser from 'Components/user/EditUser';
 // import ShowUser from 'Components/user/ShowUser';
 import Distribuidores from 'Components/distribuidor/ListDistribuidores';
-// import EditDistribuidor from 'Components/distribuidor/EditDistribuidor';
+import EditDistribuidor from 'Components/distribuidor/EditDistribuidor';
 import ShowDistribuidor from 'Components/distribuidor/ShowDistribuidor';
 // import ListVentas from 'Components/ventas/ListVentas';
 // import EditVenta from 'Components/ventas/EditVenta';
@@ -37,12 +37,12 @@ const Routes = () => (
       <Distribuidores />
     </Route>
     <Switch>
-      {/* <Route path="/distribuidor/new">
+      <Route path="/distribuidor/new">
         <EditDistribuidor />
       </Route>
-      <Route path="/distribuidor/edit/:id">
+      <Route path="/distribuidor/edit/:idDistribuidor">
         <EditDistribuidor />
-  </Route>*/}
+      </Route>
       <Route path="/distribuidor/:idDistribuidor">
         <ShowDistribuidor />
       </Route>
