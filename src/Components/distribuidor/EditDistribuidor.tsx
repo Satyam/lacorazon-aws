@@ -5,7 +5,7 @@ import { Alert, Form } from 'reactstrap';
 import * as yup from 'yup';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers';
-import { unwrapResult, SerializedError } from '@reduxjs/toolkit';
+import { unwrapResult } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
 
 // My own library imports
@@ -50,7 +50,7 @@ const EditDistribuidor2: React.FC<{
   const history = useHistory();
   const dispatch: AppDispatch = useDispatch();
   const { openLoading, closeLoading, confirmDelete } = useModals();
-  console.log('EditDistribuidor2', distribuidor);
+
   const methods = useForm<ShortDistribuidor>({
     defaultValues: distribuidorSchema.default(),
     resolver: yupResolver(distribuidorSchema),
@@ -60,16 +60,13 @@ const EditDistribuidor2: React.FC<{
     if (distribuidor) methods.reset(distribuidor);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [distribuidor]);
-  console.log('method values', methods.getValues());
+
   const onDeleteClick: React.MouseEventHandler<HTMLButtonElement> = (ev) => {
     ev.stopPropagation();
     confirmDelete(
       `al distribuidor ${distribuidor && distribuidor.nombre}`,
       async () => {
-        console.log(
-          'delete',
-          await dispatch(deleteDistribuidor(idDistribuidor))
-        );
+        await dispatch(deleteDistribuidor(idDistribuidor));
         history.replace('/distribuidores');
       }
     );
@@ -79,51 +76,34 @@ const EditDistribuidor2: React.FC<{
     values,
     formMethods
   ): Promise<void> => {
-    console.log(
-      'onSubmit: ',
-      methods.formState.isDirty,
-      idDistribuidor,
-      values,
-      methods.formState.dirtyFields
-    );
     if (idDistribuidor) {
       openLoading('Actualizando Distribuidor');
       if (methods.formState.isDirty) {
-        const changes: Partial<DistribuidorType> = Object.keys(
-          methods.formState.dirtyFields
-        ).reduce<Partial<DistribuidorType>>(
-          (cs, k) => ({
-            ...cs,
-            // @ts-ignore
-            [k]: values[k],
-          }),
-          {}
-        );
-        console.log(
-          'update',
-          await dispatch(
-            updateDistribuidor({ idDistribuidor, ...changes })
-          ).catch((err: SerializedError) => {
-            console.error('update error', err);
-            return { idDistribuidor: null };
-          })
-        );
-
-        closeLoading();
+        await dispatch(updateDistribuidor({ idDistribuidor, ...values }))
+          .then(unwrapResult)
+          .catch(() => {
+            methods.setError('nombre', {
+              type: 'duplicado',
+              message: 'Ese nombre ya existe',
+            });
+          });
       }
     } else {
       openLoading('Creando distribuidor');
-      const distr = await dispatch(
-        createDistribuidor({ ...values, idDistribuidor })
-      )
+      await dispatch(createDistribuidor({ ...values, idDistribuidor }))
         .then(unwrapResult)
-        .catch((err: SerializedError) => {
-          console.error(' create error', err);
-          return { idDistribuidor: null };
+        .then((distr) => {
+          history.replace(`/distribuidor/edit/${distr.idDistribuidor}`);
+          return distr;
+        })
+        .catch(() => {
+          methods.setError('nombre', {
+            type: 'duplicado',
+            message: 'Ese nombre ya existe',
+          });
         });
-      history.replace(`/distribuidor/edit/${distr.idDistribuidor}`);
-      closeLoading();
     }
+    closeLoading();
   };
 
   return (
@@ -153,12 +133,9 @@ const EditDistribuidor2: React.FC<{
 
 export default function EditDistribuidor() {
   const { idDistribuidor } = useParams<{ idDistribuidor: ID }>();
-  const { loading, error, distribuidor, status } = useDistribuidor(
-    idDistribuidor
-  );
+  const { loading, error, distribuidor } = useDistribuidor(idDistribuidor);
 
   if (loading) return <Loading>Cargando distribuidor</Loading>;
-  console.log({ loading, error, status, idDistribuidor, distribuidor });
   return (
     <Page
       title={`Distribuidor - ${distribuidor ? distribuidor.nombre : 'nuevo'}`}
