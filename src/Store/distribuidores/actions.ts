@@ -1,4 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { v4 as uuid } from 'uuid';
+
 export const loadDistribuidores = createAsyncThunk<Array<DistribuidorType>>(
   'loadDistribuidores',
   async (_, { requestId }) =>
@@ -10,12 +12,13 @@ export const createDistribuidor = createAsyncThunk<
   DistribuidorType
 >(
   'createDistribuidor',
-  async (distribuidor, { requestId }) => await distribuidor
+  async (distribuidor, { requestId }) =>
+    await { ...distribuidor, idDistribuidor: uuid() }
 );
 
 export const updateDistribuidor = createAsyncThunk<
-  DistribuidorType,
-  DistribuidorType
+  Partial<DistribuidorType>,
+  Partial<DistribuidorType>
 >(
   'updateDistribuidor',
   async (distribuidor, { requestId }) => await distribuidor

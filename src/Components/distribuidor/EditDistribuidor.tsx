@@ -1,24 +1,30 @@
-import React from 'react';
+// Library imports
+import React, { useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { Alert, Form } from 'reactstrap';
 import * as yup from 'yup';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers';
+import { unwrapResult, SerializedError } from '@reduxjs/toolkit';
+import { useDispatch } from 'react-redux';
 
+// My own library imports
 import { TextField, SubmitButton } from 'Components/Form';
 import { ButtonIconAdd, ButtonIconDelete, ButtonSet } from 'Components/Icons';
 import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
 import { useModals } from 'Providers/Modals';
 
+// App-related imports
 import { useDistribuidor } from 'Store/distribuidores/hooks';
 import {
   createDistribuidor,
   updateDistribuidor,
   deleteDistribuidor,
 } from 'Store/distribuidores/actions';
-import { useDispatch } from 'react-redux';
 
+// Types
+import type { AppDispatch } from 'Store';
 type ShortDistribuidor = Omit<DistribuidorType, 'idDistribuidor'>;
 
 const distribuidorSchema = yup.object().shape<ShortDistribuidor>({
@@ -39,17 +45,22 @@ const distribuidorSchema = yup.object().shape<ShortDistribuidor>({
 
 const EditDistribuidor2: React.FC<{
   idDistribuidor: ID;
-  // TODO distribuidor does have a value!!
   distribuidor?: ShortDistribuidor;
 }> = ({ idDistribuidor, distribuidor }) => {
   const history = useHistory();
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const { openLoading, closeLoading, confirmDelete } = useModals();
-
+  console.log('EditDistribuidor2', distribuidor);
   const methods = useForm<ShortDistribuidor>({
-    defaultValues: { ...distribuidorSchema.default(), ...distribuidor },
+    defaultValues: distribuidorSchema.default(),
     resolver: yupResolver(distribuidorSchema),
   });
+
+  useEffect(() => {
+    if (distribuidor) methods.reset(distribuidor);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [distribuidor]);
+  console.log('method values', methods.getValues());
   const onDeleteClick: React.MouseEventHandler<HTMLButtonElement> = (ev) => {
     ev.stopPropagation();
     confirmDelete(
@@ -63,52 +74,58 @@ const EditDistribuidor2: React.FC<{
       }
     );
   };
+
   const onSubmit: SubmitHandler<ShortDistribuidor> = async (
     values,
     formMethods
   ): Promise<void> => {
-    console.log('onSubmit id: ', idDistribuidor);
+    console.log(
+      'onSubmit: ',
+      methods.formState.isDirty,
+      idDistribuidor,
+      values,
+      methods.formState.dirtyFields
+    );
     if (idDistribuidor) {
       openLoading('Actualizando Distribuidor');
-      console.log(
-        'update',
-        await dispatch(updateDistribuidor({ ...values, idDistribuidor }))
-      );
-      // .catch((err) => {
-      //   if (
-      //     err.message ===
-      //     'GraphQL error: SQLITE_CONSTRAINT: UNIQUE constraint failed: Users.nombre'
-      //   ) {
-      //     formMethods.setError('nombre', {
-      //       type: 'duplicate',
-      //       message: 'Ese distribuidor ya existe',
-      //     });
-      //   } else throw err;
-      // })
-      // .finally(closeLoading);
-      closeLoading();
+      if (methods.formState.isDirty) {
+        const changes: Partial<DistribuidorType> = Object.keys(
+          methods.formState.dirtyFields
+        ).reduce<Partial<DistribuidorType>>(
+          (cs, k) => ({
+            ...cs,
+            // @ts-ignore
+            [k]: values[k],
+          }),
+          {}
+        );
+        console.log(
+          'update',
+          await dispatch(
+            updateDistribuidor({ idDistribuidor, ...changes })
+          ).catch((err: SerializedError) => {
+            console.error('update error', err);
+            return { idDistribuidor: null };
+          })
+        );
+
+        closeLoading();
+      }
     } else {
       openLoading('Creando distribuidor');
-      console.log(
-        'create',
-        await dispatch(createDistribuidor({ ...values, idDistribuidor }))
-      );
-      history.replace(`/distribuidor/edit/${idDistribuidor}`);
-      // .catch((err) => {
-      //   if (
-      //     err.message ===
-      //     'GraphQL error: SQLITE_CONSTRAINT: UNIQUE constraint failed: Users.nombre'
-      //   ) {
-      //     formMethods.setError('nombre', {
-      //       type: 'duplicate',
-      //       message: 'Ese distribuidor ya existe',
-      //     });
-      //   } else throw err;
-      // })
-      // .finally(closeLoading);
+      const distr = await dispatch(
+        createDistribuidor({ ...values, idDistribuidor })
+      )
+        .then(unwrapResult)
+        .catch((err: SerializedError) => {
+          console.error(' create error', err);
+          return { idDistribuidor: null };
+        });
+      history.replace(`/distribuidor/edit/${distr.idDistribuidor}`);
       closeLoading();
     }
   };
+
   return (
     <Form onSubmit={methods.handleSubmit(onSubmit)}>
       <TextField name="nombre" label="Nombre" methods={methods} />
@@ -136,10 +153,12 @@ const EditDistribuidor2: React.FC<{
 
 export default function EditDistribuidor() {
   const { idDistribuidor } = useParams<{ idDistribuidor: ID }>();
-  const { loading, error, distribuidor } = useDistribuidor(idDistribuidor);
+  const { loading, error, distribuidor, status } = useDistribuidor(
+    idDistribuidor
+  );
 
   if (loading) return <Loading>Cargando distribuidor</Loading>;
-
+  console.log({ loading, error, status, idDistribuidor, distribuidor });
   return (
     <Page
       title={`Distribuidor - ${distribuidor ? distribuidor.nombre : 'nuevo'}`}
