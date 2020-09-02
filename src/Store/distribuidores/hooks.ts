@@ -25,6 +25,5 @@ export const useDistribuidor = (idDistribuidor: ID) => {
     loading: status === LOADING,
     error,
     distribuidor: entities[idDistribuidor],
-    status,
   };
 };
