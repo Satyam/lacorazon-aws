@@ -15,7 +15,19 @@ const reducer = createReducer(
   }),
   (builder) =>
     builder
-      .addCase(loadDistribuidores.fulfilled.type, adapter.setAll)
+      .addCase(loadDistribuidores.pending.type, (state, action: AnyAction) => {
+        state.status = LOADING;
+      })
+      .addCase(
+        loadDistribuidores.fulfilled.type,
+        (state, action: AnyAction) => {
+          state.status = LOADED;
+          adapter.setAll(state, action);
+        }
+      )
+      .addCase(loadDistribuidores.rejected.type, (state, action: AnyAction) => {
+        state.status = IDLE;
+      })
       .addCase(createDistribuidor.fulfilled.type, adapter.addOne)
       .addCase(updateDistribuidor.fulfilled.type, adapter.upsertOne)
       .addCase(deleteDistribuidor.fulfilled.type, adapter.removeOne)
@@ -23,7 +35,6 @@ const reducer = createReducer(
         (action: AnyAction): action is PayloadAction<any> =>
           action.type.endsWith('/pending'),
         (state) => {
-          state.status = LOADING;
           state.error = undefined;
         }
       )
@@ -31,7 +42,6 @@ const reducer = createReducer(
         (action: AnyAction): action is PayloadAction<any> =>
           action.type.endsWith('/rejected'),
         (state, action: AnyAction) => {
-          state.status = IDLE;
           state.error = action.error;
         }
       )
@@ -39,7 +49,6 @@ const reducer = createReducer(
         (action: AnyAction): action is PayloadAction<any> =>
           action.type.endsWith('/fulfilled'),
         (state) => {
-          state.status = LOADED;
           state.error = undefined;
         }
       )
