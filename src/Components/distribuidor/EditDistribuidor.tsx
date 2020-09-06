@@ -43,10 +43,9 @@ const distribuidorSchema = yup.object().shape<ShortDistribuidor>({
   vendidos: yup.number().default(0),
 });
 
-const EditDistribuidor2: React.FC<{
-  idDistribuidor: ID;
-  distribuidor?: ShortDistribuidor;
-}> = ({ idDistribuidor, distribuidor }) => {
+const EditDistribuidor: React.FC = () => {
+  const { idDistribuidor } = useParams<{ idDistribuidor: ID }>();
+  const { error, distribuidor } = useDistribuidor(idDistribuidor);
   const history = useHistory();
   const dispatch: AppDispatch = useDispatch();
   const { openLoading, closeLoading, confirmDelete } = useModals();
@@ -81,11 +80,13 @@ const EditDistribuidor2: React.FC<{
       if (methods.formState.isDirty) {
         await dispatch(updateDistribuidor({ idDistribuidor, ...values }))
           .then(unwrapResult)
-          .catch(() => {
-            methods.setError('nombre', {
-              type: 'duplicado',
-              message: 'Ese nombre ya existe',
-            });
+          .catch((err) => {
+            if (err.name === 'DuplicateError') {
+              methods.setError(err.message, {
+                type: 'duplicado',
+                message: `Ese ${err.message} ya existe`,
+              });
+            }
           });
       }
     } else {
@@ -96,60 +97,56 @@ const EditDistribuidor2: React.FC<{
           history.replace(`/distribuidor/edit/${distr.idDistribuidor}`);
           return distr;
         })
-        .catch(() => {
-          methods.setError('nombre', {
-            type: 'duplicado',
-            message: 'Ese nombre ya existe',
-          });
+        .catch((err) => {
+          if (err.name === 'DuplicateError') {
+            methods.setError(err.message, {
+              type: 'duplicado',
+              message: `Ese ${err.message} ya existe`,
+            });
+          }
         });
     }
     closeLoading();
   };
 
-  return (
-    <Form onSubmit={methods.handleSubmit(onSubmit)}>
-      <TextField name="nombre" label="Nombre" methods={methods} />
-      <TextField name="email" label="eMail" methods={methods} />
-      <TextField name="localidad" label="Localidad" methods={methods} />
-      <TextField name="contacto" label="Contacto" methods={methods} />
-      <TextField name="telefono" label="Teléfono" methods={methods} />
-      <TextField
-        name="direccion"
-        label="Dirección"
-        rows={5}
-        methods={methods}
-      />
-      <ButtonSet>
-        <SubmitButton component={ButtonIconAdd} methods={methods}>
-          {idDistribuidor ? 'Modificar' : 'Agregar'}
-        </SubmitButton>
-        <ButtonIconDelete disabled={!idDistribuidor} onClick={onDeleteClick}>
-          Borrar
-        </ButtonIconDelete>
-      </ButtonSet>
-    </Form>
-  );
-};
-
-export default function EditDistribuidor() {
-  const { idDistribuidor } = useParams<{ idDistribuidor: ID }>();
-  const { loading, error, distribuidor } = useDistribuidor(idDistribuidor);
-
-  if (loading) return <Loading>Cargando distribuidor</Loading>;
+  if (idDistribuidor && !distribuidor)
+    return <Loading>Cargando distribuidor</Loading>;
   return (
     <Page
       title={`Distribuidor - ${distribuidor ? distribuidor.nombre : 'nuevo'}`}
       heading={`${idDistribuidor ? 'Edit' : 'Add'} Distribuidor`}
-      error={error?.message}
+      error={error?.name === 'DuplicateError' ? undefined : error?.message}
     >
       {idDistribuidor && !distribuidor ? (
         <Alert color="danger">El distribuidor no existe o fue borrado</Alert>
       ) : (
-        <EditDistribuidor2
-          idDistribuidor={idDistribuidor}
-          distribuidor={distribuidor}
-        />
+        <Form onSubmit={methods.handleSubmit(onSubmit)}>
+          <TextField name="nombre" label="Nombre" methods={methods} />
+          <TextField name="email" label="eMail" methods={methods} />
+          <TextField name="localidad" label="Localidad" methods={methods} />
+          <TextField name="contacto" label="Contacto" methods={methods} />
+          <TextField name="telefono" label="Teléfono" methods={methods} />
+          <TextField
+            name="direccion"
+            label="Dirección"
+            rows={5}
+            methods={methods}
+          />
+          <ButtonSet>
+            <SubmitButton component={ButtonIconAdd} methods={methods}>
+              {idDistribuidor ? 'Modificar' : 'Agregar'}
+            </SubmitButton>
+            <ButtonIconDelete
+              disabled={!idDistribuidor}
+              onClick={onDeleteClick}
+            >
+              Borrar
+            </ButtonIconDelete>
+          </ButtonSet>
+        </Form>
       )}
     </Page>
   );
-}
+};
+
+export default EditDistribuidor;
