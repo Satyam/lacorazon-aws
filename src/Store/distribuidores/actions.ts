@@ -12,42 +12,45 @@ export const loadDistribuidores = createAsyncThunk<Array<DistribuidorType>>(
 
 export const createDistribuidor = createAsyncThunk<
   DistribuidorType,
-  DistribuidorType,
-  any
->(
-  'createDistribuidor',
-  (distribuidor) => ({
+  DistribuidorType
+>('createDistribuidor', (distribuidor, { getState }) => {
+  const { distribuidores } = selDistribuidores(getState() as RootState);
+  if (
+    distribuidores.find(
+      (d: DistribuidorType) => d.nombre === distribuidor.nombre
+    )
+  ) {
+    // eslint-disable-next-line no-throw-literal
+    throw {
+      name: 'DuplicateError',
+      message: 'nombre',
+    };
+  }
+  return {
     ...distribuidor,
     idDistribuidor: uuid(),
-  }),
-  {
-    condition: (distribuidor, { getState }) => {
-      const { distribuidores } = selDistribuidores(getState() as RootState);
-      if (
-        distribuidores.find(
-          (d: DistribuidorType) => d.nombre === distribuidor.nombre
-        )
-      )
-        return false;
-      return true;
-    },
-  }
-);
+  };
+});
 
 export const updateDistribuidor = createAsyncThunk<
   Partial<DistribuidorType>,
   Partial<DistribuidorType>
->('updateDistribuidor', (distribuidor) => distribuidor, {
-  condition: (distribuidor, { getState }) => {
-    const { distribuidores } = selDistribuidores(getState() as RootState);
-    if (
-      distribuidores.find(
-        (d: DistribuidorType) => d.nombre === distribuidor.nombre
-      )
+>('updateDistribuidor', (distribuidor, { getState }) => {
+  const { distribuidores } = selDistribuidores(getState() as RootState);
+  if (
+    distribuidores.find(
+      (d: DistribuidorType) =>
+        d.nombre === distribuidor.nombre &&
+        d.idDistribuidor !== distribuidor.idDistribuidor
     )
-      return false;
-    return true;
-  },
+  ) {
+    // eslint-disable-next-line no-throw-literal
+    throw {
+      name: 'DuplicateError',
+      message: 'nombre',
+    };
+  }
+  return distribuidor;
 });
 
 export const deleteDistribuidor = createAsyncThunk<ID, ID>(
