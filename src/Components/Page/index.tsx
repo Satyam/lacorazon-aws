@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
-import { Container, Row, Col } from 'reactstrap';
-// import { ApolloError } from '@apollo/client';
+import { Container, Row, Col, Alert } from 'reactstrap';
+import classnames from 'classnames';
 
-// import GqlError from 'Components/GqlError';
 import styles from './styles.module.css';
 
 const Page: React.FC<{
@@ -19,11 +18,11 @@ const Page: React.FC<{
     <Container fluid>
       <Row>
         <Col sm="12" md={{ size: wide ? 12 : 8, offset: wide ? 0 : 2 }}>
-          <div className={styles.spacing}>
+          <div className={classnames('clearfix', styles.spacing)}>
             <h1 className={styles.heading}>{heading}</h1>
             <div className={styles.action}>{action}</div>
           </div>
-          <div className={styles.clear}>{error}</div>
+          {error && <Alert color="danger">{error}</Alert>}
           {children}
         </Col>
       </Row>
