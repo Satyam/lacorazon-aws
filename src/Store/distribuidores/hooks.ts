@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selDistribuidores, selDistribuidoresHash } from './selectors';
 import { loadDistribuidores } from './actions';
@@ -11,7 +11,11 @@ export const useDistribuidores = () => {
   useEffect(() => {
     if (status === IDLE) dispatch(loadDistribuidores());
   }, [dispatch, status]);
-  return { loading: status === LOADING, error, distribuidores };
+
+  return useMemo(
+    () => ({ loading: status === LOADING, error, distribuidores }),
+    [status, error, distribuidores]
+  );
 };
 
 export const useDistribuidor = (idDistribuidor: ID) => {
@@ -21,9 +25,13 @@ export const useDistribuidor = (idDistribuidor: ID) => {
   useEffect(() => {
     if (status === IDLE) dispatch(loadDistribuidores());
   }, [dispatch, status]);
-  return {
-    loading: status === LOADING,
-    error,
-    distribuidor: entities[idDistribuidor],
-  };
+
+  return useMemo(
+    () => ({
+      loading: status === LOADING,
+      error,
+      distribuidor: entities[idDistribuidor],
+    }),
+    [status, error, entities, idDistribuidor]
+  );
 };
