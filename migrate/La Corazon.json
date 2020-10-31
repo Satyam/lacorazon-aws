@@ -1,0 +1,2080 @@
+{
+  "ventaDirecta": [
+    {
+      "concepto": "Cercedilla",
+      "fecha": "2018-02-03T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "cantidad": 21,
+      "precioUnitario": 10
+    },
+    {
+      "concepto": "Cercedilla",
+      "fecha": "2018-02-03T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "cantidad": 5
+    },
+    {
+      "concepto": "Sala Flores",
+      "fecha": "2018-02-15T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "cantidad": 24,
+      "precioUnitario": 10
+    },
+    {
+      "concepto": "Sala Flores",
+      "fecha": "2018-02-15T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "cantidad": 2
+    },
+    {
+      "concepto": "Sant Jordi",
+      "fecha": "2018-04-22T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "cantidad": 6,
+      "precioUnitario": 10
+    },
+    {
+      "concepto": "Sant Jordi",
+      "fecha": "2018-04-22T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "cantidad": 1
+    },
+    {
+      "concepto": "Madrid ",
+      "fecha": "2018-06-13T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "cantidad": 10,
+      "precioUnitario": 10
+    },
+    {
+      "concepto": "Manchón",
+      "fecha": "2018-06-26T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "cantidad": 6,
+      "precioUnitario": 10
+    },
+    {
+      "concepto": "Roxana desde 17/12/2017",
+      "fecha": "2018-09-30T22:00:00.000Z",
+      "vendedor": "Ro",
+      "cantidad": 180,
+      "precioUnitario": 10
+    },
+    {
+      "concepto": "Roxana desde 17/12/2017",
+      "fecha": "2018-09-30T22:00:00.000Z",
+      "vendedor": "Ro",
+      "cantidad": 1,
+      "precioUnitario": 12
+    },
+    {
+      "concepto": "Roxana desde 17/12/2017",
+      "fecha": "2018-09-30T22:00:00.000Z",
+      "vendedor": "Ro",
+      "cantidad": 47
+    },
+    {
+      "concepto": "Raed desde 17/12/2017",
+      "fecha": "2018-09-30T22:00:00.000Z",
+      "vendedor": "Ra",
+      "cantidad": 7,
+      "precioUnitario": 10
+    },
+    {
+      "concepto": "Raed desde 17/12/2017",
+      "fecha": "2018-09-30T22:00:00.000Z",
+      "vendedor": "Ra",
+      "cantidad": 20,
+      "precioUnitario": 5
+    },
+    {
+      "concepto": "Raed desde 17/12/2017",
+      "fecha": "2018-09-30T22:00:00.000Z",
+      "vendedor": "Ra",
+      "cantidad": 28
+    },
+    {
+      "concepto": "Raed y Roxana desde 17/12/2017",
+      "fecha": "2018-09-30T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "cantidad": 26
+    },
+    {
+      "concepto": "Depósito Legal",
+      "fecha": "2018-09-30T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "cantidad": 4
+    },
+    {
+      "concepto": "Sol (Río Abirto masajes)",
+      "fecha": "2018-10-03T22:00:00.000Z",
+      "vendedor": "Ro",
+      "cantidad": 1,
+      "precioUnitario": 10
+    },
+    {
+      "concepto": "Carlos Hornstein",
+      "fecha": "2018-10-02T22:00:00.000Z",
+      "vendedor": "Ra",
+      "cantidad": 1
+    },
+    {
+      "concepto": "Roxy  para ella",
+      "fecha": "2018-10-07T22:00:00.000Z",
+      "vendedor": "Ro",
+      "cantidad": 1
+    },
+    {
+      "concepto": "Raed para él",
+      "fecha": "2018-10-07T22:00:00.000Z",
+      "vendedor": "Ra",
+      "cantidad": 1
+    },
+    {
+      "concepto": "Raed",
+      "fecha": "2018-10-11T22:00:00.000Z",
+      "vendedor": "Ra",
+      "cantidad": 1,
+      "precioUnitario": 10
+    },
+    {
+      "concepto": "Manoli",
+      "fecha": "2018-10-19T22:00:00.000Z",
+      "vendedor": "Ro",
+      "cantidad": 1,
+      "precioUnitario": 12
+    },
+    {
+      "concepto": "Laia (La Mano de Maya)",
+      "fecha": "2018-10-21T22:00:00.000Z",
+      "vendedor": "Ro",
+      "cantidad": 1,
+      "precioUnitario": 10
+    },
+    {
+      "concepto": "Coco",
+      "fecha": "2018-10-21T22:00:00.000Z",
+      "vendedor": "Ro",
+      "cantidad": 1
+    },
+    {
+      "concepto": "Biblioteca Rusiñol de Sitges",
+      "fecha": "2018-10-24T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "cantidad": 4,
+      "precioUnitario": 10
+    },
+    {
+      "concepto": "Olga Costa Rica (devuelto)",
+      "fecha": "2018-08-28T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "cantidad": 1,
+      "precioUnitario": 22
+    },
+    {
+      "concepto": "Jon Santacana",
+      "fecha": "2018-11-01T23:00:00.000Z",
+      "vendedor": "Ra",
+      "cantidad": 1
+    },
+    {
+      "concepto": "Jaime Amselem (correo Madrid)",
+      "fecha": "2018-10-05T22:00:00.000Z",
+      "vendedor": "Ra",
+      "cantidad": 1
+    },
+    {
+      "concepto": "Arnina y Miki Kashtan",
+      "fecha": "2018-10-18T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "cantidad": 2
+    },
+    {
+      "concepto": "Machi (yoga compi)",
+      "fecha": "2018-11-05T23:00:00.000Z",
+      "vendedor": "Ro",
+      "cantidad": 1,
+      "precioUnitario": 10
+    },
+    {
+      "concepto": "Xavi López",
+      "fecha": "2018-11-06T23:00:00.000Z",
+      "vendedor": "Ra",
+      "cantidad": 1,
+      "precioUnitario": 10
+    },
+    {
+      "concepto": "Jon del Vas",
+      "fecha": "2018-11-08T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "cantidad": 1
+    },
+    {
+      "concepto": "Paola (curso Jon)",
+      "fecha": "2018-11-09T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "cantidad": 1,
+      "precioUnitario": 10
+    },
+    {
+      "concepto": "Jonathan Tepper",
+      "fecha": "2018-11-11T23:00:00.000Z",
+      "vendedor": "Ra",
+      "cantidad": 1
+    },
+    {
+      "concepto": "Devuelto de Costa Rica",
+      "fecha": "2018-10-29T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "cantidad": -1
+    },
+    {
+      "concepto": "Olga 13.75 Costa Rica Bis ",
+      "fecha": "2018-11-11T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "cantidad": 1,
+      "precioUnitario": 13.75
+    },
+    {
+      "concepto": "Ángela España Borja (Murcia)",
+      "fecha": "2018-11-13T23:00:00.000Z",
+      "vendedor": "Ro",
+      "cantidad": 2,
+      "precioUnitario": 13,
+      "iva": true
+    },
+    {
+      "concepto": "Ana Bougeois",
+      "fecha": "2018-11-16T23:00:00.000Z",
+      "vendedor": "Ro",
+      "cantidad": 8,
+      "precioUnitario": 10
+    },
+    {
+      "concepto": "Rocío (simplecat big compra)",
+      "fecha": "2018-11-21T23:00:00.000Z",
+      "vendedor": "Ra",
+      "cantidad": 1
+    },
+    {
+      "concepto": "Once Upon a Time",
+      "fecha": "2018-11-23T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "cantidad": 8,
+      "precioUnitario": 10
+    },
+    {
+      "concepto": "David canje CD",
+      "fecha": "2018-11-23T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "cantidad": 1
+    },
+    {
+      "concepto": "Ruth",
+      "fecha": "2018-11-23T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "cantidad": 1,
+      "precioUnitario": 10
+    },
+    {
+      "concepto": "People Strategy S. L. ",
+      "fecha": "2018-11-25T23:00:00.000Z",
+      "vendedor": "Ro",
+      "cantidad": 15,
+      "precioUnitario": 10,
+      "iva": true
+    },
+    {
+      "concepto": "Cristina Zabaleta",
+      "fecha": "2018-12-02T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "cantidad": 1,
+      "precioUnitario": 13,
+      "iva": true
+    },
+    {
+      "concepto": "Montse Coolinary Market",
+      "fecha": "2018-12-04T23:00:00.000Z",
+      "vendedor": "Ra",
+      "cantidad": 1
+    },
+    {
+      "concepto": "Blanca para Ernest",
+      "fecha": "2018-12-09T23:00:00.000Z",
+      "vendedor": "Ro",
+      "cantidad": 1,
+      "precioUnitario": 10
+    },
+    {
+      "concepto": "Daniel (Fisioterapeuta Barna)",
+      "fecha": "2018-12-11T23:00:00.000Z",
+      "vendedor": "Ro",
+      "cantidad": 1
+    },
+    {
+      "concepto": "Padre de Filippa",
+      "fecha": "2018-12-19T23:00:00.000Z",
+      "vendedor": "Ra",
+      "cantidad": 1,
+      "precioUnitario": 12
+    },
+    {
+      "concepto": "Jennifer",
+      "fecha": "2019-01-02T23:00:00.000Z",
+      "vendedor": "Ro",
+      "cantidad": 1,
+      "precioUnitario": 10
+    },
+    {
+      "concepto": "Pepi",
+      "fecha": "2019-01-07T23:00:00.000Z",
+      "vendedor": "Ra",
+      "cantidad": 1
+    },
+    {
+      "concepto": "Ali",
+      "fecha": "2019-01-07T23:00:00.000Z",
+      "vendedor": "Ra",
+      "cantidad": 1
+    },
+    {
+      "concepto": "Encuentro CNV Alborache",
+      "fecha": "2019-01-26T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "cantidad": 8,
+      "precioUnitario": 10
+    },
+    {
+      "concepto": "Carla Formadora Valencia",
+      "fecha": "2019-01-26T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "cantidad": 6,
+      "precioUnitario": 10
+    },
+    {
+      "concepto": "Noelia  Formadora Traductora",
+      "fecha": "2019-01-26T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "cantidad": 6,
+      "precioUnitario": 9
+    },
+    {
+      "concepto": "Dominique ",
+      "fecha": "2019-01-26T23:00:00.000Z",
+      "vendedor": "Ra",
+      "cantidad": 1
+    },
+    {
+      "concepto": "Nuria Charla en Vilafranca",
+      "fecha": "2019-01-29T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "cantidad": 1,
+      "precioUnitario": 10
+    },
+    {
+      "concepto": "Ana Bougeois",
+      "fecha": "2019-02-01T23:00:00.000Z",
+      "vendedor": "Ro",
+      "cantidad": 4,
+      "precioUnitario": 10
+    },
+    {
+      "concepto": "Carla Penna",
+      "fecha": "2019-02-22T23:00:00.000Z",
+      "vendedor": "Ro",
+      "cantidad": 1,
+      "precioUnitario": 10
+    },
+    {
+      "concepto": "Gurujiwan",
+      "fecha": "2019-03-05T23:00:00.000Z",
+      "vendedor": "Ra",
+      "cantidad": 1,
+      "precioUnitario": 10
+    },
+    {
+      "concepto": "Francesca Catricalá",
+      "fecha": "2019-03-17T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "cantidad": 1
+    },
+    {
+      "concepto": "Mireia (banco)",
+      "fecha": "2019-03-19T23:00:00.000Z",
+      "vendedor": "Ra",
+      "cantidad": 1
+    },
+    {
+      "concepto": "Daniela Hearne",
+      "fecha": "2019-04-06T22:00:00.000Z",
+      "vendedor": "Ra",
+      "cantidad": 1
+    },
+    {
+      "concepto": "Nora Gleizer  por correo",
+      "fecha": "2019-04-23T22:00:00.000Z",
+      "vendedor": "Ro",
+      "cantidad": 1,
+      "precioUnitario": 13
+    },
+    {
+      "concepto": "Milena (Ginebra)",
+      "fecha": "2019-05-26T22:00:00.000Z",
+      "vendedor": "Ro",
+      "cantidad": 1
+    },
+    {
+      "concepto": "Marga",
+      "fecha": "2019-05-28T22:00:00.000Z",
+      "vendedor": "Ra",
+      "cantidad": 1,
+      "precioUnitario": 10
+    },
+    {
+      "concepto": "Sofía",
+      "fecha": "2019-06-04T22:00:00.000Z",
+      "vendedor": "Ra",
+      "cantidad": 1
+    },
+    {
+      "concepto": "Ana Cabut Argentina",
+      "fecha": "2019-06-22T22:00:00.000Z",
+      "vendedor": "Ro",
+      "cantidad": 10
+    },
+    {
+      "concepto": "Manu Mora para Luciana",
+      "fecha": "2019-06-22T22:00:00.000Z",
+      "vendedor": "Ro",
+      "cantidad": 1
+    },
+    {
+      "concepto": "Duke Duchscherer",
+      "fecha": "2019-06-25T22:00:00.000Z",
+      "vendedor": "Ro",
+      "cantidad": 1
+    },
+    {
+      "concepto": "Kristian Herbolzheimer",
+      "fecha": "2019-06-25T22:00:00.000Z",
+      "vendedor": "Ro",
+      "cantidad": 1
+    },
+    {
+      "concepto": "Círculo  Duke -  Mercé",
+      "fecha": "2019-06-29T22:00:00.000Z",
+      "vendedor": "Ra",
+      "cantidad": 1
+    },
+    {
+      "concepto": "Ana Gómez",
+      "fecha": "2019-07-14T22:00:00.000Z",
+      "vendedor": "Ro",
+      "cantidad": 1,
+      "precioUnitario": 10
+    },
+    {
+      "concepto": "Montse Yoga Qi Gong",
+      "fecha": "2019-07-25T22:00:00.000Z",
+      "vendedor": "Ro",
+      "cantidad": 1,
+      "precioUnitario": 10
+    },
+    {
+      "concepto": "Ana Gómez",
+      "fecha": "2019-08-14T22:00:00.000Z",
+      "vendedor": "Ro",
+      "cantidad": 2,
+      "precioUnitario": 20
+    },
+    {
+      "concepto": "Ismael Prof. Yoga",
+      "fecha": "2019-08-19T22:00:00.000Z",
+      "vendedor": "Ro",
+      "cantidad": 1
+    },
+    {
+      "concepto": "Silvia prima Nora Gleizer",
+      "fecha": "2019-09-11T22:00:00.000Z",
+      "vendedor": "Ro",
+      "cantidad": 2,
+      "precioUnitario": 12
+    },
+    {
+      "concepto": "Chencho",
+      "fecha": "2019-09-23T22:00:00.000Z",
+      "vendedor": "Ro",
+      "cantidad": 1,
+      "precioUnitario": 10
+    },
+    {
+      "concepto": "Ana Cabut Argentina",
+      "fecha": "2019-09-30T22:00:00.000Z",
+      "vendedor": "Ro",
+      "cantidad": 10
+    },
+    {
+      "concepto": "Carolina Taller Mirada",
+      "fecha": "2019-10-04T22:00:00.000Z",
+      "vendedor": "Ro",
+      "cantidad": 1,
+      "precioUnitario": 10
+    },
+    {
+      "concepto": "Roxana Argentina",
+      "fecha": "2019-10-11T22:00:00.000Z",
+      "vendedor": "Ro",
+      "cantidad": 9
+    },
+    {
+      "concepto": "Roxana a Mara para Quique",
+      "fecha": "2019-10-25T22:00:00.000Z",
+      "vendedor": "Ro",
+      "cantidad": 1,
+      "precioUnitario": 7.5
+    },
+    {
+      "concepto": "Andrea Torres",
+      "fecha": "2019-11-07T23:00:00.000Z",
+      "vendedor": "Ro",
+      "cantidad": 1,
+      "precioUnitario": 10
+    },
+    {
+      "concepto": "Cristina Murcia",
+      "fecha": "2019-11-27T23:00:00.000Z",
+      "vendedor": "Ro",
+      "cantidad": 1,
+      "precioUnitario": 13,
+      "ctaRaed": true
+    },
+    {
+      "concepto": "Andrea Torres para Amiga",
+      "fecha": "2019-12-04T23:00:00.000Z",
+      "vendedor": "Ro",
+      "cantidad": 2,
+      "precioUnitario": 24,
+      "ctaRaed": true
+    },
+    {
+      "concepto": "Authors of Sitges",
+      "fecha": "2019-12-07T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "cantidad": 2,
+      "precioUnitario": 10
+    },
+    {
+      "concepto": "Authors of Sitges Helen/Niki",
+      "fecha": "2019-12-07T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "cantidad": 2
+    },
+    {
+      "concepto": "Tiempo Vivo",
+      "fecha": "2020-01-14T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "cantidad": 9
+    },
+    {
+      "concepto": "Sandra Madrid",
+      "fecha": "2020-01-22T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "cantidad": 1,
+      "precioUnitario": 13,
+      "ctaRaed": true
+    },
+    {
+      "concepto": "Elena Tiempo Vivo",
+      "fecha": "2020-01-27T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "cantidad": 1,
+      "precioUnitario": 12
+    },
+    {
+      "concepto": "Tiempo Vivo participantes",
+      "fecha": "2020-01-27T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "cantidad": 9,
+      "precioUnitario": 10
+    },
+    {
+      "concepto": "Encuentro CNV 2020",
+      "fecha": "2020-02-01T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "cantidad": 20,
+      "precioUnitario": 12
+    },
+    {
+      "concepto": "Jean y Christine GROK ",
+      "fecha": "2020-02-12T23:00:00.000Z",
+      "vendedor": "Ra",
+      "cantidad": 2
+    },
+    {
+      "concepto": "Encarna",
+      "fecha": "2020-02-13T23:00:00.000Z",
+      "vendedor": "Ro",
+      "cantidad": 10
+    },
+    {
+      "concepto": "Charla Zag Zig",
+      "fecha": "2020-02-14T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "cantidad": 6,
+      "precioUnitario": 12
+    },
+    {
+      "concepto": "Laura y Sergio  Bélgica/Brasil",
+      "fecha": "2020-02-21T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "cantidad": 1
+    },
+    {
+      "concepto": "Raed Círculo 12 para regalar",
+      "fecha": "2020-02-21T23:00:00.000Z",
+      "vendedor": "Ra",
+      "cantidad": 12
+    },
+    {
+      "concepto": "Andrés Grillo Ed Planeta Colombia",
+      "fecha": "2020-07-06T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "cantidad": 1
+    },
+    {
+      "concepto": "Sergio Ed Urano Barna",
+      "fecha": "2020-07-06T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "cantidad": 1
+    },
+    {
+      "concepto": "María Florencia ",
+      "fecha": "2020-08-25T22:00:00.000Z",
+      "vendedor": "Ro",
+      "cantidad": 1,
+      "precioUnitario": 13,
+      "ctaRaed": true
+    },
+    {
+      "concepto": "Pamela Alduey Madrid",
+      "fecha": "2020-09-02T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "cantidad": 1
+    },
+    {
+      "concepto": "Maxi",
+      "fecha": "2020-09-03T22:00:00.000Z",
+      "vendedor": "Ra",
+      "cantidad": 1
+    }
+  ],
+  "enConsigna": [
+    {
+      "codigo": "Alfamar",
+      "fecha": "2017-12-09T23:00:00.000Z",
+      "vendedor": "Ro",
+      "entregados": 4
+    },
+    {
+      "codigo": "Alfamar",
+      "fecha": "2018-03-20T23:00:00.000Z",
+      "vendedor": "Ro",
+      "vendidos": 2,
+      "cobrado": 20
+    },
+    {
+      "codigo": "Alfamar",
+      "fecha": "2018-09-18T22:00:00.000Z",
+      "vendedor": "Ro",
+      "vendidos": 1,
+      "cobrado": 10
+    },
+    {
+      "codigo": "Alfamar",
+      "fecha": "2018-10-03T22:00:00.000Z",
+      "vendedor": "Ro",
+      "vendidos": 1,
+      "cobrado": 10
+    },
+    {
+      "codigo": "Alfamar",
+      "fecha": "2018-10-03T22:00:00.000Z",
+      "vendedor": "Ro",
+      "entregados": 3
+    },
+    {
+      "codigo": "Alfamar",
+      "fecha": "2019-05-30T22:00:00.000Z",
+      "vendedor": "Ro",
+      "vendidos": 1,
+      "cobrado": 10
+    },
+    {
+      "codigo": "Alfamar",
+      "fecha": "2019-09-08T22:00:00.000Z",
+      "vendedor": "Ro",
+      "vendidos": 1,
+      "cobrado": 10
+    },
+    {
+      "codigo": "Alfamar",
+      "fecha": "2019-09-08T22:00:00.000Z",
+      "vendedor": "Ro",
+      "entregados": 2
+    },
+    {
+      "codigo": "Alibri",
+      "fecha": "2018-03-05T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "entregados": 6,
+      "porcentaje": 0.35
+    },
+    {
+      "codigo": "Alibri",
+      "fecha": "2018-05-16T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "vendidos": 6,
+      "facturado": 46.81,
+      "nroFactura": "E18-006"
+    },
+    {
+      "codigo": "Alibri",
+      "fecha": "2018-05-16T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "nroFactura": "E18-006",
+      "cobrado": 46.81
+    },
+    {
+      "codigo": "Alibri",
+      "fecha": "2018-06-05T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "entregados": 10
+    },
+    {
+      "codigo": "Alibri",
+      "fecha": "2018-09-16T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "vendidos": 1
+    },
+    {
+      "codigo": "Alibri",
+      "fecha": "2018-12-09T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "vendidos": 6
+    },
+    {
+      "codigo": "Alibri",
+      "fecha": "2018-12-11T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "entregados": 10
+    },
+    {
+      "codigo": "Alibri",
+      "fecha": "2019-02-04T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "facturado": 54.6,
+      "nroFactura": "E19-002",
+      "cobrado": 54.6
+    },
+    {
+      "codigo": "Alibri",
+      "fecha": "2019-09-29T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "vendidos": 4,
+      "facturado": 31.2,
+      "nroFactura": "E19-007",
+      "cobrado": 31.2
+    },
+    {
+      "codigo": "Alibri",
+      "fecha": "2019-10-13T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "facturado": -54.6,
+      "nroFactura": "E19-002"
+    },
+    {
+      "codigo": "Alibri",
+      "fecha": "2019-10-14T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "facturado": 54.6,
+      "nroFactura": "E19-011"
+    },
+    {
+      "codigo": "Alibri",
+      "fecha": "2020-01-02T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "entregados": 5
+    },
+    {
+      "codigo": "Alibri",
+      "fecha": "2020-09-28T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "vendidos": 6,
+      "facturado": 46.8,
+      "nroFactura": "E20-004"
+    },
+    {
+      "codigo": "Ansara",
+      "fecha": "2018-03-11T23:00:00.000Z",
+      "vendedor": "Ro",
+      "entregados": 1,
+      "porcentaje": 0.17
+    },
+    {
+      "codigo": "Ansara",
+      "fecha": "2019-01-26T23:00:00.000Z",
+      "vendedor": "Ro",
+      "vendidos": 1,
+      "cobrado": 10
+    },
+    {
+      "codigo": "Beatriz",
+      "fecha": "2018-11-01T23:00:00.000Z",
+      "vendedor": "Ro",
+      "entregados": 10,
+      "porcentaje": 0.1666
+    },
+    {
+      "codigo": "Beatriz",
+      "fecha": "2019-03-26T23:00:00.000Z",
+      "vendedor": "Ro",
+      "vendidos": 10,
+      "facturado": 100,
+      "nroFactura": "E18-004"
+    },
+    {
+      "codigo": "Beatriz",
+      "fecha": "2019-05-08T22:00:00.000Z",
+      "vendedor": "Ro",
+      "nroFactura": "E18-004",
+      "cobrado": 100
+    },
+    {
+      "codigo": "Beatriz",
+      "fecha": "2020-09-13T22:00:00.000Z",
+      "vendedor": "Ro",
+      "entregados": 4,
+      "porcentaje": 0.25,
+      "facturado": 36,
+      "nroFactura": "E20-002"
+    },
+    {
+      "codigo": "BioSitges",
+      "fecha": "2018-02-07T23:00:00.000Z",
+      "vendedor": "Ro",
+      "entregados": 3
+    },
+    {
+      "codigo": "BioSitges",
+      "fecha": "2018-07-16T22:00:00.000Z",
+      "vendedor": "Ro",
+      "vendidos": 1,
+      "cobrado": 10
+    },
+    {
+      "codigo": "BioSitges",
+      "fecha": "2018-07-16T22:00:00.000Z",
+      "vendedor": "Ro",
+      "entregados": 1
+    },
+    {
+      "codigo": "BioSitges",
+      "fecha": "2019-08-16T22:00:00.000Z",
+      "vendedor": "Ro",
+      "vendidos": 1,
+      "cobrado": 10
+    },
+    {
+      "codigo": "CafeLletres",
+      "fecha": "2019-01-23T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "entregados": 5,
+      "porcentaje": 0.3
+    },
+    {
+      "codigo": "CafeLletres",
+      "fecha": "2019-06-29T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "vendidos": 1
+    },
+    {
+      "codigo": "Cambalache",
+      "fecha": "2018-09-05T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "entregados": 20,
+      "porcentaje": 0.5
+    },
+    {
+      "codigo": "Cambalache",
+      "fecha": "2018-12-09T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "vendidos": 4
+    },
+    {
+      "codigo": "Cambalache",
+      "fecha": "2019-01-13T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "entregados": 10
+    },
+    {
+      "codigo": "Cambalache",
+      "fecha": "2019-03-29T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "vendidos": 4,
+      "facturado": 48,
+      "nroFactura": "E19-005"
+    },
+    {
+      "codigo": "Cambalache",
+      "fecha": "2019-03-29T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "nroFactura": "E19-005",
+      "cobrado": 48
+    },
+    {
+      "codigo": "Cambalache",
+      "fecha": "2019-09-29T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "vendidos": 4,
+      "facturado": 24,
+      "nroFactura": "E19-009",
+      "cobrado": 24
+    },
+    {
+      "codigo": "Cambalache",
+      "fecha": "2020-09-29T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "vendidos": 4,
+      "facturado": 24,
+      "nroFactura": "E20-005"
+    },
+    {
+      "codigo": "Cambalache",
+      "fecha": "2020-10-21T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "entregados": 10
+    },
+    {
+      "codigo": "Carla Penna",
+      "fecha": "2019-03-19T23:00:00.000Z",
+      "vendedor": "Ro",
+      "entregados": 4,
+      "porcentaje": 0.17
+    },
+    {
+      "codigo": "Carla Penna",
+      "fecha": "2019-04-02T22:00:00.000Z",
+      "vendedor": "Ro",
+      "vendidos": 2,
+      "cobrado": 20
+    },
+    {
+      "codigo": "Carla Penna",
+      "fecha": "2019-05-09T22:00:00.000Z",
+      "vendedor": "Ro",
+      "vendidos": 2,
+      "cobrado": 20
+    },
+    {
+      "codigo": "Clara",
+      "fecha": "2018-10-05T22:00:00.000Z",
+      "vendedor": "Ro",
+      "entregados": 10,
+      "porcentaje": 0.25,
+      "vendidos": 10,
+      "facturado": 90,
+      "nroFactura": "E18-009"
+    },
+    {
+      "codigo": "Clara",
+      "fecha": "2018-11-28T23:00:00.000Z",
+      "vendedor": "Ro",
+      "entregados": 10,
+      "porcentaje": 0.25
+    },
+    {
+      "codigo": "Clara",
+      "fecha": "2019-10-05T22:00:00.000Z",
+      "vendedor": "Ro",
+      "nroFactura": "E18-009",
+      "cobrado": 90
+    },
+    {
+      "codigo": "Clara",
+      "fecha": "2020-10-29T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "vendidos": 10,
+      "facturado": 90,
+      "nroFactura": "E20-006",
+      "cobrado": 90
+    },
+    {
+      "codigo": "Dharani",
+      "fecha": "2018-02-07T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "entregados": 4,
+      "porcentaje": 0.25
+    },
+    {
+      "codigo": "Dharani",
+      "fecha": "2020-10-04T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "vendidos": 1,
+      "devueltos": 3,
+      "cobrado": 9
+    },
+    {
+      "codigo": "ECreadoras",
+      "fecha": "2019-01-09T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "porcentaje": 0.15
+    },
+    {
+      "codigo": "ECreadoras",
+      "fecha": "2019-06-17T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "entregados": 1,
+      "vendidos": 1,
+      "facturado": 13,
+      "nroFactura": "E19-006"
+    },
+    {
+      "codigo": "ECreadoras",
+      "fecha": "2019-10-03T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "nroFactura": "E19-006",
+      "cobrado": 13
+    },
+    {
+      "codigo": "El Cucut",
+      "fecha": "2019-01-02T23:00:00.000Z",
+      "vendedor": "Ro",
+      "entregados": 6,
+      "porcentaje": 0.3
+    },
+    {
+      "codigo": "Encarna",
+      "fecha": "2018-10-03T22:00:00.000Z",
+      "vendedor": "Ro",
+      "entregados": 10,
+      "porcentaje": 0.25
+    },
+    {
+      "codigo": "Encarna",
+      "fecha": "2018-11-27T23:00:00.000Z",
+      "vendedor": "Ro",
+      "vendidos": 4,
+      "cobrado": 36
+    },
+    {
+      "codigo": "Encarna",
+      "fecha": "2019-03-13T23:00:00.000Z",
+      "vendedor": "Ro",
+      "vendidos": 3,
+      "cobrado": 27
+    },
+    {
+      "codigo": "Encarna",
+      "fecha": "2019-08-25T22:00:00.000Z",
+      "vendedor": "Ro",
+      "vendidos": 3,
+      "cobrado": 27
+    },
+    {
+      "codigo": "Encarna",
+      "fecha": "2020-02-13T23:00:00.000Z",
+      "vendedor": "Ro",
+      "entregados": 10
+    },
+    {
+      "codigo": "Gabalda",
+      "fecha": "2018-08-21T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "entregados": 5,
+      "porcentaje": 0.3
+    },
+    {
+      "codigo": "Gabalda",
+      "fecha": "2018-09-05T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "vendidos": 3
+    },
+    {
+      "codigo": "Gabalda",
+      "fecha": "2018-09-05T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "entregados": 3
+    },
+    {
+      "codigo": "Gabalda",
+      "fecha": "2018-12-09T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "vendidos": 1
+    },
+    {
+      "codigo": "Gabalda",
+      "fecha": "2019-03-27T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "facturado": 33.6,
+      "nroFactura": "E19-004",
+      "cobrado": 33.6
+    },
+    {
+      "codigo": "Gabalda",
+      "fecha": "2020-01-29T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "vendidos": 4
+    },
+    {
+      "codigo": "Gabalda",
+      "fecha": "2020-01-29T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "entregados": 6
+    },
+    {
+      "codigo": "Lluvia",
+      "fecha": "2018-06-14T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "entregados": 10,
+      "porcentaje": 0.35
+    },
+    {
+      "codigo": "Lluvia",
+      "fecha": "2018-09-18T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "vendidos": 4
+    },
+    {
+      "codigo": "Lluvia",
+      "fecha": "2018-12-13T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "facturado": 31.2,
+      "nroFactura": "E18-014"
+    },
+    {
+      "codigo": "Lluvia",
+      "fecha": "2018-12-13T23:00:00.000Z",
+      "nroFactura": "E18-014",
+      "cobrado": 31.2
+    },
+    {
+      "codigo": "Lluvia",
+      "fecha": "2019-03-11T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "vendidos": 1
+    },
+    {
+      "codigo": "LosAngeles",
+      "fecha": "2018-09-05T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "entregados": 4,
+      "porcentaje": 0.3
+    },
+    {
+      "codigo": "LosAngeles",
+      "fecha": "2018-09-16T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "vendidos": 4,
+      "cobrado": 33.6
+    },
+    {
+      "codigo": "LosAngeles",
+      "fecha": "2018-09-18T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "entregados": 4
+    },
+    {
+      "codigo": "LosAngeles",
+      "fecha": "2019-03-11T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "vendidos": 2
+    },
+    {
+      "codigo": "LosAngeles",
+      "fecha": "2019-04-15T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "cobrado": 16.8
+    },
+    {
+      "codigo": "Manu Mora",
+      "fecha": "2019-06-18T22:00:00.000Z",
+      "vendedor": "Ro",
+      "entregados": 25,
+      "porcentaje": "20%%"
+    },
+    {
+      "codigo": "Manu Mora",
+      "fecha": "2019-07-22T22:00:00.000Z",
+      "vendedor": "Ro",
+      "vendidos": 25
+    },
+    {
+      "codigo": "Maya",
+      "fecha": "2018-10-21T22:00:00.000Z",
+      "vendedor": "Ro",
+      "entregados": 5,
+      "porcentaje": 0.25
+    },
+    {
+      "codigo": "Maya",
+      "fecha": "2019-01-15T23:00:00.000Z",
+      "vendedor": "Ro",
+      "vendidos": 2,
+      "facturado": 18,
+      "nroFactura": "E19-001"
+    },
+    {
+      "codigo": "Maya",
+      "fecha": "2019-01-15T23:00:00.000Z",
+      "vendedor": "Ro",
+      "nroFactura": "E19-001",
+      "cobrado": 18
+    },
+    {
+      "codigo": "Maya",
+      "fecha": "2020-07-28T22:00:00.000Z",
+      "vendedor": "Ro",
+      "devueltos": 2
+    },
+    {
+      "codigo": "Mulassa",
+      "fecha": "2018-09-05T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "entregados": 6,
+      "porcentaje": 0.3
+    },
+    {
+      "codigo": "Mulassa",
+      "fecha": "2018-12-09T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "vendidos": 1
+    },
+    {
+      "codigo": "Mulassa",
+      "fecha": "2019-06-29T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "vendidos": 1
+    },
+    {
+      "codigo": "Mulassa",
+      "fecha": "2019-09-29T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "vendidos": 1,
+      "facturado": 23.4,
+      "nroFactura": "E19-008",
+      "cobrado": 23.4
+    },
+    {
+      "codigo": "Olivia",
+      "fecha": "2018-05-08T22:00:00.000Z",
+      "vendedor": "Ro",
+      "entregados": 55
+    },
+    {
+      "codigo": "Olivia",
+      "fecha": "2018-05-09T22:00:00.000Z",
+      "vendedor": "Ro",
+      "porcentaje": 0.2,
+      "vendidos": 14,
+      "cobrado": 112
+    },
+    {
+      "codigo": "Olivia",
+      "fecha": "2018-11-25T23:00:00.000Z",
+      "vendedor": "Ro",
+      "porcentaje": 0.2,
+      "vendidos": 3
+    },
+    {
+      "codigo": "Olivia",
+      "fecha": "2018-12-05T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "porcentaje": 0.2,
+      "vendidos": 3,
+      "cobrado": 38
+    },
+    {
+      "codigo": "Olivia",
+      "fecha": "2019-06-18T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "devueltos": 1
+    },
+    {
+      "codigo": "Olivia",
+      "fecha": "2019-06-18T22:00:00.000Z",
+      "vendedor": "Ro",
+      "devueltos": 24
+    },
+    {
+      "codigo": "Olympia",
+      "fecha": "2018-11-13T23:00:00.000Z",
+      "vendedor": "Ra",
+      "entregados": 4,
+      "porcentaje": 0.5,
+      "vendidos": 4,
+      "cobrado": 24
+    },
+    {
+      "codigo": "SimpleCat",
+      "fecha": "2017-12-31T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "porcentaje": 0.35
+    },
+    {
+      "codigo": "SimpleCat",
+      "fecha": "2018-05-08T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "entregados": 30,
+      "vendidos": 30,
+      "facturado": 230.14,
+      "nroFactura": "E18-003"
+    },
+    {
+      "codigo": "SimpleCat",
+      "fecha": "2018-05-08T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "nroFactura": "E18-003",
+      "cobrado": 230.14
+    },
+    {
+      "codigo": "SimpleCat",
+      "fecha": "2019-03-26T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "entregados": 59,
+      "porcentaje": 0.35,
+      "vendidos": 59,
+      "facturado": 460.2,
+      "nroFactura": "E19-003"
+    },
+    {
+      "codigo": "SimpleCat",
+      "fecha": "2019-03-26T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "nroFactura": "E19-003",
+      "cobrado": 460.2
+    },
+    {
+      "codigo": "SimpleCat",
+      "fecha": "2019-09-29T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "entregados": 50,
+      "porcentaje": 0.35,
+      "vendidos": 50,
+      "facturado": 390,
+      "nroFactura": "E19-010"
+    },
+    {
+      "codigo": "SimpleCat",
+      "fecha": "2019-09-29T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "nroFactura": "E19-010",
+      "cobrado": 390
+    },
+    {
+      "codigo": "SimpleCat",
+      "fecha": "2019-12-26T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "entregados": 70,
+      "porcentaje": 0.35,
+      "vendidos": 70,
+      "facturado": 546,
+      "nroFactura": "E19-012",
+      "cobrado": 546
+    },
+    {
+      "codigo": "SimpleCat",
+      "fecha": "2020-09-23T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "entregados": 51,
+      "vendidos": 51,
+      "facturado": 397.8,
+      "nroFactura": "E20-003",
+      "cobrado": 397.8
+    },
+    {
+      "codigo": "Swinton",
+      "fecha": "2018-06-14T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "entregados": 3,
+      "porcentaje": 0.35
+    },
+    {
+      "codigo": "Swinton",
+      "fecha": "2019-06-29T22:00:00.000Z",
+      "vendedor": "RoRa"
+    },
+    {
+      "codigo": "Swinton",
+      "fecha": "2019-09-29T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "vendidos": 1
+    },
+    {
+      "codigo": "Tatiana",
+      "fecha": "2018-10-03T22:00:00.000Z",
+      "vendedor": "Ro",
+      "entregados": 20,
+      "porcentaje": 0.25
+    },
+    {
+      "codigo": "Tatiana",
+      "fecha": "2018-10-26T22:00:00.000Z",
+      "vendedor": "Ro",
+      "vendidos": 5
+    },
+    {
+      "codigo": "Tatiana",
+      "fecha": "2018-11-27T23:00:00.000Z",
+      "vendedor": "Ro",
+      "vendidos": 3
+    },
+    {
+      "codigo": "Tatiana",
+      "fecha": "2019-03-27T23:00:00.000Z",
+      "vendedor": "Ro",
+      "cobrado": 80
+    },
+    {
+      "codigo": "Tatiana",
+      "fecha": "2020-07-06T22:00:00.000Z",
+      "vendedor": "Ro",
+      "vendidos": 10,
+      "cobrado": 80
+    },
+    {
+      "codigo": "TeQuiero",
+      "fecha": "2018-01-09T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "entregados": 10,
+      "porcentaje": 0.3
+    },
+    {
+      "codigo": "TeQuiero",
+      "fecha": "2018-06-26T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "vendidos": 10,
+      "cobrado": 84
+    },
+    {
+      "codigo": "TeQuiero",
+      "fecha": "2018-06-26T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "entregados": 10
+    },
+    {
+      "codigo": "TeQuiero",
+      "fecha": "2018-09-16T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "vendidos": 2
+    },
+    {
+      "codigo": "TeQuiero",
+      "fecha": "2019-01-16T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "entregados": 6,
+      "vendidos": 4
+    },
+    {
+      "codigo": "TeQuiero",
+      "fecha": "2019-04-15T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "cobrado": 50.4
+    },
+    {
+      "codigo": "TeQuiero",
+      "fecha": "2019-09-29T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "vendidos": 6
+    },
+    {
+      "codigo": "TeQuiero",
+      "fecha": "2019-12-27T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "entregados": 6
+    },
+    {
+      "codigo": "TeQuiero",
+      "fecha": "2020-06-10T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "entregados": 10
+    },
+    {
+      "codigo": "TeQuiero",
+      "fecha": "2020-06-29T22:00:00.000Z",
+      "vendedor": "RoRa",
+      "vendidos": 10,
+      "cobrado": 84
+    },
+    {
+      "codigo": "Noelia",
+      "fecha": "2020-02-16T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "entregados": 10,
+      "porcentaje": 0.25
+    },
+    {
+      "codigo": "Usoa",
+      "fecha": "2020-03-03T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "entregados": 10,
+      "porcentaje": 0.25
+    },
+    {
+      "codigo": "Usoa",
+      "fecha": "2020-03-17T23:00:00.000Z",
+      "vendedor": "RoRa",
+      "vendidos": 4,
+      "nroFactura": "E20-001",
+      "cobrado": 36
+    }
+  ],
+  "salidas": [
+    {
+      "fecha": "2018-02-15T23:00:00.000Z",
+      "concepto": "Gastos Sala Flores ",
+      "importe": 116
+    },
+    {
+      "fecha": "2018-03-08T23:00:00.000Z",
+      "concepto": "Gastos envío Bs As Adrián ",
+      "importe": 76
+    },
+    {
+      "fecha": "2018-04-05T22:00:00.000Z",
+      "concepto": "Gastos envío Bs As Eusi ",
+      "importe": 76
+    },
+    {
+      "fecha": "2018-05-03T22:00:00.000Z",
+      "concepto": "Reintegro 50% Raed y 50%Roxy",
+      "reintegro": true,
+      "importe": 1000
+    },
+    {
+      "fecha": "2018-06-13T22:00:00.000Z",
+      "concepto": "Madrid Renfe",
+      "importe": 344.6
+    },
+    {
+      "fecha": "2018-06-13T22:00:00.000Z",
+      "concepto": "Madrid Hotel",
+      "importe": 58.9
+    },
+    {
+      "fecha": "2018-06-13T22:00:00.000Z",
+      "concepto": "Madrid Sala",
+      "importe": 36.3
+    },
+    {
+      "fecha": "2018-06-13T22:00:00.000Z",
+      "concepto": "Madrid Clara",
+      "importe": 72.5
+    },
+    {
+      "fecha": "2018-06-13T22:00:00.000Z",
+      "concepto": "Madrid viáticos comida ambos",
+      "importe": 114.85
+    },
+    {
+      "fecha": "2018-09-17T22:00:00.000Z",
+      "concepto": "La Bolsera",
+      "importe": 9.6
+    },
+    {
+      "fecha": "2018-08-28T22:00:00.000Z",
+      "concepto": "Correo Costa Rica",
+      "importe": 13.75
+    },
+    {
+      "fecha": "2018-08-28T22:00:00.000Z",
+      "concepto": "Comisión Pay Pal",
+      "importe": 1.32
+    },
+    {
+      "fecha": "2018-08-27T22:00:00.000Z",
+      "concepto": "Bonaire Eco de Sitges",
+      "importe": 5.25
+    },
+    {
+      "fecha": "2018-08-26T22:00:00.000Z",
+      "concepto": "Correo Cambalache",
+      "importe": 10.26
+    },
+    {
+      "fecha": "2018-10-05T22:00:00.000Z",
+      "concepto": "Correo Madrid Clara y amigo Raed",
+      "importe": 4.16
+    },
+    {
+      "fecha": "2018-10-11T22:00:00.000Z",
+      "concepto": "Comisión Raed de 180 €",
+      "comision": "Ra",
+      "importe": 45
+    },
+    {
+      "fecha": "2018-10-11T22:00:00.000Z",
+      "concepto": "Comisión Roxy de 1822 €",
+      "comision": "Ro",
+      "importe": 455.5
+    },
+    {
+      "fecha": "2018-10-11T22:00:00.000Z",
+      "concepto": "Reintegro 50% Raed y 50%Roxy",
+      "reintegro": true,
+      "importe": 400
+    },
+    {
+      "fecha": "2018-10-18T22:00:00.000Z",
+      "concepto": "Correo Miki y Arnina",
+      "importe": 27.5
+    },
+    {
+      "fecha": "2018-11-01T23:00:00.000Z",
+      "concepto": "Correo Beatriz Asturias 10 libros",
+      "importe": 3.55
+    },
+    {
+      "fecha": "2018-11-11T23:00:00.000Z",
+      "concepto": "Correo Costa Rica Bis",
+      "importe": 13.75
+    },
+    {
+      "fecha": "2019-01-02T23:00:00.000Z",
+      "concepto": "Correo envío 6 libros Girona El Cucut",
+      "importe": 2.75
+    },
+    {
+      "fecha": "2019-01-13T23:00:00.000Z",
+      "concepto": "Correo Cambalache",
+      "importe": 2.73
+    },
+    {
+      "fecha": "2019-01-23T23:00:00.000Z",
+      "concepto": "Correo Vic",
+      "importe": 1.95
+    },
+    {
+      "fecha": "2019-01-29T23:00:00.000Z",
+      "concepto": "Porcentaje Asosciación CNV x ventas Alborache",
+      "importe": 9.7,
+      "ctaRaed": true
+    },
+    {
+      "fecha": "2019-03-07T23:00:00.000Z",
+      "concepto": "Correo Carla Penna",
+      "importe": 1.95
+    },
+    {
+      "fecha": "2019-04-23T22:00:00.000Z",
+      "concepto": "Correo Nora",
+      "importe": 1
+    },
+    {
+      "fecha": "2019-06-04T22:00:00.000Z",
+      "concepto": "Puntos de Libro Imprenta",
+      "importe": 149.44
+    },
+    {
+      "fecha": "2019-09-20T22:00:00.000Z",
+      "concepto": "Traducción Luciana al portugués",
+      "importe": 500,
+      "ctaRaed": true
+    },
+    {
+      "fecha": "2019-10-03T22:00:00.000Z",
+      "concepto": "Reintegro 50% Raed y 50%Roxy",
+      "reintegro": true,
+      "importe": 1822.4
+    },
+    {
+      "fecha": "2019-10-06T22:00:00.000Z",
+      "concepto": "Correo Madrid Pilar y matrimonio amigo Raed",
+      "importe": 0.62
+    },
+    {
+      "fecha": "2019-10-09T22:00:00.000Z",
+      "concepto": "Comida Roxy/Raed en Amelie",
+      "importe": 20.6
+    },
+    {
+      "fecha": "2019-10-14T22:00:00.000Z",
+      "concepto": "Reintegro 50% Raed y 50%Roxy",
+      "reintegro": true,
+      "importe": 250
+    },
+    {
+      "fecha": "2019-10-15T22:00:00.000Z",
+      "concepto": "Reintegro 50% Raed y 50%Roxy",
+      "reintegro": true,
+      "importe": 400
+    },
+    {
+      "fecha": "2019-11-27T23:00:00.000Z",
+      "concepto": "Correo Murcia Cristina",
+      "importe": 0.65
+    },
+    {
+      "fecha": "2020-01-22T23:00:00.000Z",
+      "concepto": "Correo Sandra Madrid",
+      "importe": 0.65
+    },
+    {
+      "fecha": "2020-02-16T23:00:00.000Z",
+      "concepto": "Noelia 10 libros ",
+      "importe": 4.88
+    },
+    {
+      "fecha": "2020-02-21T23:00:00.000Z",
+      "concepto": "Libro y cartas simplecat a Bélgica",
+      "importe": 17.2
+    },
+    {
+      "fecha": "2020-06-10T22:00:00.000Z",
+      "concepto": "Libros a Té Quiero",
+      "importe": 2.82
+    },
+    {
+      "fecha": "2020-07-06T22:00:00.000Z",
+      "concepto": "Envío a Colombia Andrés Grillo",
+      "importe": 14.35
+    },
+    {
+      "fecha": "2020-08-25T22:00:00.000Z",
+      "concepto": "Correo María Florencia Badalona",
+      "importe": 0.76
+    },
+    {
+      "fecha": "2020-08-25T22:00:00.000Z",
+      "concepto": "10 Sobres para envíos  libros",
+      "importe": 2
+    },
+    {
+      "fecha": "2020-09-02T22:00:00.000Z",
+      "concepto": "Envío libro Pamela Madrid",
+      "importe": 0.5
+    },
+    {
+      "fecha": "2020-09-13T22:00:00.000Z",
+      "concepto": "Envío Beatriz 4 libros",
+      "importe": 2.67
+    },
+    {
+      "fecha": "2020-10-21T22:00:00.000Z",
+      "concepto": "Correo Cambalache",
+      "importe": 2.82
+    }
+  ],
+  "puntosDeVenta": [
+    {
+      "codigo": "Alfamar",
+      "nombre": "Alfamar 4 libros",
+      "entregados": 9,
+      "vendidos": 6,
+      "existencias": 3,
+      "aCobrar": 46.800000000000004,
+      "cobrado": 60,
+      "localidad": "Barcelona",
+      "contacto": "Emilio  ",
+      "telefono": "93 318 8453"
+    },
+    {
+      "codigo": "Alibri",
+      "nombre": "Alibri",
+      "entregados": 31,
+      "vendidos": 23,
+      "existencias": 8,
+      "aCobrar": 132.60000000000002,
+      "facturado": 179.40999999999997,
+      "cobrado": 132.60999999999999,
+      "localidad": "Barcelona",
+      "contacto": "Andrés / Ester",
+      "telefono": "93 317 0578",
+      "email": "psicologia@alibri.cat"
+    },
+    {
+      "codigo": "Ansara",
+      "nombre": "Ansara",
+      "entregados": 1,
+      "vendidos": 1,
+      "aCobrar": 9.959999999999999,
+      "cobrado": 10
+    },
+    {
+      "codigo": "Beatriz",
+      "nombre": "Beatriz Oliva",
+      "entregados": 14,
+      "vendidos": 10,
+      "existencias": 4,
+      "aCobrar": 54,
+      "facturado": 136,
+      "cobrado": 100,
+      "localidad": "Asturias",
+      "contacto": "Beatriz",
+      "telefono": "696 512 564",
+      "email": "bogrupos@gmail.com"
+    },
+    {
+      "codigo": "BioSitges",
+      "nombre": "BioSitges",
+      "entregados": 4,
+      "vendidos": 2,
+      "existencias": 2,
+      "aCobrar": 15.600000000000001,
+      "cobrado": 20,
+      "localidad": "Sitges"
+    },
+    {
+      "codigo": "CafeLletres",
+      "nombre": "El Cafe de les Lletres",
+      "entregados": 5,
+      "vendidos": 1,
+      "existencias": 4,
+      "aCobrar": 8.399999999999999,
+      "localidad": "Vic",
+      "contacto": "Jose Barragán",
+      "telefono": "93. 889. 35. 68",
+      "email": "elcafedeleslletres@yahoo.es"
+    },
+    {
+      "codigo": "Cambalache",
+      "nombre": "Asociación Cambalache",
+      "entregados": 40,
+      "vendidos": 16,
+      "existencias": 24,
+      "aCobrar": 96,
+      "facturado": 96,
+      "cobrado": 72,
+      "localidad": "Oviedo",
+      "contacto": "Germán / Eduardo",
+      "telefono": "985 20 22 92",
+      "email": "cambalache@localcambalache.org"
+    },
+    {
+      "codigo": "Carla Penna",
+      "nombre": "Carla Penna",
+      "entregados": 4,
+      "vendidos": 4,
+      "aCobrar": 39.839999999999996,
+      "cobrado": 40,
+      "telefono": "667 98 37 21"
+    },
+    {
+      "codigo": "Clara",
+      "nombre": "Clara Rodriguez",
+      "entregados": 20,
+      "vendidos": 20,
+      "aCobrar": 90,
+      "facturado": 180,
+      "cobrado": 180,
+      "localidad": "Madrid",
+      "contacto": "Clara Rodriguez",
+      "telefono": "636 613 886"
+    },
+    {
+      "codigo": "Dharani",
+      "nombre": "Dharani",
+      "entregados": 4,
+      "vendidos": 1,
+      "devueltos": 3,
+      "aCobrar": 9,
+      "cobrado": 9,
+      "localidad": "Sitges",
+      "contacto": " "
+    },
+    {
+      "codigo": "ECreadoras",
+      "nombre": "Empresas Creadoras",
+      "entregados": 1,
+      "vendidos": 1,
+      "aCobrar": 10.2,
+      "facturado": 13,
+      "cobrado": 13
+    },
+    {
+      "codigo": "El Cucut",
+      "nombre": "Llibreria El Cucut",
+      "entregados": 6,
+      "existencias": 6,
+      "localidad": "Girona",
+      "contacto": "María Teresa",
+      "telefono": "655 95 18 31  972 75 98 82"
+    },
+    {
+      "codigo": "Encarna",
+      "nombre": "Encarna Martínez",
+      "entregados": 20,
+      "vendidos": 10,
+      "existencias": 10,
+      "aCobrar": 90,
+      "cobrado": 90,
+      "localidad": "Barcelona",
+      "contacto": "Encarna Martínez",
+      "telefono": "607 112 743"
+    },
+    {
+      "codigo": "Gabalda",
+      "nombre": "Gabaldà",
+      "entregados": 14,
+      "vendidos": 8,
+      "existencias": 6,
+      "aCobrar": 67.19999999999999,
+      "facturado": 33.6,
+      "cobrado": 33.6,
+      "localidad": "Sant Pere",
+      "telefono": "93 896 02 51",
+      "email": "llibreria.gabalda@gmail.com"
+    },
+    {
+      "codigo": "Lluvia",
+      "nombre": "El Olor de la Lluvia",
+      "entregados": 10,
+      "vendidos": 5,
+      "existencias": 5,
+      "aCobrar": 39,
+      "facturado": 31.2,
+      "cobrado": 31.2,
+      "localidad": "Madrid",
+      "contacto": "Raquel y Alfonso ",
+      "telefono": "91 138 9054",
+      "email": "libreria@elolordelalluvia.es"
+    },
+    {
+      "codigo": "LosAngeles",
+      "nombre": "Librería Los Ángeles",
+      "entregados": 8,
+      "vendidos": 6,
+      "existencias": 2,
+      "aCobrar": 50.4,
+      "cobrado": 50.400000000000006,
+      "localidad": "Barcelona",
+      "contacto": "María del Pilar",
+      "telefono": "932 18 89 86",
+      "email": "Travessera de Gràcia, 157  "
+    },
+    {
+      "codigo": "Manu Mora",
+      "nombre": "Manu Mora",
+      "entregados": 25,
+      "vendidos": 25,
+      "aCobrar": 195,
+      "localidad": "Bs As"
+    },
+    {
+      "codigo": "Maya",
+      "nombre": "La Mano de Maya",
+      "entregados": 5,
+      "vendidos": 2,
+      "devueltos": 2,
+      "existencias": 1,
+      "aCobrar": 18,
+      "facturado": 18,
+      "cobrado": 18,
+      "localidad": "Sitges",
+      "contacto": "Laia",
+      "telefono": "93 510 48 89",
+      "email": "info@lamanodemaya.com"
+    },
+    {
+      "codigo": "Mulassa",
+      "nombre": "La Mulassa",
+      "entregados": 6,
+      "vendidos": 3,
+      "existencias": 3,
+      "aCobrar": 1.8000000000000007,
+      "facturado": 23.4,
+      "cobrado": 23.4,
+      "localidad": "Vilanova i la Geltrú",
+      "contacto": "Berta Chivite",
+      "telefono": "93 814 48 46",
+      "email": "info@llibrerialamulassa.cat/monserrat@llibrerialamulassa.cat"
+    },
+    {
+      "codigo": "Olivia",
+      "nombre": "Ed Olivia ",
+      "entregados": 55,
+      "vendidos": 20,
+      "devueltos": 25,
+      "existencias": 10,
+      "aCobrar": 192,
+      "cobrado": 150,
+      "localidad": "Buenos Aires",
+      "contacto": "Adrián Scotto",
+      "telefono": "0054 9 11 3202 6709",
+      "email": "info@editorialolivia.com"
+    },
+    {
+      "codigo": "Olympia",
+      "nombre": "Olympia",
+      "entregados": 4,
+      "vendidos": 4,
+      "aCobrar": 24,
+      "cobrado": 24,
+      "telefono": "616 335 060"
+    },
+    {
+      "codigo": "SimpleCat",
+      "nombre": "Simple.cat",
+      "entregados": 260,
+      "vendidos": 260,
+      "aCobrar": 1630.2,
+      "facturado": 2024.1399999999999,
+      "cobrado": 2024.1399999999999,
+      "localidad": "Barcelona",
+      "telefono": "656 966 373",
+      "email": "enric@simple.cat"
+    },
+    {
+      "codigo": "Swinton",
+      "nombre": "Swinton & Grant",
+      "entregados": 3,
+      "vendidos": 1,
+      "existencias": 2,
+      "aCobrar": 7.800000000000001,
+      "localidad": "Madrid",
+      "contacto": "Goyo  ",
+      "telefono": "659 479 421",
+      "email": "aloha@swintonandgrant.com"
+    },
+    {
+      "codigo": "Tatiana",
+      "nombre": "Tatiana Sibilia",
+      "entregados": 20,
+      "vendidos": 18,
+      "existencias": 2,
+      "aCobrar": 162,
+      "cobrado": 160,
+      "localidad": "Barcelona",
+      "telefono": "671 843 924"
+    },
+    {
+      "codigo": "TeQuiero",
+      "nombre": "Té Quiero",
+      "entregados": 42,
+      "vendidos": 32,
+      "existencias": 10,
+      "aCobrar": 268.79999999999995,
+      "cobrado": 218.4,
+      "localidad": "Barcelona",
+      "contacto": "Iris / Chelo  ",
+      "telefono": "93 284 6000",
+      "email": "libreríatequiero@yahoo.es"
+    },
+    {
+      "codigo": "Noelia",
+      "nombre": "Noelia CNV",
+      "entregados": 10,
+      "existencias": 10,
+      "telefono": "628 125 176"
+    },
+    {
+      "codigo": "Usoa",
+      "nombre": "Usoa",
+      "entregados": 10,
+      "vendidos": 4,
+      "existencias": 6,
+      "aCobrar": 36,
+      "cobrado": 36,
+      "telefono": "696 777 917"
+    }
+  ]
+}
