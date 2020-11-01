@@ -24,9 +24,7 @@ declare global {
     telefono?: string;
     email?: string;
     direccion?: string;
-    entregados?: number;
-    existencias?: number;
-    vendidos?: number;
+    nif?: string;
   };
 
   type UsuarioType = {
