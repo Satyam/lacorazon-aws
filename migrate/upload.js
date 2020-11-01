@@ -12,6 +12,7 @@ const db = admin.database();
 const data = require('./La Corazon.json');
 
 function addVendedores() {
+  console.log('vendedores');
   return db.ref('vendedores').set({
     ro: {
       id: 'ro',
@@ -32,6 +33,7 @@ function addVendedores() {
 }
 
 function addDistribuidores() {
+  console.log('distribuidores')
   const campos = [
     'codigo',
     'nombre',
@@ -62,33 +64,26 @@ function byFecha(a, b) {
 }
 
 function addVentaDirecta() {
+  console.log('venta directa')
   const ventas = db.ref('ventas');
   return Promise.all(
-    data.ventaDirecta.sort(byFecha).map(venta =>
+    data.ventaDirecta.sort(byFecha).map(({vendedor, ...venta}) =>
       ventas.push({
         ...venta,
-        fecha: new Date(venta.fecha),
-        vendedor: venta.vendedor ? venta.vendedor.toLowerCase() : null
+        vendedor: vendedor ? vendedor.toLowerCase() : null
       })
     )
   );
 }
 
-// function sortByCodigoFecha(a, b) {
-//   const ca = a.codigo;
-//   const cb = b.codigo;
-//   if (ca < cb) return -1;
-//   if (ca > cb) return 1;
-//   return byFecha(a,b);
-// }
 function addEnConsigna() {
+  console.log('en consigna')
   const consigna = db.ref('consigna');
   return Promise.all(
-    data.enConsigna.sort(byFecha).map(({ codigo, ...venta }) =>
+    data.enConsigna.sort(byFecha).map(({ codigo, vendedor, ...venta }) =>
       consigna.push({
         ...venta,
-        fecha: new Date(venta.fecha),
-        vendedor: venta.vendedor ? venta.vendedor.toLowerCase() : null,
+        vendedor: vendedor ? vendedor.toLowerCase() : null,
         distribuidor: codigo.toLowerCase()
       })
     )
@@ -96,20 +91,24 @@ function addEnConsigna() {
 }
 
 function addSalidas() {
+  console.log('salidas')
   const salidas = db.ref('salidas');
   return Promise.all(
     data.salidas.sort(byFecha).map(salida =>
-      salidas.push({
-        ...salida,
-        fecha: new Date(salida.fecha)
-      })
+      salidas.push(salida)
     )
   );
 }
 
-db.ref().remove()
+db.ref().set({
+  vendedores: null,
+  distribuidores: null,
+  consigna: null,
+  salidas: null
+})
   .then(addVendedores)
   .then(addDistribuidores)
   .then(addVentaDirecta)
   .then(addEnConsigna)
-  .then(addSalidas);
+  .then(addSalidas)
+  .then(() => process.exit());
