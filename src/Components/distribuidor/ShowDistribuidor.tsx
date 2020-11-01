@@ -5,11 +5,15 @@ import { useParams } from 'react-router-dom';
 import { LabeledText } from 'Components/Form';
 import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
-import { useDistribuidor } from 'Store/distribuidores/hooks';
+
+import { db } from 'Firebase';
+import { useObjectVal } from 'react-firebase-hooks/database';
 
 export default function ShowDistribuidor() {
   const { idDistribuidor } = useParams<{ idDistribuidor: ID }>();
-  const { loading, error, distribuidor } = useDistribuidor(idDistribuidor);
+  const [distribuidor, loading, error] = useObjectVal<DistribuidorType>(
+    db.ref(`distribuidores/${idDistribuidor}`)
+  );
 
   if (loading) return <Loading>Cargando distribuidor</Loading>;
 
@@ -27,8 +31,7 @@ export default function ShowDistribuidor() {
           <LabeledText label="Dirección" value={distribuidor.direccion} pre />
           <LabeledText label="Contacto" value={distribuidor.contacto} />
           <LabeledText label="Teléfono" value={distribuidor.telefono} />
-          <LabeledText label="Entregados" value={distribuidor.entregados} />
-          <LabeledText label="Existencias" value={distribuidor.existencias} />
+          <LabeledText label="NIF" value={distribuidor.nif} />
         </>
       ) : (
         <Alert color="danger">El distribuidor no existe o fue borrado</Alert>

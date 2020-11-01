@@ -11,16 +11,16 @@ import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
 import { useModals } from 'Providers/Modals';
 
-import { useDispatch } from 'react-redux';
+import { db } from 'Firebase';
+import { useListVals } from 'react-firebase-hooks/database';
 
 import styles from './styles.module.css';
-import { useDistribuidores } from 'Store/distribuidores/hooks';
-import { deleteDistribuidor } from 'Store/distribuidores/actions';
 
 export default function ListDistribuidores() {
   const history = useHistory();
-  const dispatch = useDispatch();
-  const { loading, error, distribuidores } = useDistribuidores();
+  const [distribuidores, loading, error] = useListVals<DistribuidorType>(
+    db.ref('distribuidores')
+  );
 
   const { confirmDelete } = useModals();
 
@@ -30,8 +30,9 @@ export default function ListDistribuidores() {
     const { nombre, id } = ev.currentTarget.dataset;
     if (!id) return;
     ev.stopPropagation();
+    debugger;
     confirmDelete(`al distribuidor ${nombre}`, () =>
-      dispatch(deleteDistribuidor(id))
+      db.ref(`distribuidores/${id}`).remove()
     );
   };
   const onAdd: React.MouseEventHandler<HTMLButtonElement> = (ev) => {
@@ -60,8 +61,7 @@ export default function ListDistribuidores() {
         <td className={styles.small}>
           {(distribuidor.email || '').replace('@', '\n@')}
         </td>
-        <td align="right">{distribuidor.entregados}</td>
-        <td align="right">{distribuidor.existencias}</td>
+        <td>{distribuidor.nif}</td>
         <td align="center">
           <ButtonGroup size="sm">
             <ButtonIconEdit
@@ -100,8 +100,7 @@ export default function ListDistribuidores() {
             <th>Teléfono</th>
             <th>Dirección</th>
             <th>e-Mail</th>
-            <th>Entregados</th>
-            <th>Existencias</th>
+            <th>NIF</th>
             <th />
           </tr>
         </thead>

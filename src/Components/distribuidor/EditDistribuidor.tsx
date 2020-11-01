@@ -5,8 +5,6 @@ import { Alert, Form } from 'reactstrap';
 import * as yup from 'yup';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { unwrapResult } from '@reduxjs/toolkit';
-import { useDispatch } from 'react-redux';
 
 // My own library imports
 import { TextField, SubmitButton } from 'Components/Form';
@@ -15,16 +13,10 @@ import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
 import { useModals } from 'Providers/Modals';
 
-// App-related imports
-import { useDistribuidor } from 'Store/distribuidores/hooks';
-import {
-  createDistribuidor,
-  updateDistribuidor,
-  deleteDistribuidor,
-} from 'Store/distribuidores/actions';
+import { db } from 'Firebase';
+import { useObjectVal } from 'react-firebase-hooks/database';
 
 // Types
-import type { AppDispatch } from 'Store';
 type ShortDistribuidor = Omit<DistribuidorType, 'idDistribuidor'>;
 
 const distribuidorSchema = yup.object().shape<ShortDistribuidor>({
@@ -38,16 +30,15 @@ const distribuidorSchema = yup.object().shape<ShortDistribuidor>({
     .default(''),
   email: yup.string().trim().email().default(''),
   direccion: yup.string().trim().default(''),
-  entregados: yup.number().default(0),
-  existencias: yup.number().default(0),
-  vendidos: yup.number().default(0),
+  nif: yup.string().trim().default(''),
 });
 
 const EditDistribuidor: React.FC = () => {
   const { idDistribuidor } = useParams<{ idDistribuidor: ID }>();
-  const { error, distribuidor } = useDistribuidor(idDistribuidor);
+  const [distribuidor, , error] = useObjectVal<DistribuidorType>(
+    db.ref(`distribuidores/${idDistribuidor}`)
+  );
   const history = useHistory();
-  const dispatch: AppDispatch = useDispatch();
   const { openLoading, closeLoading, confirmDelete } = useModals();
 
   const methods = useForm<ShortDistribuidor>({
@@ -65,7 +56,7 @@ const EditDistribuidor: React.FC = () => {
     confirmDelete(
       `al distribuidor ${distribuidor && distribuidor.nombre}`,
       async () => {
-        await dispatch(deleteDistribuidor(idDistribuidor));
+        await db.ref(`distribuidores/${idDistribuidor}`).remove();
         history.replace('/distribuidores');
       }
     );
@@ -78,33 +69,26 @@ const EditDistribuidor: React.FC = () => {
     if (idDistribuidor) {
       openLoading('Actualizando Distribuidor');
       if (methods.formState.isDirty) {
-        await dispatch(updateDistribuidor({ idDistribuidor, ...values }))
-          .then(unwrapResult)
-          .catch((err) => {
-            if (err.name === 'DuplicateError') {
-              methods.setError(err.message, {
-                type: 'duplicado',
-                message: `Ese ${err.message} ya existe`,
-              });
-            }
-          });
+        await db.ref(`distribuidores/${idDistribuidor}`).update(
+          Object.keys(methods.formState.dirtyFields).reduce<
+            Partial<DistribuidorType>
+          >(
+            (newValues, name) => ({
+              ...newValues,
+              [name]: values[name as keyof ShortDistribuidor],
+            }),
+            {}
+          )
+        );
       }
     } else {
       openLoading('Creando distribuidor');
-      await dispatch(createDistribuidor({ ...values, idDistribuidor }))
-        .then(unwrapResult)
-        .then((distr) => {
-          history.replace(`/distribuidor/edit/${distr.idDistribuidor}`);
-          return distr;
-        })
-        .catch((err) => {
-          if (err.name === 'DuplicateError') {
-            methods.setError(err.message, {
-              type: 'duplicado',
-              message: `Ese ${err.message} ya existe`,
-            });
-          }
-        });
+      const newRef = await db.ref('distribuidores').push();
+      await newRef.set({
+        ...values,
+        idDistribuidor: newRef.key,
+      });
+      history.replace(`/distribuidor/edit/${newRef.key}`);
     }
     closeLoading();
   };
@@ -132,6 +116,7 @@ const EditDistribuidor: React.FC = () => {
             rows={5}
             methods={methods}
           />
+          <TextField name="nif" label="NIF" methods={methods} />
           <ButtonSet>
             <SubmitButton component={ButtonIconAdd} methods={methods}>
               {idDistribuidor ? 'Modificar' : 'Agregar'}
