@@ -41,7 +41,8 @@ function addDistribuidores() {
     'contacto',
     'telefono',
     'email',
-    'direccion'
+    'direccion',
+    'nif'
   ];
   return db.ref('distribuidores').set(
     data.puntosDeVenta.reduce((distribuidores, distribuidor) => ({
