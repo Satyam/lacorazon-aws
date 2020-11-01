@@ -15,17 +15,17 @@ function addVendedores() {
   console.log('vendedores');
   return db.ref('vendedores').set({
     ro: {
-      id: 'ro',
+      idVendedor: 'ro',
       nombre: 'Roxana Cabut',
       email: 'RoxanaCabut@gmail.com'
     },
     ra:{
-      id: 'ra',
+      idVendedor: 'ra',
       nombre: 'Raed El Younsi',
       email: 'reyezuelo@gmail.com'
     },
     rora:{
-      id: 'rora',
+      idVendedor: 'rora',
       nombre: 'Roxana & Raed',
       email: 'reyezuelo@gmail.com;RoxanaCabut@gmail.com'
     }
@@ -47,7 +47,7 @@ function addDistribuidores() {
     data.puntosDeVenta.reduce((distribuidores, distribuidor) => ({
       ...distribuidores,
       [distribuidor.codigo.toLowerCase()]: campos.reduce((acc, campo) => {
-        if (campo === 'codigo') acc.id = distribuidor.codigo.toLowerCase();
+        if (campo === 'codigo') acc.idDistribuidor = distribuidor.codigo.toLowerCase();
         else if (distribuidor[campo]) acc[campo] = distribuidor[campo];
         return acc;
       }, {})
@@ -70,7 +70,7 @@ function addVentaDirecta() {
     data.ventaDirecta.sort(byFecha).map(({vendedor, ...venta}) =>
       ventas.push({
         ...venta,
-        vendedor: vendedor ? vendedor.toLowerCase() : null
+        idVendedor: vendedor ? vendedor.toLowerCase() : null
       })
     )
   );
@@ -83,8 +83,8 @@ function addEnConsigna() {
     data.enConsigna.sort(byFecha).map(({ codigo, vendedor, ...venta }) =>
       consigna.push({
         ...venta,
-        vendedor: vendedor ? vendedor.toLowerCase() : null,
-        distribuidor: codigo.toLowerCase()
+        idVendedor: vendedor ? vendedor.toLowerCase() : null,
+        idDistribuidor: codigo.toLowerCase()
       })
     )
   );
