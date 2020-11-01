@@ -774,7 +774,8 @@
       "vendedor": "RoRa",
       "facturado": 54.6,
       "nroFactura": "E19-002",
-      "cobrado": 54.6
+      "cobrado": 54.6,
+      "ctaRaed": true
     },
     {
       "codigo": "Alibri",
@@ -783,7 +784,8 @@
       "vendidos": 4,
       "facturado": 31.2,
       "nroFactura": "E19-007",
-      "cobrado": 31.2
+      "cobrado": 31.2,
+      "ctaRaed": true
     },
     {
       "codigo": "Alibri",
@@ -929,7 +931,8 @@
       "fecha": "2019-03-29T23:00:00.000Z",
       "vendedor": "RoRa",
       "nroFactura": "E19-005",
-      "cobrado": 48
+      "cobrado": 48,
+      "ctaRaed": true
     },
     {
       "codigo": "Cambalache",
@@ -938,7 +941,8 @@
       "vendidos": 4,
       "facturado": 24,
       "nroFactura": "E19-009",
-      "cobrado": 24
+      "cobrado": 24,
+      "ctaRaed": true
     },
     {
       "codigo": "Cambalache",
@@ -1006,7 +1010,8 @@
       "vendidos": 10,
       "facturado": 90,
       "nroFactura": "E20-006",
-      "cobrado": 90
+      "cobrado": 90,
+      "ctaRaed": true
     },
     {
       "codigo": "Dharani",
@@ -1043,7 +1048,8 @@
       "fecha": "2019-10-03T22:00:00.000Z",
       "vendedor": "RoRa",
       "nroFactura": "E19-006",
-      "cobrado": 13
+      "cobrado": 13,
+      "ctaRaed": true
     },
     {
       "codigo": "El Cucut",
@@ -1117,7 +1123,8 @@
       "vendedor": "RoRa",
       "facturado": 33.6,
       "nroFactura": "E19-004",
-      "cobrado": 33.6
+      "cobrado": 33.6,
+      "ctaRaed": true
     },
     {
       "codigo": "Gabalda",
@@ -1228,7 +1235,8 @@
       "fecha": "2019-01-15T23:00:00.000Z",
       "vendedor": "Ro",
       "nroFactura": "E19-001",
-      "cobrado": 18
+      "cobrado": 18,
+      "ctaRaed": true
     },
     {
       "codigo": "Maya",
@@ -1262,7 +1270,8 @@
       "vendidos": 1,
       "facturado": 23.4,
       "nroFactura": "E19-008",
-      "cobrado": 23.4
+      "cobrado": 23.4,
+      "ctaRaed": true
     },
     {
       "codigo": "Olivia",
@@ -1351,7 +1360,8 @@
       "fecha": "2019-03-26T23:00:00.000Z",
       "vendedor": "RoRa",
       "nroFactura": "E19-003",
-      "cobrado": 460.2
+      "cobrado": 460.2,
+      "ctaRaed": true
     },
     {
       "codigo": "SimpleCat",
@@ -1368,7 +1378,8 @@
       "fecha": "2019-09-29T22:00:00.000Z",
       "vendedor": "RoRa",
       "nroFactura": "E19-010",
-      "cobrado": 390
+      "cobrado": 390,
+      "ctaRaed": true
     },
     {
       "codigo": "SimpleCat",
@@ -1379,7 +1390,8 @@
       "vendidos": 70,
       "facturado": 546,
       "nroFactura": "E19-012",
-      "cobrado": 546
+      "cobrado": 546,
+      "ctaRaed": true
     },
     {
       "codigo": "SimpleCat",
@@ -1389,7 +1401,8 @@
       "vendidos": 51,
       "facturado": 397.8,
       "nroFactura": "E20-003",
-      "cobrado": 397.8
+      "cobrado": 397.8,
+      "ctaRaed": true
     },
     {
       "codigo": "Swinton",
@@ -1525,7 +1538,8 @@
       "vendedor": "RoRa",
       "vendidos": 4,
       "nroFactura": "E20-001",
-      "cobrado": 36
+      "cobrado": 36,
+      "ctaRaed": true
     }
   ],
   "salidas": [
@@ -1537,12 +1551,14 @@
     {
       "fecha": "2018-03-08T23:00:00.000Z",
       "concepto": "Gastos envío Bs As Adrián ",
-      "importe": 76
+      "importe": 76,
+      "iva": 0.21
     },
     {
       "fecha": "2018-04-05T22:00:00.000Z",
       "concepto": "Gastos envío Bs As Eusi ",
-      "importe": 76
+      "importe": 76,
+      "iva": 0.21
     },
     {
       "fecha": "2018-05-03T22:00:00.000Z",
@@ -1553,17 +1569,20 @@
     {
       "fecha": "2018-06-13T22:00:00.000Z",
       "concepto": "Madrid Renfe",
-      "importe": 344.6
+      "importe": 344.6,
+      "iva": 0.21
     },
     {
       "fecha": "2018-06-13T22:00:00.000Z",
       "concepto": "Madrid Hotel",
-      "importe": 58.9
+      "importe": 58.9,
+      "iva": 0.21
     },
     {
       "fecha": "2018-06-13T22:00:00.000Z",
       "concepto": "Madrid Sala",
-      "importe": 36.3
+      "importe": 36.3,
+      "iva": 0.21
     },
     {
       "fecha": "2018-06-13T22:00:00.000Z",
@@ -1573,17 +1592,20 @@
     {
       "fecha": "2018-06-13T22:00:00.000Z",
       "concepto": "Madrid viáticos comida ambos",
-      "importe": 114.85
+      "importe": 114.85,
+      "iva": 0.21
     },
     {
       "fecha": "2018-09-17T22:00:00.000Z",
       "concepto": "La Bolsera",
-      "importe": 9.6
+      "importe": 9.6,
+      "iva": 0.21
     },
     {
       "fecha": "2018-08-28T22:00:00.000Z",
       "concepto": "Correo Costa Rica",
-      "importe": 13.75
+      "importe": 13.75,
+      "iva": 0.21
     },
     {
       "fecha": "2018-08-28T22:00:00.000Z",
@@ -1593,17 +1615,20 @@
     {
       "fecha": "2018-08-27T22:00:00.000Z",
       "concepto": "Bonaire Eco de Sitges",
-      "importe": 5.25
+      "importe": 5.25,
+      "iva": 0.21
     },
     {
       "fecha": "2018-08-26T22:00:00.000Z",
       "concepto": "Correo Cambalache",
-      "importe": 10.26
+      "importe": 10.26,
+      "iva": 0.21
     },
     {
       "fecha": "2018-10-05T22:00:00.000Z",
       "concepto": "Correo Madrid Clara y amigo Raed",
-      "importe": 4.16
+      "importe": 4.16,
+      "iva": 0.21
     },
     {
       "fecha": "2018-10-11T22:00:00.000Z",
@@ -1626,32 +1651,38 @@
     {
       "fecha": "2018-10-18T22:00:00.000Z",
       "concepto": "Correo Miki y Arnina",
-      "importe": 27.5
+      "importe": 27.5,
+      "iva": 0.21
     },
     {
       "fecha": "2018-11-01T23:00:00.000Z",
       "concepto": "Correo Beatriz Asturias 10 libros",
-      "importe": 3.55
+      "importe": 3.55,
+      "iva": 0.21
     },
     {
       "fecha": "2018-11-11T23:00:00.000Z",
       "concepto": "Correo Costa Rica Bis",
-      "importe": 13.75
+      "importe": 13.75,
+      "iva": 0.21
     },
     {
       "fecha": "2019-01-02T23:00:00.000Z",
       "concepto": "Correo envío 6 libros Girona El Cucut",
-      "importe": 2.75
+      "importe": 2.75,
+      "iva": 0.21
     },
     {
       "fecha": "2019-01-13T23:00:00.000Z",
       "concepto": "Correo Cambalache",
-      "importe": 2.73
+      "importe": 2.73,
+      "iva": 0.21
     },
     {
       "fecha": "2019-01-23T23:00:00.000Z",
       "concepto": "Correo Vic",
-      "importe": 1.95
+      "importe": 1.95,
+      "iva": 0.21
     },
     {
       "fecha": "2019-01-29T23:00:00.000Z",
@@ -1662,7 +1693,8 @@
     {
       "fecha": "2019-03-07T23:00:00.000Z",
       "concepto": "Correo Carla Penna",
-      "importe": 1.95
+      "importe": 1.95,
+      "iva": 0.21
     },
     {
       "fecha": "2019-04-23T22:00:00.000Z",
@@ -1672,7 +1704,8 @@
     {
       "fecha": "2019-06-04T22:00:00.000Z",
       "concepto": "Puntos de Libro Imprenta",
-      "importe": 149.44
+      "importe": 149.44,
+      "iva": 0.21
     },
     {
       "fecha": "2019-09-20T22:00:00.000Z",
@@ -1775,7 +1808,8 @@
       "cobrado": 60,
       "localidad": "Barcelona",
       "contacto": "Emilio  ",
-      "telefono": "93 318 8453"
+      "telefono": "93 318 8453",
+      "direccion": "Carrer de Roger de Llúria, 46"
     },
     {
       "codigo": "Alibri",
@@ -1789,7 +1823,8 @@
       "localidad": "Barcelona",
       "contacto": "Andrés / Ester",
       "telefono": "93 317 0578",
-      "email": "psicologia@alibri.cat"
+      "email": "psicologia@alibri.cat",
+      "direccion": "Carrer de Balmes, 26  - Barcelona"
     },
     {
       "codigo": "Ansara",
@@ -1811,7 +1846,8 @@
       "localidad": "Asturias",
       "contacto": "Beatriz",
       "telefono": "696 512 564",
-      "email": "bogrupos@gmail.com"
+      "email": "bogrupos@gmail.com",
+      "direccion": "Avenida María Faes 15 Siero 33519  Asturias"
     },
     {
       "codigo": "BioSitges",
@@ -1833,7 +1869,9 @@
       "localidad": "Vic",
       "contacto": "Jose Barragán",
       "telefono": "93. 889. 35. 68",
-      "email": "elcafedeleslletres@yahoo.es"
+      "email": "elcafedeleslletres@yahoo.es",
+      "direccion": "CAFÈS BARDOM, S.L. EL CAFÈ DE LES LLETRES C/ Sta. Joaquima de Vedruna, 29- 08500 VIC",
+      "nif": "NIF B66875915"
     },
     {
       "codigo": "Cambalache",
@@ -1847,7 +1885,9 @@
       "localidad": "Oviedo",
       "contacto": "Germán / Eduardo",
       "telefono": "985 20 22 92",
-      "email": "cambalache@localcambalache.org"
+      "email": "cambalache@localcambalache.org",
+      "direccion": "c/Martínez Vigil 30, bajo\n33010 Oviedo - Asturias",
+      "nif": "CIF G74025230"
     },
     {
       "codigo": "Carla Penna",
@@ -1868,7 +1908,8 @@
       "cobrado": 180,
       "localidad": "Madrid",
       "contacto": "Clara Rodriguez",
-      "telefono": "636 613 886"
+      "telefono": "636 613 886",
+      "direccion": "Calle Francisco Rabal 2, 2-C\n28901 Getafe Madrid"
     },
     {
       "codigo": "Dharani",
@@ -1897,7 +1938,9 @@
       "existencias": 6,
       "localidad": "Girona",
       "contacto": "María Teresa",
-      "telefono": "655 95 18 31  972 75 98 82"
+      "telefono": "655 95 18 31  972 75 98 82",
+      "direccion": "Carrer del Roser 29-31 Torreola de Montgrí 17257    ",
+      "nif": "NIF B55249718"
     },
     {
       "codigo": "Encarna",
@@ -1922,7 +1965,9 @@
       "cobrado": 33.6,
       "localidad": "Sant Pere",
       "telefono": "93 896 02 51",
-      "email": "llibreria.gabalda@gmail.com"
+      "email": "llibreria.gabalda@gmail.com",
+      "direccion": "Plaça de la Vila 8, Sant Pere de Ribes  08810 Barcelona\nPilar Gabaldà Pascual\n\n",
+      "nif": "NIF 77081261 G"
     },
     {
       "codigo": "Lluvia",
@@ -1936,7 +1981,9 @@
       "localidad": "Madrid",
       "contacto": "Raquel y Alfonso ",
       "telefono": "91 138 9054",
-      "email": "libreria@elolordelalluvia.es"
+      "email": "libreria@elolordelalluvia.es",
+      "direccion": "c/ de las Maldonadas 6 28005 Madrid \nEl Olor de la Lluvia C.B.",
+      "nif": "E 87413407"
     },
     {
       "codigo": "LosAngeles",
@@ -1972,7 +2019,9 @@
       "localidad": "Sitges",
       "contacto": "Laia",
       "telefono": "93 510 48 89",
-      "email": "info@lamanodemaya.com"
+      "email": "info@lamanodemaya.com",
+      "direccion": "MEXCALI, S.L.  Carrer de Sant Josep, 36-38",
+      "nif": "B66529702"
     },
     {
       "codigo": "Mulassa",
@@ -1986,7 +2035,9 @@
       "localidad": "Vilanova i la Geltrú",
       "contacto": "Berta Chivite",
       "telefono": "93 814 48 46",
-      "email": "info@llibrerialamulassa.cat/monserrat@llibrerialamulassa.cat"
+      "email": "info@llibrerialamulassa.cat/monserrat@llibrerialamulassa.cat",
+      "direccion": "Rambla Principal 2, 08800 Vilanova i la Geltrú\n",
+      "nif": "B62197165"
     },
     {
       "codigo": "Olivia",
@@ -2000,7 +2051,8 @@
       "localidad": "Buenos Aires",
       "contacto": "Adrián Scotto",
       "telefono": "0054 9 11 3202 6709",
-      "email": "info@editorialolivia.com"
+      "email": "info@editorialolivia.com",
+      "direccion": "Esmeralda 980 1º B \nC.A.B.A. (C1007ABJ) Argentina"
     },
     {
       "codigo": "Olympia",
@@ -2021,7 +2073,9 @@
       "cobrado": 2024.1399999999999,
       "localidad": "Barcelona",
       "telefono": "656 966 373",
-      "email": "enric@simple.cat"
+      "email": "enric@simple.cat",
+      "direccion": " C/Joan Ramon Benaprès, 15, 1-1 08870 Sitges",
+      "nif": "NIF: 35.111.953S"
     },
     {
       "codigo": "Swinton",
@@ -2033,7 +2087,9 @@
       "localidad": "Madrid",
       "contacto": "Goyo  ",
       "telefono": "659 479 421",
-      "email": "aloha@swintonandgrant.com"
+      "email": "aloha@swintonandgrant.com",
+      "direccion": "Factura: Bit Flow Studio S. L. \nc/ Miguel Servet 21 - ",
+      "nif": "B 85849065"
     },
     {
       "codigo": "Tatiana",
@@ -2057,7 +2113,9 @@
       "localidad": "Barcelona",
       "contacto": "Iris / Chelo  ",
       "telefono": "93 284 6000",
-      "email": "libreríatequiero@yahoo.es"
+      "email": "libreríatequiero@yahoo.es",
+      "direccion": "Carrer de Torrijos, 9 - Barcelona\n",
+      "nif": "NIF 38062310R"
     },
     {
       "codigo": "Noelia",
