@@ -5,6 +5,7 @@ import { Alert, Form } from 'reactstrap';
 import * as yup from 'yup';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import slugify from 'slugify';
 
 // My own library imports
 import { TextField, SubmitButton } from 'Components/Form';
@@ -18,6 +19,10 @@ import { useObjectVal } from 'react-firebase-hooks/database';
 
 // Types
 type ShortDistribuidor = Omit<DistribuidorType, 'idDistribuidor'>;
+
+function distrRef(idDistribuidor?: string) {
+  return db.ref(`distribuidores/${idDistribuidor}`);
+}
 
 const distribuidorSchema = yup.object().shape<ShortDistribuidor>({
   nombre: yup.string().required().trim().default(''),
@@ -35,8 +40,8 @@ const distribuidorSchema = yup.object().shape<ShortDistribuidor>({
 
 const EditDistribuidor: React.FC = () => {
   const { idDistribuidor } = useParams<{ idDistribuidor: ID }>();
-  const [distribuidor, , error] = useObjectVal<DistribuidorType>(
-    db.ref(`distribuidores/${idDistribuidor}`)
+  const [distribuidor, loading, error] = useObjectVal<DistribuidorType>(
+    distrRef(idDistribuidor)
   );
   const history = useHistory();
   const { openLoading, closeLoading, confirmDelete } = useModals();
@@ -56,7 +61,7 @@ const EditDistribuidor: React.FC = () => {
     confirmDelete(
       `al distribuidor ${distribuidor && distribuidor.nombre}`,
       async () => {
-        await db.ref(`distribuidores/${idDistribuidor}`).remove();
+        await distrRef(idDistribuidor).remove();
         history.replace('/distribuidores');
       }
     );
@@ -69,7 +74,8 @@ const EditDistribuidor: React.FC = () => {
     if (idDistribuidor) {
       openLoading('Actualizando Distribuidor');
       if (methods.formState.isDirty) {
-        await db.ref(`distribuidores/${idDistribuidor}`).update(
+        // TODO Use Transaction instead of update
+        await distrRef(idDistribuidor).update(
           Object.keys(methods.formState.dirtyFields).reduce<
             Partial<DistribuidorType>
           >(
@@ -83,18 +89,34 @@ const EditDistribuidor: React.FC = () => {
       }
     } else {
       openLoading('Creando distribuidor');
-      const newRef = await db.ref('distribuidores').push();
-      await newRef.set({
-        ...values,
-        idDistribuidor: newRef.key,
-      });
-      history.replace(`/distribuidor/edit/${newRef.key}`);
+      var slug = slugify(values.nombre, { lower: true });
+      const duplicate = await distrRef(slug).once('value');
+      if (duplicate.exists()) {
+        methods.setError('nombre', {
+          type: 'duplicado',
+          message: 'Ese nombre, o uno muy parecido, ya existe',
+        });
+      } else {
+        await distrRef(slug).set({
+          ...values,
+          idDistribuidor: slug,
+        });
+        history.replace(`/distribuidor/edit/${slug}`);
+      }
     }
     closeLoading();
   };
-
-  if (idDistribuidor && !distribuidor)
+  console.log({ idDistribuidor, loading, distribuidor });
+  if (loading) {
     return <Loading>Cargando distribuidor</Loading>;
+  }
+  if (idDistribuidor && !distribuidor) {
+    return (
+      <Alert color="warning">
+        El distribuidor [{idDistribuidor}] no existe o ha sido borrado
+      </Alert>
+    );
+  }
   return (
     <Page
       title={`Distribuidor - ${distribuidor ? distribuidor.nombre : 'nuevo'}`}
