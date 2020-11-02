@@ -19,7 +19,7 @@ import styles from './styles.module.css';
 export default function ListDistribuidores() {
   const history = useHistory();
   const [distribuidores, loading, error] = useListVals<DistribuidorType>(
-    db.ref('distribuidores')
+    db.ref('distribuidores').orderByChild('nombre')
   );
 
   const { confirmDelete } = useModals();
@@ -30,7 +30,6 @@ export default function ListDistribuidores() {
     const { nombre, id } = ev.currentTarget.dataset;
     if (!id) return;
     ev.stopPropagation();
-    debugger;
     confirmDelete(`al distribuidor ${nombre}`, () =>
       db.ref(`distribuidores/${id}`).remove()
     );
