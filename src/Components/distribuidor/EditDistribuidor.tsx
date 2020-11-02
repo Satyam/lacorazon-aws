@@ -74,18 +74,28 @@ const EditDistribuidor: React.FC = () => {
     if (idDistribuidor) {
       openLoading('Actualizando Distribuidor');
       if (methods.formState.isDirty) {
-        // TODO Use Transaction instead of update
-        await distrRef(idDistribuidor).update(
-          Object.keys(methods.formState.dirtyFields).reduce<
+        await distrRef(idDistribuidor).transaction((dbValues) => {
+          if (
+            Object.keys(methods.formState.dirtyFields).some(
+              (name) =>
+                dbValues[name] !==
+                (distribuidor as ShortDistribuidor)[
+                  name as keyof ShortDistribuidor
+                ]
+            )
+          )
+            return;
+
+          return Object.keys(methods.formState.dirtyFields).reduce<
             Partial<DistribuidorType>
           >(
             (newValues, name) => ({
               ...newValues,
               [name]: values[name as keyof ShortDistribuidor],
             }),
-            {}
-          )
-        );
+            distribuidor as ShortDistribuidor
+          );
+        });
       }
     } else {
       openLoading('Creando distribuidor');
@@ -106,7 +116,7 @@ const EditDistribuidor: React.FC = () => {
     }
     closeLoading();
   };
-  console.log({ idDistribuidor, loading, distribuidor });
+
   if (loading) {
     return <Loading>Cargando distribuidor</Loading>;
   }
