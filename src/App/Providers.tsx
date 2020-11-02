@@ -4,15 +4,11 @@ import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { IntlProvider } from 'Providers/Intl';
 import { ModalsProvider } from 'Providers/Modals';
-import { Provider as ReduxProvider } from 'react-redux';
-import store from 'Store';
 
 const Providers: React.FC<{}> = ({ children }) => (
   <IntlProvider locale="es-ES">
     <Router>
-      <ReduxProvider store={store}>
-        <ModalsProvider>{children}</ModalsProvider>
-      </ReduxProvider>
+      <ModalsProvider>{children}</ModalsProvider>
     </Router>
   </IntlProvider>
 );
