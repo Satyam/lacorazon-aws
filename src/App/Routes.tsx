@@ -7,9 +7,9 @@ import { Route, Switch } from 'react-router-dom';
 import Distribuidores from 'Components/distribuidor/ListDistribuidores';
 import EditDistribuidor from 'Components/distribuidor/EditDistribuidor';
 import ShowDistribuidor from 'Components/distribuidor/ShowDistribuidor';
-// import ListVentas from 'Components/ventas/ListVentas';
-// import EditVenta from 'Components/ventas/EditVenta';
-// import ShowVenta from 'Components/ventas/ShowVenta';
+import ListVentas from 'Components/ventas/ListVentas';
+import EditVenta from 'Components/ventas/EditVenta';
+import ShowVenta from 'Components/ventas/ShowVenta';
 // import Profile from 'Components/Profile';
 
 // import PrivateRoute from './PrivateRoute';
@@ -47,7 +47,7 @@ const Routes = () => (
         <ShowDistribuidor />
       </Route>
     </Switch>
-    {/*<Route path="/ventas">
+    <Route path="/ventas">
       <ListVentas />
     </Route>
     <Switch>
@@ -61,7 +61,7 @@ const Routes = () => (
         <ShowVenta />
       </Route>
     </Switch>
-    <PrivateRoute path="/profile">
+    {/* <PrivateRoute path="/profile">
       <Profile />
     </PrivateRoute> */}
   </>
