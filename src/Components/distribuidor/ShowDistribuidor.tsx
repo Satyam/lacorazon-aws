@@ -6,14 +6,11 @@ import { LabeledText } from 'Components/Form';
 import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
 
-import { db } from 'Firebase';
-import { useObjectVal } from 'react-firebase-hooks/database';
+import { useDistribuidor } from './common';
 
 export default function ShowDistribuidor() {
   const { idDistribuidor } = useParams<{ idDistribuidor: ID }>();
-  const [distribuidor, loading, error] = useObjectVal<DistribuidorType>(
-    db.ref(`distribuidores/${idDistribuidor}`)
-  );
+  const [distribuidor, loading, error] = useDistribuidor(idDistribuidor);
 
   if (loading) return <Loading>Cargando distribuidor</Loading>;
 

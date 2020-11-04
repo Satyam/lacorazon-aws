@@ -11,16 +11,12 @@ import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
 import { useModals } from 'Providers/Modals';
 
-import { db } from 'Firebase';
-import { useListVals } from 'react-firebase-hooks/database';
-
+import { distrRef, useDistribuidores } from './common';
 import styles from './styles.module.css';
 
 export default function ListDistribuidores() {
   const history = useHistory();
-  const [distribuidores, loading, error] = useListVals<DistribuidorType>(
-    db.ref('distribuidores').orderByChild('nombre')
-  );
+  const [distribuidores, loading, error] = useDistribuidores();
 
   const { confirmDelete } = useModals();
 
@@ -30,14 +26,14 @@ export default function ListDistribuidores() {
     const { nombre, id } = ev.currentTarget.dataset;
     if (!id) return;
     ev.stopPropagation();
-    confirmDelete(`al distribuidor ${nombre}`, () =>
-      db.ref(`distribuidores/${id}`).remove()
-    );
+    confirmDelete(`al distribuidor ${nombre}`, () => distrRef(id).remove());
   };
+
   const onAdd: React.MouseEventHandler<HTMLButtonElement> = (ev) => {
     ev.stopPropagation();
     history.push('/distribuidor/new');
   };
+
   const rowDistribuidor = (distribuidor: DistribuidorType) => {
     const idDistribuidor = distribuidor.idDistribuidor;
     return (

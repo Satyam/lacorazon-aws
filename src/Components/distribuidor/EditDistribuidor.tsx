@@ -14,15 +14,10 @@ import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
 import { useModals } from 'Providers/Modals';
 
-import { db } from 'Firebase';
-import { useObjectVal } from 'react-firebase-hooks/database';
+import { useDistribuidor, distrRef } from './common';
 
 // Types
 type ShortDistribuidor = Omit<DistribuidorType, 'idDistribuidor'>;
-
-function distrRef(idDistribuidor?: string) {
-  return db.ref(`distribuidores/${idDistribuidor}`);
-}
 
 const distribuidorSchema = yup.object().shape<ShortDistribuidor>({
   nombre: yup.string().required().trim().default(''),
@@ -40,9 +35,7 @@ const distribuidorSchema = yup.object().shape<ShortDistribuidor>({
 
 const EditDistribuidor: React.FC = () => {
   const { idDistribuidor } = useParams<{ idDistribuidor: ID }>();
-  const [distribuidor, loading, error] = useObjectVal<DistribuidorType>(
-    distrRef(idDistribuidor)
-  );
+  const [distribuidor, loading, error] = useDistribuidor(idDistribuidor);
   const history = useHistory();
   const { openLoading, closeLoading, confirmDelete } = useModals();
 
