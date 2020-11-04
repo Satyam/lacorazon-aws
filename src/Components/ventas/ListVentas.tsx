@@ -1,5 +1,4 @@
 import React from 'react';
-import firebase from 'firebase';
 import { useHistory, Link } from 'react-router-dom';
 import { Table, ButtonGroup } from 'reactstrap';
 import { FaRegCheckSquare, FaRegSquare } from 'react-icons/fa';
@@ -14,8 +13,7 @@ import { Loading } from 'Components/Modals';
 import Page from 'Components/Page';
 import { useModals } from 'Providers/Modals';
 
-import { db } from 'Firebase';
-import { useList } from 'react-firebase-hooks/database';
+import { useVentas, ventaRef } from './common';
 
 const ListVentas: React.FC<{
   idVendedor?: string;
@@ -24,7 +22,7 @@ const ListVentas: React.FC<{
 }> = ({ idVendedor, nombreVendedor, wide }) => {
   const history = useHistory();
 
-  const [ventasSnap, loading, error] = useList(db.ref('ventas'));
+  const [ventas, loading, error] = useVentas();
 
   const { formatDate, formatCurrency } = useIntl();
   const { confirmDelete } = useModals();
@@ -39,8 +37,12 @@ const ListVentas: React.FC<{
   const onDelete: React.MouseEventHandler<HTMLButtonElement> = (ev) => {
     ev.stopPropagation();
     const { fecha, id } = ev.currentTarget.dataset;
-    console.log('delete', fecha, id);
-    // confirmDelete(`la venta del ${fecha}`, () => deleteVenta(id!));
+    if (id && fecha) {
+      confirmDelete(
+        `la venta del ${fecha}`,
+        async () => await ventaRef(id).remove()
+      );
+    }
   };
   const onEdit: React.MouseEventHandler<HTMLButtonElement> = (ev) => {
     ev.stopPropagation();
@@ -51,9 +53,8 @@ const ListVentas: React.FC<{
     history.push(`/user/${ev.currentTarget.dataset.id}`);
   };
 
-  const rowVenta = (ventaSnap: firebase.database.DataSnapshot) => {
-    const idVenta = ventaSnap.key;
-    const venta = ventaSnap.val();
+  const rowVenta = (venta: VentaType) => {
+    const idVenta = venta.idVenta;
     return (
       <tr key={idVenta}>
         <td align="right">
@@ -91,7 +92,12 @@ const ListVentas: React.FC<{
               data-id={idVenta}
               data-fecha={formatDate(new Date(venta.fecha))}
             />
-            <ButtonIconDelete outline onClick={onDelete} data-id={idVenta} />
+            <ButtonIconDelete
+              outline
+              onClick={onDelete}
+              data-id={idVenta}
+              data-fecha={formatDate(new Date(venta.fecha))}
+            />
           </ButtonGroup>
         </td>
       </tr>
@@ -123,7 +129,7 @@ const ListVentas: React.FC<{
             <th />
           </tr>
         </thead>
-        <tbody>{(ventasSnap || []).map(rowVenta)}</tbody>
+        <tbody>{(ventas || []).map(rowVenta)}</tbody>
       </Table>
     </Page>
   );

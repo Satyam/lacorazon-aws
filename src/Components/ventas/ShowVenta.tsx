@@ -7,7 +7,7 @@ import { Loading } from 'Components/Modals';
 import { Alert } from 'reactstrap';
 import { useIntl } from 'Providers/Intl';
 
-import { useVenta } from 'Firebase';
+import { useVenta } from './common';
 
 export default function ShowVenta() {
   const history = useHistory();

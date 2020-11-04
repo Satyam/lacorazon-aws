@@ -18,16 +18,17 @@ import Page from 'Components/Page';
 import { useIntl } from 'Providers/Intl';
 import { useModals } from 'Providers/Modals';
 
-import { useVenta } from 'Firebase';
+import { ventaRef, useVenta } from './common';
+import { db } from 'Firebase';
 
-type ShortVenta = Omit<VentaType, 'idVenta'>;
-// @ts-ignore
+type ShortVenta = Omit<VentaType, 'idVenta'> & { fecha: Date };
+
 const ventaSchema = yup.object().shape<ShortVenta>({
   // @ts-ignore
   fecha: yup
     .date()
     .required()
-    .default(() => new Date().toISOString()),
+    .default(() => new Date()),
   concepto: yup.string().trim().required().default(''),
   // @ts-ignore
   cantidad: yup.number().integer().default(1),
@@ -52,10 +53,6 @@ export default function EditVenta() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [venta]);
 
-  // const optionVendedoresStatus = useOptionsVendedores();
-  // const createVenta = useCreateVenta();
-  // const updateVenta = useUpdateVenta();
-  // const deleteVenta = useDeleteVenta();
   const { openLoading, closeLoading, confirmDelete } = useModals();
   const { formatDate } = useIntl();
 
@@ -64,24 +61,53 @@ export default function EditVenta() {
   const onSubmit: SubmitHandler<ShortVenta> = async (values) => {
     if (id) {
       openLoading('Actualizando Venta');
-      // await updateVenta(id, values).finally(closeLoading);
+      await ventaRef(id).transaction((dbValues) => {
+        if (
+          Object.keys(methods.formState.dirtyFields).some(
+            (name) =>
+              dbValues[name] !== (venta as ShortVenta)[name as keyof ShortVenta]
+          )
+        )
+          return;
+
+        return Object.keys(methods.formState.dirtyFields).reduce<
+          Partial<VentaType>
+        >(
+          (newValues, name) => ({
+            ...newValues,
+            [name]:
+              name === 'fecha'
+                ? (values[name as keyof ShortVenta] as Date)?.toISOString()
+                : values[name as keyof ShortVenta],
+          }),
+          {
+            ...(venta as ShortVenta),
+            fecha: venta.fecha.toISOString(),
+          }
+        );
+      });
     } else {
       openLoading('Creando Venta');
-      // await createVenta(values)
-      //   .then((id) => {
-      //     history.replace(`/venta/edit/${id}`);
-      //   })
+      const newVenta = await db.ref('ventas').push({
+        ...values,
+        fecha: values.fecha.toISOString(),
+      });
+      history.replace(`/venta/edit/${newVenta.key}`);
     }
     closeLoading();
   };
 
   const onDeleteClick: React.MouseEventHandler<HTMLButtonElement> = (ev) => {
     ev.stopPropagation();
-    // confirmDelete(`la venta del ${formatDate(venta && venta.fecha)}`, () =>
-    //   deleteVenta(id!).then(() => history.replace('/ventas'))
-    // );
+    confirmDelete(
+      `la venta del ${formatDate(venta && venta.fecha)}`,
+      async () => {
+        await ventaRef(id).remove();
+        history.replace('/ventas');
+      }
+    );
   };
-  debugger;
+
   return (
     <Page
       title={`Venta - ${venta ? venta.fecha : 'nuevo'}`}
