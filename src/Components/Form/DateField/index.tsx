@@ -68,7 +68,6 @@ const DateField: React.FC<{
   //     }
   //   }
   // }
-  console.log('fecha', getValues(name));
   return (
     <FormGroup row>
       <Label for={actualId} xs={12} lg={2}>
