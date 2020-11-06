@@ -11,7 +11,7 @@ import {
   CheckboxField,
   SubmitButton,
 } from 'Components/Form';
-import DropdownVendedor from 'Components/vendedores/Dropdown';
+import { DropdownVendedores } from 'Components/vendedores/gadgets';
 import { ButtonIconAdd, ButtonIconDelete, ButtonSet } from 'Components/Icons';
 import { Loading } from 'Components/Modals';
 import Page from 'Components/Page';
@@ -120,7 +120,7 @@ export default function EditVenta() {
         <Form onSubmit={methods.handleSubmit(onSubmit)}>
           <DateField name="fecha" label="Fecha" methods={methods} />
           <TextField name="concepto" label="Concepto" methods={methods} />
-          <DropdownVendedor
+          <DropdownVendedores
             name="idVendedor"
             label="Vendedor"
             noOption={!id}

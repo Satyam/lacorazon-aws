@@ -1,7 +1,8 @@
 import React from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { LabeledText, LabeledCheckbox } from 'Components/Form';
+import { LabeledVendedores } from 'Components/vendedores/gadgets';
 import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
 import { Alert } from 'reactstrap';
@@ -10,18 +11,12 @@ import { useIntl } from 'Providers/Intl';
 import { useVenta } from './common';
 
 export default function ShowVenta() {
-  const history = useHistory();
   const { id } = useParams<{ id: ID }>();
   const [venta, loading, error] = useVenta(id);
 
   const { formatDate, formatCurrency } = useIntl();
 
   if (loading) return <Loading>Cargando venta</Loading>;
-
-  const onShowVendedor: React.MouseEventHandler<HTMLDivElement> = (ev) => {
-    ev.stopPropagation();
-    history.push(`/user/${ev.currentTarget.dataset.id}`);
-  };
 
   return (
     <Page
@@ -36,13 +31,7 @@ export default function ShowVenta() {
             value={formatDate(new Date(venta.fecha))}
           />
           <LabeledText label="Concepto" value={venta.concepto} />
-          <LabeledText
-            label="Vendedor"
-            value={venta.idVendedor}
-            data-id={venta.idVendedor}
-            onClick={venta.idVendedor ? onShowVendedor : undefined}
-            className="link"
-          />
+          <LabeledVendedores label="Vendedor" idVendedor={venta.idVendedor} />
           <LabeledText label="Cantidad" value={venta.cantidad} />
           <LabeledCheckbox label="IVA" value={venta.iva} />
           <LabeledText

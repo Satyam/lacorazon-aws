@@ -1,8 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory, Link } from 'react-router-dom';
-import { Table, ButtonGroup } from 'reactstrap';
+import {
+  Table,
+  ButtonGroup,
+  TabContent,
+  Nav,
+  NavItem,
+  NavLink,
+} from 'reactstrap';
 import { FaRegCheckSquare, FaRegSquare } from 'react-icons/fa';
-
+import classnames from 'classnames';
 import {
   ButtonIconAdd,
   ButtonIconEdit,
@@ -12,6 +19,7 @@ import { useIntl } from 'Providers/Intl';
 import { Loading } from 'Components/Modals';
 import Page from 'Components/Page';
 import { useModals } from 'Providers/Modals';
+import { ShowVendedor } from 'Components/vendedores/gadgets';
 
 import { useVentas, ventaRef } from './common';
 
@@ -26,9 +34,20 @@ const ListVentas: React.FC<{
 
   const { formatDate, formatCurrency } = useIntl();
   const { confirmDelete } = useModals();
+  const [activeTab, setActiveTab] = useState<number>(new Date().getFullYear());
 
   if (loading) return <Loading>Cargando ventas</Loading>;
 
+  const years = [];
+  if (Array.isArray(ventas)) {
+    for (
+      let y = ventas[0].fecha.getFullYear();
+      y <= ventas[ventas.length - 1].fecha.getFullYear();
+      y++
+    ) {
+      years.push(y);
+    }
+  }
   const onAdd: React.MouseEventHandler<HTMLButtonElement> = (ev) => {
     ev.stopPropagation();
     history.push('/venta/new');
@@ -48,10 +67,6 @@ const ListVentas: React.FC<{
     ev.stopPropagation();
     history.push(`/venta/edit/${ev.currentTarget.dataset.id}`);
   };
-  const onShowVendedor: React.MouseEventHandler<HTMLElement> = (ev) => {
-    ev.stopPropagation();
-    history.push(`/user/${ev.currentTarget.dataset.id}`);
-  };
 
   const rowVenta = (venta: VentaType) => {
     const idVenta = venta.idVenta;
@@ -65,13 +80,13 @@ const ListVentas: React.FC<{
         <td>{venta.concepto}</td>
         {!idVendedor &&
           (venta.idVendedor ? (
-            <td
-              className="link"
-              onClick={onShowVendedor}
-              data-id={venta.idVendedor}
-              title={`Ver detalle vendedor: \n${venta.idVendedor}`}
-            >
-              {venta.idVendedor}
+            <td>
+              <Link
+                title={`Ver detalle vendedor: \n${venta.idVendedor}`}
+                to={`/vendedores/${venta.idVendedor}`}
+              >
+                <ShowVendedor idVendedor={venta.idVendedor} />
+              </Link>
             </td>
           ) : (
             <td>---</td>
@@ -116,21 +131,43 @@ const ListVentas: React.FC<{
       }
       error={error}
     >
-      <Table striped hover size="sm" responsive bordered>
-        <thead>
-          <tr>
-            <th>Fecha</th>
-            <th>Concepto</th>
-            {!idVendedor && <th>Vendedor</th>}
-            <th>Cantidad</th>
-            <th>Precio Unitario</th>
-            <th>IVA</th>
-            <th>Precio Total</th>
-            <th />
-          </tr>
-        </thead>
-        <tbody>{(ventas || []).map(rowVenta)}</tbody>
-      </Table>
+      <Nav tabs>
+        {years.map((y) => (
+          <NavItem key={y}>
+            <NavLink
+              className={classnames({ active: activeTab === y })}
+              onClick={() => {
+                setActiveTab(y);
+              }}
+            >
+              {y}
+            </NavLink>
+          </NavItem>
+        ))}
+      </Nav>
+      <TabContent>
+        <Table striped hover size="sm" responsive bordered>
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Concepto</th>
+              {!idVendedor && <th>Vendedor</th>}
+              <th>Cantidad</th>
+              <th>Precio Unitario</th>
+              <th>IVA</th>
+              <th>Precio Total</th>
+              <th />
+            </tr>
+          </thead>
+          <tbody>
+            {(ventas || [])
+              .filter(
+                (venta: VentaType) => venta.fecha.getFullYear() === activeTab
+              )
+              .map(rowVenta)}
+          </tbody>
+        </Table>
+      </TabContent>
     </Page>
   );
 };

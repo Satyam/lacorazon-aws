@@ -9,7 +9,7 @@ const cx = classNames.bind(styles);
 export const LabeledText: React.FC<
   {
     label: string;
-    value: any;
+    value?: any;
     pre?: boolean;
     className?: string;
   } & DOMAttributes<HTMLDivElement>
