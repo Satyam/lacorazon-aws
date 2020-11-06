@@ -41,7 +41,7 @@ declare global {
 
   interface VentaType {
     idVenta: ID;
-    fecha: string;
+    fecha: Date;
     concepto?: string;
     idVendedor?: ID;
     cantidad: number;
