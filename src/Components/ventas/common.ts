@@ -1,10 +1,12 @@
 import { useMemo } from 'react';
-import { db } from 'Firebase';
+import { db, dbUpdate } from 'Firebase';
 import { useObjectVal, useListVals } from 'react-firebase-hooks/database';
 
 export const ventaRef = (idVenta: ID) => db.ref(`ventas/${idVenta}`);
 
-export const useVenta = (idVenta: ID) => {
+export const useVenta: (
+  idVenta: ID
+) => [VentaType | undefined, boolean, any] = (idVenta) => {
   const [venta, loading, error] = useObjectVal<VentaType>(ventaRef(idVenta));
   return useMemo(
     () => [
@@ -40,3 +42,12 @@ export const useVentas: () => [
     error,
   ];
 };
+
+export const updateVenta: <U extends Partial<VentaType>>(
+  idVenta: string,
+  newValues: U,
+  origValues: U
+) => Promise<any> = (idVenta, newValues, origValues) =>
+  dbUpdate(`ventas/${idVenta}`, newValues, origValues, (name, value) =>
+    name === 'fecha' ? value.toISOString() : value
+  );

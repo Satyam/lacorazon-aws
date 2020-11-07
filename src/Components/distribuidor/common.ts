@@ -1,4 +1,4 @@
-import { db } from 'Firebase';
+import { db, dbUpdate } from 'Firebase';
 import { useObjectVal, useListVals } from 'react-firebase-hooks/database';
 
 export const distrRef = (idDistribuidor?: string) =>
@@ -10,4 +10,16 @@ export const useDistribuidor = (idDistribuidor: ID) =>
 export const useDistribuidores = () =>
   useListVals<DistribuidorType>(
     db.ref('distribuidores').orderByChild('nombre')
+  );
+
+export const updateDistribuidor: <U extends Partial<DistribuidorType>>(
+  idDistribuidor: string,
+  newValues: U,
+  origValues: U
+) => Promise<any> = (idVenta, newValues, origValues) =>
+  dbUpdate(
+    `distribuidores/${idVenta}`,
+    newValues,
+    origValues,
+    (name, value) => value
   );

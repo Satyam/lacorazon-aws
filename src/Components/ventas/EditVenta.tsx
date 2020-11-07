@@ -18,7 +18,7 @@ import Page from 'Components/Page';
 import { useIntl } from 'Providers/Intl';
 import { useModals } from 'Providers/Modals';
 
-import { ventaRef, useVenta } from './common';
+import { ventaRef, useVenta, updateVenta } from './common';
 import { db } from 'Firebase';
 
 type ShortVenta = Omit<VentaType, 'idVenta'> & { fecha: Date };
@@ -59,33 +59,9 @@ export default function EditVenta() {
   if (loading) return <Loading>Cargando venta</Loading>;
 
   const onSubmit: SubmitHandler<ShortVenta> = async (values) => {
-    if (id) {
+    if (id && venta) {
       openLoading('Actualizando Venta');
-      await ventaRef(id).transaction((dbValues) => {
-        if (
-          Object.keys(methods.formState.dirtyFields).some(
-            (name) =>
-              dbValues[name] !== (venta as ShortVenta)[name as keyof ShortVenta]
-          )
-        )
-          return;
-
-        return Object.keys(methods.formState.dirtyFields).reduce<
-          Partial<VentaType>
-        >(
-          (newValues, name) => ({
-            ...newValues,
-            [name]:
-              name === 'fecha'
-                ? (values[name as keyof ShortVenta] as Date)?.toISOString()
-                : values[name as keyof ShortVenta],
-          }),
-          {
-            ...(venta as ShortVenta),
-            fecha: venta.fecha.toISOString(),
-          }
-        );
-      });
+      await updateVenta<ShortVenta>(id, values, venta);
     } else {
       openLoading('Creando Venta');
       const newVenta = await db.ref('ventas').push({

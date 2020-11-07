@@ -14,7 +14,7 @@ import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
 import { useModals } from 'Providers/Modals';
 
-import { useDistribuidor, distrRef } from './common';
+import { useDistribuidor, distrRef, updateDistribuidor } from './common';
 
 // Types
 type ShortDistribuidor = Omit<DistribuidorType, 'idDistribuidor'>;
@@ -49,6 +49,10 @@ const EditDistribuidor: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [distribuidor]);
 
+  if (loading) {
+    return <Loading>Cargando distribuidor</Loading>;
+  }
+
   const onDeleteClick: React.MouseEventHandler<HTMLButtonElement> = (ev) => {
     ev.stopPropagation();
     confirmDelete(
@@ -64,8 +68,14 @@ const EditDistribuidor: React.FC = () => {
     values,
     formMethods
   ): Promise<void> => {
-    if (idDistribuidor) {
+    if (idDistribuidor && distribuidor) {
       openLoading('Actualizando Distribuidor');
+      await updateDistribuidor<ShortDistribuidor>(
+        idDistribuidor,
+        values,
+        distribuidor
+      );
+
       if (methods.formState.isDirty) {
         await distrRef(idDistribuidor).transaction((dbValues) => {
           if (
@@ -110,9 +120,6 @@ const EditDistribuidor: React.FC = () => {
     closeLoading();
   };
 
-  if (loading) {
-    return <Loading>Cargando distribuidor</Loading>;
-  }
   if (idDistribuidor && !distribuidor) {
     return (
       <Alert color="warning">
