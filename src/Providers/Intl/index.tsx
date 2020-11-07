@@ -3,11 +3,11 @@ import React, { createContext, useContext, useState, useMemo } from 'react';
 import { format } from 'date-fns';
 import { enUS, es } from 'date-fns/locale';
 
-// import { registerLocale, setDefaultLocale } from 'react-datepicker';
+import { registerLocale, setDefaultLocale } from 'react-datepicker';
 
 const localeTables: { [index: string]: any } = { 'en-US': enUS, 'es-ES': es };
 
-// Object.keys(localeTables).forEach(l => registerLocale(l, localeTables[l]));
+Object.keys(localeTables).forEach((l) => registerLocale(l, localeTables[l]));
 
 type intlType = {
   locales: string[];
@@ -47,7 +47,7 @@ export const IntlProvider: React.FC<{
       currency,
     });
 
-    // setDefaultLocale(locale);
+    setDefaultLocale(locale);
 
     return {
       locales: Object.keys(localeTables),

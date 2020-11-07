@@ -75,14 +75,13 @@ const DateField: React.FC<{
       </Label>
       <Col xs={12} lg={8}>
         <Controller
-          render={({ onChange, onBlur, value }) => (
+          render={(props) => (
             <ReactDatePicker
+              {...props}
               className={classNames('form-control', className, {
                 'is-invalid': hasError,
               })}
-              onChange={onChange}
-              onBlur={onBlur}
-              selected={value}
+              selected={props.value}
               dateFormat="P"
               id={actualId}
               minDate={actualMin}
