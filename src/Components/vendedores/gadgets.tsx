@@ -43,7 +43,7 @@ export const DropdownVendedores: React.FC<
 
 export const LabeledVendedores: React.FC<
   {
-    idVendedor: string;
+    idVendedor?: string;
     label: string;
     help?: string;
     className?: string;
