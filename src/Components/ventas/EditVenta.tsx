@@ -20,7 +20,7 @@ import { useModals } from 'Providers/Modals';
 
 import { useVenta, updateVenta, createVenta, deleteVenta } from './common';
 
-type ShortVenta = Omit<VentaType, 'idVenta'> & { fecha: Date };
+type ShortVenta = Omit<VentaType, 'idVenta'>;
 
 const ventaSchema = yup.object().shape<ShortVenta>({
   // @ts-ignore
