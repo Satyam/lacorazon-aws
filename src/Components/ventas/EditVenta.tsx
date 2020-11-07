@@ -18,8 +18,7 @@ import Page from 'Components/Page';
 import { useIntl } from 'Providers/Intl';
 import { useModals } from 'Providers/Modals';
 
-import { ventaRef, useVenta, updateVenta } from './common';
-import { db } from 'Firebase';
+import { useVenta, updateVenta, createVenta, deleteVenta } from './common';
 
 type ShortVenta = Omit<VentaType, 'idVenta'> & { fecha: Date };
 
@@ -64,10 +63,7 @@ export default function EditVenta() {
       await updateVenta<ShortVenta>(id, values, venta);
     } else {
       openLoading('Creando Venta');
-      const newVenta = await db.ref('ventas').push({
-        ...values,
-        fecha: values.fecha.toISOString(),
-      });
+      const newVenta = await createVenta(values);
       history.replace(`/venta/edit/${newVenta.key}`);
     }
     closeLoading();
@@ -78,7 +74,7 @@ export default function EditVenta() {
     confirmDelete(
       `la venta del ${formatDate(venta && venta.fecha)}`,
       async () => {
-        await ventaRef(id).remove();
+        await deleteVenta(id);
         history.replace('/ventas');
       }
     );

@@ -21,7 +21,7 @@ import Page from 'Components/Page';
 import { useModals } from 'Providers/Modals';
 import { ShowVendedor } from 'Components/vendedores/gadgets';
 
-import { useVentas, ventaRef } from './common';
+import { useVentas, deleteVenta } from './common';
 
 const ListVentas: React.FC<{
   idVendedor?: string;
@@ -57,10 +57,7 @@ const ListVentas: React.FC<{
     ev.stopPropagation();
     const { fecha, id } = ev.currentTarget.dataset;
     if (id && fecha) {
-      confirmDelete(
-        `la venta del ${fecha}`,
-        async () => await ventaRef(id).remove()
-      );
+      confirmDelete(`la venta del ${fecha}`, async () => await deleteVenta(id));
     }
   };
   const onEdit: React.MouseEventHandler<HTMLButtonElement> = (ev) => {

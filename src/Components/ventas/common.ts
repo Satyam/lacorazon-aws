@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { db, dbUpdate } from 'Firebase';
+import firebase from 'firebase';
 import { useObjectVal, useListVals } from 'react-firebase-hooks/database';
 
 export const ventaRef = (idVenta: ID) => db.ref(`ventas/${idVenta}`);
@@ -43,6 +44,14 @@ export const useVentas: () => [
   ];
 };
 
+export const createVenta: (
+  values: Partial<VentaType>
+) => firebase.database.ThenableReference = (values) =>
+  db.ref('ventas').push({
+    ...values,
+    fecha: values.fecha?.toISOString(),
+  });
+
 export const updateVenta: <U extends Partial<VentaType>>(
   idVenta: string,
   newValues: U,
@@ -51,3 +60,6 @@ export const updateVenta: <U extends Partial<VentaType>>(
   dbUpdate(`ventas/${idVenta}`, newValues, origValues, (name, value) =>
     name === 'fecha' ? value.toISOString() : value
   );
+
+export const deleteVenta: (idVenta: ID) => Promise<any> = (idVenta) =>
+  ventaRef(idVenta).remove();
