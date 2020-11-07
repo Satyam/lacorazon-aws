@@ -11,8 +11,8 @@ import { useIntl } from 'Providers/Intl';
 import { useVenta } from './common';
 
 export default function ShowVenta() {
-  const { id } = useParams<{ id: ID }>();
-  const [venta, loading, error] = useVenta(id);
+  const { idVenta } = useParams<{ idVenta: ID }>();
+  const [venta, loading, error] = useVenta(idVenta);
 
   const { formatDate, formatCurrency } = useIntl();
 

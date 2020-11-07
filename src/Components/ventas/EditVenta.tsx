@@ -39,8 +39,8 @@ const ventaSchema = yup.object().shape<ShortVenta>({
 
 export default function EditVenta() {
   const history = useHistory();
-  const { id } = useParams<{ id: ID }>();
-  const [venta, loading, error] = useVenta(id);
+  const { idVenta } = useParams<{ idVenta: ID }>();
+  const [venta, loading, error] = useVenta(idVenta);
 
   const methods = useForm<ShortVenta>({
     defaultValues: ventaSchema.default(),
@@ -58,9 +58,9 @@ export default function EditVenta() {
   if (loading) return <Loading>Cargando venta</Loading>;
 
   const onSubmit: SubmitHandler<ShortVenta> = async (values) => {
-    if (id && venta) {
+    if (idVenta && venta) {
       openLoading('Actualizando Venta');
-      await updateVenta<ShortVenta>(id, values, venta);
+      await updateVenta<ShortVenta>(idVenta, values, venta);
     } else {
       openLoading('Creando Venta');
       const newVenta = await createVenta(values);
@@ -74,7 +74,7 @@ export default function EditVenta() {
     confirmDelete(
       `la venta del ${formatDate(venta && venta.fecha)}`,
       async () => {
-        await deleteVenta(id);
+        await deleteVenta(idVenta);
         history.replace('/ventas');
       }
     );
@@ -83,10 +83,10 @@ export default function EditVenta() {
   return (
     <Page
       title={`Venta - ${venta ? venta.fecha : 'nuevo'}`}
-      heading={`${id ? 'Edit' : 'Add'} Venta`}
+      heading={`${idVenta ? 'Edit' : 'Add'} Venta`}
       error={error?.name === 'DuplicateError' ? undefined : error?.message}
     >
-      {id && !venta ? (
+      {idVenta && !venta ? (
         <Alert color="danger">La venta no existe o fue borrada</Alert>
       ) : (
         <Form onSubmit={methods.handleSubmit(onSubmit)}>
@@ -95,7 +95,7 @@ export default function EditVenta() {
           <DropdownVendedores
             name="idVendedor"
             label="Vendedor"
-            noOption={!id}
+            noOption={!idVenta}
             methods={methods}
           />
 
@@ -108,10 +108,10 @@ export default function EditVenta() {
           />
           <ButtonSet>
             <SubmitButton component={ButtonIconAdd} methods={methods}>
-              {id ? 'Modificar' : 'Agregar'}
+              {idVenta ? 'Modificar' : 'Agregar'}
             </SubmitButton>
-            {id && (
-              <ButtonIconDelete disabled={!id} onClick={onDeleteClick}>
+            {idVenta && (
+              <ButtonIconDelete disabled={!idVenta} onClick={onDeleteClick}>
                 Borrar
               </ButtonIconDelete>
             )}

@@ -54,10 +54,10 @@ const Routes = () => (
       <Route path="/venta/new">
         <EditVenta />
       </Route>
-      <Route path="/venta/edit/:id">
+      <Route path="/venta/edit/:idVenta">
         <EditVenta />
       </Route>
-      <Route path="/venta/:id">
+      <Route path="/venta/:idVenta">
         <ShowVenta />
       </Route>
     </Switch>
