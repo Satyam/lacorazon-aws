@@ -11,7 +11,7 @@ import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
 import { useModals } from 'Providers/Modals';
 
-import { distrRef, useDistribuidores } from './common';
+import { deleteDistribuidor, useDistribuidores } from './common';
 import styles from './styles.module.css';
 
 export default function ListDistribuidores() {
@@ -26,7 +26,7 @@ export default function ListDistribuidores() {
     const { nombre, id } = ev.currentTarget.dataset;
     if (!id) return;
     ev.stopPropagation();
-    confirmDelete(`al distribuidor ${nombre}`, () => distrRef(id).remove());
+    confirmDelete(`al distribuidor ${nombre}`, () => deleteDistribuidor(id));
   };
 
   const onAdd: React.MouseEventHandler<HTMLButtonElement> = (ev) => {

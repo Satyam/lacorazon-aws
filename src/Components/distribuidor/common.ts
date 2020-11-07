@@ -1,5 +1,9 @@
 import { db, dbUpdate } from 'Firebase';
 import { useObjectVal, useListVals } from 'react-firebase-hooks/database';
+import slugify from 'slugify';
+
+export const DuplicateErrorMessage = 'nombre duplicado';
+export const MissingNombreMessage = 'falta nombre';
 
 export const distrRef = (idDistribuidor?: string) =>
   db.ref(`distribuidores/${idDistribuidor}`);
@@ -12,6 +16,27 @@ export const useDistribuidores = () =>
     db.ref('distribuidores').orderByChild('nombre')
   );
 
+export const createDistribuidor: (
+  values: Partial<DistribuidorType>
+) => Promise<Partial<DistribuidorType>> = async (values) => {
+  if (values.nombre) {
+    var slug = slugify(values.nombre, { lower: true });
+    const duplicate = await distrRef(slug).once('value');
+    if (duplicate.exists()) {
+      throw new Error(DuplicateErrorMessage);
+    } else {
+      const data = {
+        ...values,
+        idDistribuidor: slug,
+      };
+      await distrRef(slug).set(data);
+      return data;
+    }
+  } else {
+    throw new Error(MissingNombreMessage);
+  }
+};
+
 export const updateDistribuidor: <U extends Partial<DistribuidorType>>(
   idDistribuidor: string,
   newValues: U,
@@ -23,3 +48,7 @@ export const updateDistribuidor: <U extends Partial<DistribuidorType>>(
     origValues,
     (name, value) => value
   );
+
+export const deleteDistribuidor: (idDistribuidor: ID) => Promise<any> = (
+  idDistribuidor
+) => distrRef(idDistribuidor).remove();

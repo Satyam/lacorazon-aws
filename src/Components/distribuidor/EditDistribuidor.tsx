@@ -5,7 +5,6 @@ import { Alert, Form } from 'reactstrap';
 import * as yup from 'yup';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import slugify from 'slugify';
 
 // My own library imports
 import { TextField, SubmitButton } from 'Components/Form';
@@ -14,7 +13,14 @@ import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
 import { useModals } from 'Providers/Modals';
 
-import { useDistribuidor, distrRef, updateDistribuidor } from './common';
+import {
+  useDistribuidor,
+  createDistribuidor,
+  updateDistribuidor,
+  DuplicateErrorMessage,
+  MissingNombreMessage,
+  deleteDistribuidor,
+} from './common';
 
 // Types
 type ShortDistribuidor = Omit<DistribuidorType, 'idDistribuidor'>;
@@ -58,7 +64,7 @@ const EditDistribuidor: React.FC = () => {
     confirmDelete(
       `al distribuidor ${distribuidor && distribuidor.nombre}`,
       async () => {
-        await distrRef(idDistribuidor).remove();
+        await deleteDistribuidor(idDistribuidor);
         history.replace('/distribuidores');
       }
     );
@@ -75,46 +81,28 @@ const EditDistribuidor: React.FC = () => {
         values,
         distribuidor
       );
-
-      if (methods.formState.isDirty) {
-        await distrRef(idDistribuidor).transaction((dbValues) => {
-          if (
-            Object.keys(methods.formState.dirtyFields).some(
-              (name) =>
-                dbValues[name] !==
-                (distribuidor as ShortDistribuidor)[
-                  name as keyof ShortDistribuidor
-                ]
-            )
-          )
-            return;
-
-          return Object.keys(methods.formState.dirtyFields).reduce<
-            Partial<DistribuidorType>
-          >(
-            (newValues, name) => ({
-              ...newValues,
-              [name]: values[name as keyof ShortDistribuidor],
-            }),
-            distribuidor as ShortDistribuidor
-          );
-        });
-      }
     } else {
       openLoading('Creando distribuidor');
-      var slug = slugify(values.nombre, { lower: true });
-      const duplicate = await distrRef(slug).once('value');
-      if (duplicate.exists()) {
-        methods.setError('nombre', {
-          type: 'duplicado',
-          message: 'Ese nombre, o uno muy parecido, ya existe',
-        });
-      } else {
-        await distrRef(slug).set({
-          ...values,
-          idDistribuidor: slug,
-        });
-        history.replace(`/distribuidor/edit/${slug}`);
+      try {
+        const d = await createDistribuidor(values);
+        history.replace(`/distribuidor/edit/${d.idDistribuidor}`);
+      } catch (err) {
+        switch (err.message) {
+          case DuplicateErrorMessage:
+            methods.setError('nombre', {
+              type: 'duplicado',
+              message: 'Ese nombre, o uno muy parecido, ya existe',
+            });
+            break;
+          case MissingNombreMessage:
+            methods.setError('nombre', {
+              type: 'missing',
+              message: 'Falta indicar el nombre',
+            });
+            break;
+          default:
+            throw err;
+        }
       }
     }
     closeLoading();
