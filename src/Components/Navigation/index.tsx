@@ -57,6 +57,22 @@ export function Navigation() {
             </NavItem>
             <UncontrolledDropdown nav inNavbar>
               <DropdownToggle nav caret>
+                Sumarios
+              </DropdownToggle>
+              <DropdownMenu right>
+                <DropdownItem>
+                  <NavLink tag={Link} to="/sumario/porVendedor">
+                    Sumario por vendedor
+                  </NavLink>
+                </DropdownItem>
+                <DropdownItem>Option 2</DropdownItem>
+                <DropdownItem divider />
+                <DropdownItem>Reset</DropdownItem>
+              </DropdownMenu>
+            </UncontrolledDropdown>
+
+            <UncontrolledDropdown nav inNavbar>
+              <DropdownToggle nav caret>
                 {locale}
               </DropdownToggle>
               <DropdownMenu right>

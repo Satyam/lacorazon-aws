@@ -48,5 +48,33 @@ declare global {
     iva: boolean;
     precioUnitario?: number;
   }
+
+  type SalidaType = {
+    idSalida: ID;
+    fecha: Date;
+    concepto: string;
+    importe: number;
+    reintegro?: boolean;
+    pagoiva?: boolean;
+    comision?: ID;
+    ctaRaed?: boolean;
+    iva?: number;
+  };
+
+  type ConsignaType = {
+    idConsigna: ID;
+    idDistribuidor: ID;
+    fecha: Date;
+    idVendedor: ID;
+    entregados: number;
+    porcentaje: number;
+    vendidos: number;
+    devueltos: number;
+    facturado: number;
+    nroFactura: string;
+    cobrado: number;
+    ctaRaed: boolean;
+    comentarios: string;
+  };
 }
 export {};

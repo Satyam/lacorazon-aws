@@ -10,6 +10,7 @@ import ShowDistribuidor from 'Components/distribuidor/ShowDistribuidor';
 import ListVentas from 'Components/ventas/ListVentas';
 import EditVenta from 'Components/ventas/EditVenta';
 import ShowVenta from 'Components/ventas/ShowVenta';
+import SumarioVendedores from 'Components/sumarios/PorVendedor';
 // import Profile from 'Components/Profile';
 
 // import PrivateRoute from './PrivateRoute';
@@ -61,6 +62,9 @@ const Routes = () => (
         <ShowVenta />
       </Route>
     </Switch>
+    <Route path="/sumario/porVendedor">
+      <SumarioVendedores />
+    </Route>
     {/* <PrivateRoute path="/profile">
       <Profile />
     </PrivateRoute> */}
