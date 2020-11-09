@@ -34,6 +34,7 @@ declare global {
   };
 
   type VendedorType = {
+    idVendedor: ID;
     nombre: string;
     email: string;
   };
@@ -75,5 +76,13 @@ declare global {
     ctaRaed: boolean;
     comentarios: string;
   };
+
+  type ConfigType = {
+    PVP: number;
+    comisionEstandar: number;
+    IVALibros: number;
+    comisionInterna: number;
+  };
 }
+
 export {};
