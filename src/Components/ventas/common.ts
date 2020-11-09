@@ -15,13 +15,12 @@ export const useVenta: (
         ? {
             ...venta,
             fecha: new Date(venta?.fecha),
-            idVenta,
           }
         : venta,
       loading,
       error,
     ],
-    [idVenta, venta, loading, error]
+    [venta, loading, error]
   );
 };
 

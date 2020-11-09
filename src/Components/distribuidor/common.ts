@@ -13,24 +13,21 @@ export const useDistribuidor = (idDistribuidor: ID) =>
 
 export const useDistribuidores = () =>
   useListVals<DistribuidorType>(
-    db.ref('distribuidores').orderByChild('nombre')
+    db.ref('distribuidores').orderByChild('nombre'),
+    { keyField: 'idDistribuidor' }
   );
 
 export const createDistribuidor: (
   values: Partial<DistribuidorType>
-) => Promise<Partial<DistribuidorType>> = async (values) => {
+) => Promise<ID> = async (values) => {
   if (values.nombre) {
     var slug = slugify(values.nombre, { lower: true });
     const duplicate = await distrRef(slug).once('value');
     if (duplicate.exists()) {
       throw new Error(DuplicateErrorMessage);
     } else {
-      const data = {
-        ...values,
-        idDistribuidor: slug,
-      };
-      await distrRef(slug).set(data);
-      return data;
+      await distrRef(slug).set(values);
+      return slug;
     }
   } else {
     throw new Error(MissingNombreMessage);

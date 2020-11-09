@@ -23,7 +23,8 @@ export const DropdownVendedores: React.FC<
   } & DOMAttributes<HTMLDivElement>
 > = ({ idVendedor, ...rest }) => {
   const [vendedores, loading, error] = useListVals<VendedorType>(
-    db.ref('vendedores')
+    db.ref('vendedores'),
+    { keyField: 'idVendedor' }
   );
 
   if (error) return <Alert color="danger">{error}</Alert>;

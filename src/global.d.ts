@@ -34,7 +34,6 @@ declare global {
   };
 
   type VendedorType = {
-    idVendedor: ID;
     nombre: string;
     email: string;
   };
@@ -56,7 +55,7 @@ declare global {
     importe: number;
     reintegro?: boolean;
     pagoiva?: boolean;
-    comision?: ID;
+    idVendedor?: ID;
     ctaRaed?: boolean;
     iva?: number;
   };

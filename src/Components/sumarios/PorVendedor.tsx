@@ -33,12 +33,12 @@ const SumarioVendedores: React.FC = () => {
 
   if (salidas) {
     const comisionesPagadasPorVendedor = salidas
-      .filter((salida) => salida.comision)
+      .filter((salida) => salida.idVendedor)
       .reduce<Record<string, any>>(
         (acumuladorComisionesPorVendedor, salida) => {
-          var vendedor = salida?.comision?.toLowerCase() || '';
-          acumuladorComisionesPorVendedor[vendedor] =
-            (acumuladorComisionesPorVendedor[vendedor] || 0) + salida.importe;
+          const idVendedor = salida?.idVendedor || '';
+          acumuladorComisionesPorVendedor[idVendedor] =
+            (acumuladorComisionesPorVendedor[idVendedor] || 0) + salida.importe;
           return acumuladorComisionesPorVendedor;
         },
         {}
@@ -175,7 +175,7 @@ const SumarioVendedores: React.FC = () => {
                   <th>Regalados</th>
                   <th>Total</th>
                   <th>Total</th>
-                  <th>Promedio</th>
+                  <th>Promedio por libro</th>
                   <th>por Venta Directa</th>
                   <th>por Distribuidores</th>
                   <th>Pagada</th>

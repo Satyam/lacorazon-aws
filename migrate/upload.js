@@ -15,27 +15,33 @@ function addVendedores() {
   console.log('vendedores');
   return db.ref('vendedores').set({
     ro: {
-      idVendedor: 'ro',
       nombre: 'Roxana Cabut',
       email: 'RoxanaCabut@gmail.com'
     },
     ra:{
-      idVendedor: 'ra',
       nombre: 'Raed El Younsi',
       email: 'reyezuelo@gmail.com'
     },
     rora:{
-      idVendedor: 'rora',
       nombre: 'Roxana & Raed',
       email: 'reyezuelo@gmail.com;RoxanaCabut@gmail.com'
     }
   })
 }
 
+function addConfig() {
+  console.log('config');
+  return db.ref('config').set({
+    PVP:	12,
+    comisionEstandar:0.35,
+    IVALibros:0.04,
+    comisionInterna:0.25,
+})
+}
+
 function addDistribuidores() {
   console.log('distribuidores')
   const campos = [
-    'codigo',
     'nombre',
     'localidad',
     'contacto',
@@ -45,13 +51,14 @@ function addDistribuidores() {
     'nif'
   ];
   return db.ref('distribuidores').set(
-    data.puntosDeVenta.reduce((distribuidores, distribuidor) => ({
+    data.puntosDeVenta.reduce((distribuidores, {codigo, ...distribuidor}) => ({
       ...distribuidores,
-      [distribuidor.codigo.toLowerCase()]: campos.reduce((acc, campo) => {
-        if (campo === 'codigo') acc.idDistribuidor = distribuidor.codigo.toLowerCase();
-        else if (distribuidor[campo]) acc[campo] = distribuidor[campo];
-        return acc;
-      }, {})
+      [codigo.toLowerCase()]: campos.reduce((acc, campo) => distribuidor[campo] 
+        ? ({
+          ...acc,
+          [campo]:distribuidor[campo]
+        })
+        : acc, {})
     }), {})
   );
 }
@@ -95,18 +102,26 @@ function addSalidas() {
   console.log('salidas')
   const salidas = db.ref('salidas');
   return Promise.all(
-    data.salidas.sort(byFecha).map(salida =>
-      salidas.push(salida)
-    )
-  );
+    data.salidas.sort(byFecha).map(({comision, ...salida}) =>
+      salidas.push(
+        comision 
+        ? {
+          ...salida,
+          idVendedor:comision.toLowerCase()
+        }
+        : salida
+      )
+  ));
 }
 
 db.ref().set({
+  config: null,
   vendedores: null,
   distribuidores: null,
   consigna: null,
   salidas: null
 })
+  .then(addConfig)
   .then(addVendedores)
   .then(addDistribuidores)
   .then(addVentaDirecta)
