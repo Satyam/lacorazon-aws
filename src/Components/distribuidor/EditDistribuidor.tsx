@@ -84,8 +84,8 @@ const EditDistribuidor: React.FC = () => {
     } else {
       openLoading('Creando distribuidor');
       try {
-        const id = await createDistribuidor(values);
-        history.replace(`/distribuidor/edit/${id}`);
+        const { idDistribuidor } = await createDistribuidor(values);
+        history.replace(`/distribuidor/edit/${idDistribuidor}`);
       } catch (err) {
         switch (err.message) {
           case DuplicateErrorMessage:

@@ -19,15 +19,18 @@ export const useDistribuidores = () =>
 
 export const createDistribuidor: (
   values: Partial<DistribuidorType>
-) => Promise<ID> = async (values) => {
+) => Promise<Partial<DistribuidorType>> = async (values) => {
   if (values.nombre) {
-    var slug = slugify(values.nombre, { lower: true });
-    const duplicate = await distrRef(slug).once('value');
+    var idDistribuidor = slugify(values.nombre, { lower: true });
+    const duplicate = await distrRef(idDistribuidor).once('value');
     if (duplicate.exists()) {
       throw new Error(DuplicateErrorMessage);
     } else {
-      await distrRef(slug).set(values);
-      return slug;
+      await distrRef(idDistribuidor).set(values);
+      return {
+        ...values,
+        idDistribuidor,
+      };
     }
   } else {
     throw new Error(MissingNombreMessage);
