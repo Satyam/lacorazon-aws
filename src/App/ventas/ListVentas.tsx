@@ -19,7 +19,7 @@ import { useIntl } from 'Providers/Intl';
 import { Loading } from 'Components/Modals';
 import Page from 'Components/Page';
 import { useModals } from 'Providers/Modals';
-import { ShowVendedor } from 'Components/vendedores/gadgets';
+import { ShowVendedor } from 'App/vendedores/gadgets';
 
 import { useVentas, deleteVenta } from './common';
 

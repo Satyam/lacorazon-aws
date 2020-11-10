@@ -3,12 +3,12 @@ import React from 'react';
 import { Table, Alert } from 'reactstrap';
 import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
-import { useVendedores } from 'Components/vendedores/common';
-import { useSalidas } from 'Components/salidas/common';
-import { useVentas } from 'Components/ventas/common';
-import { useConsignas } from 'Components/consigna/common';
-import { useConfig } from 'Components/config/common';
-import { ShowVendedor } from 'Components/vendedores/gadgets';
+import { useVendedores } from 'App/vendedores/common';
+import { useSalidas } from 'App/salidas/common';
+import { useVentas } from 'App/ventas/common';
+import { useConsignas } from 'App/consigna/common';
+import { useConfig } from 'App/config/common';
+import { ShowVendedor } from 'App/vendedores/gadgets';
 import { useIntl } from 'Providers/Intl';
 
 type SumarioPorVendedor = {

@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 
 import { LabeledText, LabeledCheckbox } from 'Components/Form';
-import { LabeledVendedores } from 'Components/vendedores/gadgets';
+import { LabeledVendedores } from 'App/vendedores/gadgets';
 import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
 import { Alert } from 'reactstrap';

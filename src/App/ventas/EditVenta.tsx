@@ -11,7 +11,7 @@ import {
   CheckboxField,
   SubmitButton,
 } from 'Components/Form';
-import { DropdownVendedores } from 'Components/vendedores/gadgets';
+import { DropdownVendedores } from 'App/vendedores/gadgets';
 import { ButtonIconAdd, ButtonIconDelete, ButtonSet } from 'Components/Icons';
 import { Loading } from 'Components/Modals';
 import Page from 'Components/Page';

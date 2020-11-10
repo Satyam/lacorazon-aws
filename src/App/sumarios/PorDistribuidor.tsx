@@ -3,11 +3,11 @@ import React from 'react';
 import { Table, Alert } from 'reactstrap';
 import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
-import { useDistribuidores } from 'Components/distribuidor/common';
-import { useSalidas } from 'Components/salidas/common';
-import { useVentas } from 'Components/ventas/common';
-import { useConsignas } from 'Components/consigna/common';
-import { useConfigs } from 'Components/config/common';
+import { useDistribuidores } from 'App/distribuidor/common';
+import { useSalidas } from 'App/salidas/common';
+import { useVentas } from 'App/ventas/common';
+import { useConsignas } from 'App/consigna/common';
+import { useConfigs } from 'App/config/common';
 import { useIntl } from 'Providers/Intl';
 
 type SumarioPorDistribuidor = {
