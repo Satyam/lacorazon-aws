@@ -13,7 +13,7 @@ import {
   DropdownMenu,
   DropdownItem,
 } from 'reactstrap';
-import { FaUser } from 'react-icons/fa';
+// import { FaUser } from 'react-icons/fa';
 
 import { useIntl } from 'Providers/Intl';
 
@@ -65,7 +65,11 @@ export function Navigation() {
                     Sumario por vendedor
                   </NavLink>
                 </DropdownItem>
-                <DropdownItem>Option 2</DropdownItem>
+                <DropdownItem>
+                  <NavLink tag={Link} to="/sumario/porDistribuidor">
+                    Sumario por distribuidor
+                  </NavLink>
+                </DropdownItem>
                 <DropdownItem divider />
                 <DropdownItem>Reset</DropdownItem>
               </DropdownMenu>
