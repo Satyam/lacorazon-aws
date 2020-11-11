@@ -71,7 +71,7 @@ export const ShowVendedor: React.FC<
   {
     idVendedor: string;
   } & DOMAttributes<HTMLDivElement>
-> = ({ idVendedor, ...rest }) => {
+> = ({ idVendedor }) => {
   const [vendedor, loading, error] = useObjectVal<VendedorType>(
     db.ref(`vendedores/${idVendedor}`)
   );
@@ -79,9 +79,9 @@ export const ShowVendedor: React.FC<
   if (loading) return <img src={icon} alt="loading ..." />;
   if (vendedor) {
     return (
-      <span {...rest} title={vendedor.nombre}>
+      <Link title={vendedor.nombre} to={`/vendedor/${idVendedor}`}>
         {idVendedor}
-      </span>
+      </Link>
     );
   }
   return null;

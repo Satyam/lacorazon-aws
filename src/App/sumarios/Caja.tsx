@@ -2,13 +2,13 @@ import React from 'react';
 
 import { Table, Alert } from 'reactstrap';
 import Page from 'Components/Page';
-import { Link } from 'react-router-dom';
 import { Loading } from 'Components/Modals';
 import { useSalidas } from 'App/salidas/common';
 import { useVentas } from 'App/ventas/common';
 import { useConsignas } from 'App/consigna/common';
 import { useConfigs } from 'App/config/common';
 import { ShowVendedor } from 'App/vendedores/gadgets';
+import { ShowDistribuidor } from 'App/distribuidor/gadgets';
 import { useIntl } from 'Providers/Intl';
 import { Checkmark } from 'Components/Icons';
 
@@ -176,9 +176,7 @@ const SumarioCaja: React.FC = () => {
           {sumario.origen === Origen.Venta ? (
             <ShowVendedor idVendedor={sumario.referencia} />
           ) : sumario.origen === Origen.Distribuidor ? (
-            <Link to={`/distribuidor/${sumario.referencia}`}>
-              {sumario.referencia}
-            </Link>
+            <ShowDistribuidor idDistribuidor={sumario.referencia} />
           ) : (
             sumario.referencia
           )}
