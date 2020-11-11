@@ -11,6 +11,8 @@ import {
   FaCalendarAlt,
   FaExclamationCircle,
   FaExclamationTriangle,
+  FaRegCheckSquare,
+  FaRegSquare,
 } from 'react-icons/fa';
 
 import styles from './styles.module.css';
@@ -198,3 +200,6 @@ export const ButtonSet: React.FC<{
     {children}
   </div>
 );
+
+export const Checkmark: React.FC<{ value: Boolean }> = ({ value }) =>
+  value ? <FaRegCheckSquare /> : <FaRegSquare />;

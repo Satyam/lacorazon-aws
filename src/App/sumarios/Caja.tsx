@@ -10,7 +10,7 @@ import { useConsignas } from 'App/consigna/common';
 import { useConfigs } from 'App/config/common';
 import { ShowVendedor } from 'App/vendedores/gadgets';
 import { useIntl } from 'Providers/Intl';
-import { FaCheckCircle } from 'react-icons/fa';
+import { Checkmark } from 'Components/Icons';
 
 enum Origen {
   Venta = 'Venta',
@@ -185,7 +185,9 @@ const SumarioCaja: React.FC = () => {
         </td>
         <td>{sumario.concepto}</td>
         <td align="right">{formatCurrency(sumario.importe)}</td>
-        <td align="center">{sumario.ctaRaed ? <FaCheckCircle /> : ''}</td>
+        <td align="center">
+          <Checkmark value={sumario.ctaRaed} />
+        </td>
         <td align="right">{formatCurrency(sumario.iva)}</td>
         <td align="right">{formatCurrency(sumario.importeSinIVA)}</td>
         <td align="right">{formatCurrency(sumario.saldo)}</td>
