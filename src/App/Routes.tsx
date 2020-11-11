@@ -12,6 +12,7 @@ import EditVenta from 'App/ventas/EditVenta';
 import ShowVenta from 'App/ventas/ShowVenta';
 import SumarioVendedores from 'App/sumarios/PorVendedor';
 import SumarioDistribuidores from 'App/sumarios/PorDistribuidor';
+import SumarioCaja from 'App/sumarios/Caja';
 // import Profile from 'Components/Profile';
 
 // import PrivateRoute from './PrivateRoute';
@@ -69,6 +70,10 @@ const Routes = () => (
     <Route path="/sumario/porDistribuidor">
       <SumarioDistribuidores />
     </Route>
+    <Route path="/sumario/caja">
+      <SumarioCaja />
+    </Route>
+
     {/* <PrivateRoute path="/profile">
       <Profile />
     </PrivateRoute> */}

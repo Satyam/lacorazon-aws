@@ -70,6 +70,11 @@ export function Navigation() {
                     Sumario por distribuidor
                   </NavLink>
                 </DropdownItem>
+                <DropdownItem>
+                  <NavLink tag={Link} to="/sumario/caja">
+                    Sumario de caja
+                  </NavLink>
+                </DropdownItem>
                 <DropdownItem divider />
                 <DropdownItem>Reset</DropdownItem>
               </DropdownMenu>
