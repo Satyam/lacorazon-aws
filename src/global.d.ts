@@ -47,6 +47,7 @@ declare global {
     cantidad: number;
     iva: boolean;
     precioUnitario?: number;
+    ctaRaed?: boolean;
   }
 
   type SalidaType = {

@@ -68,7 +68,7 @@ const SumarioCaja: React.FC = () => {
           referencia: venta.idVendedor,
           concepto: venta.concepto,
           importe: precio,
-          ctaRaed: false,
+          ctaRaed: venta.ctaRaed,
           iva: precio - precioSinIVA || '',
           importeSinIVA: precioSinIVA,
         } as EntradaDeCaja;
@@ -102,6 +102,7 @@ const SumarioCaja: React.FC = () => {
         }
 
         var importeSinIVA = importe / (1 + iva);
+
         return {
           fecha,
           origen: Origen.Salida,
