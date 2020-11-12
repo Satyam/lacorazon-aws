@@ -47,7 +47,7 @@ declare global {
     cantidad: number;
     iva: boolean;
     precioUnitario?: number;
-    ctaRaed?: boolean;
+    cuenta?: string;
   }
 
   type SalidaType = {
@@ -58,7 +58,7 @@ declare global {
     reintegro?: boolean;
     pagoiva?: boolean;
     idVendedor?: ID;
-    ctaRaed?: boolean;
+    cuenta?: string;
     iva?: number;
   };
 
@@ -74,7 +74,7 @@ declare global {
     facturado: number;
     nroFactura: string;
     cobrado: number;
-    ctaRaed: boolean;
+    cuenta: string;
     comentarios: string;
   };
 
@@ -83,6 +83,12 @@ declare global {
     comisionEstandar: number;
     IVALibros: number;
     comisionInterna: number;
+  };
+
+  type CuentaType = {
+    idCuenta: ID;
+    descr: string;
+    color: string;
   };
 }
 

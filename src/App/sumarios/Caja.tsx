@@ -10,7 +10,7 @@ import { useConfigs } from 'App/config/common';
 import { ShowVendedor } from 'App/vendedores/gadgets';
 import { ShowDistribuidor } from 'App/distribuidor/gadgets';
 import { useIntl } from 'Providers/Intl';
-import { Checkmark } from 'Components/Icons';
+import { cuentas, ShowCuenta } from 'App/cuentas/gadgets';
 
 enum Origen {
   Venta = 'Venta',
@@ -24,7 +24,7 @@ type EntradaDeCaja = {
   referencia: string;
   concepto: string;
   importe: number;
-  ctaRaed: boolean;
+  cuenta: string;
   iva: number;
   importeSinIVA: number;
   saldo?: number;
@@ -68,7 +68,7 @@ const SumarioCaja: React.FC = () => {
           referencia: venta.idVendedor,
           concepto: venta.concepto,
           importe: precio,
-          ctaRaed: venta.ctaRaed,
+          cuenta: venta.cuenta,
           iva: precio - precioSinIVA || '',
           importeSinIVA: precioSinIVA,
         } as EntradaDeCaja;
@@ -85,7 +85,7 @@ const SumarioCaja: React.FC = () => {
         idVendedor,
         fecha,
         concepto,
-        ctaRaed,
+        cuenta,
       }) => {
         if (
           (iva ? 1 : 0) +
@@ -115,7 +115,7 @@ const SumarioCaja: React.FC = () => {
             : '',
           concepto: concepto,
           importe: -importe,
-          ctaRaed: ctaRaed,
+          cuenta: cuenta,
           iva: pagoiva ? -importe : -(importe - importeSinIVA) || '',
           importeSinIVA: pagoiva ? 0 : -importeSinIVA,
         } as EntradaDeCaja;
@@ -128,7 +128,7 @@ const SumarioCaja: React.FC = () => {
 
     return consignas
       .filter((consigna) => consigna.cobrado)
-      .map(({ cobrado, nroFactura, fecha, idDistribuidor, ctaRaed }) => {
+      .map(({ cobrado, nroFactura, fecha, idDistribuidor, cuenta }) => {
         const cobradoSinIVA = nroFactura
           ? cobrado / factorPrecioSinIva
           : cobrado;
@@ -141,7 +141,7 @@ const SumarioCaja: React.FC = () => {
             ? nroFactura + ' de ' + idDistribuidor
             : idDistribuidor,
           importe: cobrado,
-          ctaRaed: ctaRaed,
+          cuenta: cuenta,
           iva: cobrado - cobradoSinIVA || '',
           importeSinIVA: cobradoSinIVA,
         } as EntradaDeCaja;
@@ -149,8 +149,14 @@ const SumarioCaja: React.FC = () => {
   };
   let saldo = 0;
   let acumIVA = 0;
-  let caja = 0;
-  let ctaRaed = 0;
+  let total = 0;
+  const totalesPorCuenta: Record<string, number> = Object.keys(cuentas).reduce(
+    (tots, cta) => ({
+      ...tots,
+      [cta]: 0,
+    }),
+    {}
+  );
 
   const entradas: EntradaDeCaja[] = acumSalidas()
     .concat(acumVentas(), acumConsigna())
@@ -159,14 +165,19 @@ const SumarioCaja: React.FC = () => {
         a.fecha.getTime() - b.fecha.getTime()
     )
     .map((entrada) => {
+      // this part could have been done in a separate forEach()
       saldo += entrada.importeSinIVA;
       acumIVA += entrada.iva || 0;
-      if (entrada.ctaRaed) ctaRaed += entrada.importe || 0;
-      else caja += entrada.importe || 0;
+      totalesPorCuenta[entrada.cuenta] += entrada.importe || 0;
+      total += entrada.importe || 0;
+
+      // this part does alter entrada
       entrada.saldo = saldo;
       entrada.acumIVA = acumIVA;
       return entrada;
     });
+
+  console.log({ totalesPorCuenta });
 
   const rowSumario = (sumario: EntradaDeCaja) => {
     return (
@@ -184,8 +195,8 @@ const SumarioCaja: React.FC = () => {
         </td>
         <td>{sumario.concepto}</td>
         <td align="right">{formatCurrency(sumario.importe)}</td>
-        <td align="center">
-          <Checkmark value={sumario.ctaRaed} />
+        <td>
+          <ShowCuenta idCuenta={sumario.cuenta} />
         </td>
         <td align="right">{formatCurrency(sumario.iva)}</td>
         <td align="right">{formatCurrency(sumario.importeSinIVA)}</td>
@@ -219,16 +230,16 @@ uno en su caja/sobre/cuenta
             `}
             >
               <th>Total</th>
-              <td align="right">{formatCurrency(ctaRaed + caja)}</td>
+              <td align="right">{formatCurrency(total)}</td>
             </tr>
-            <tr>
-              <th>Cuenta Raed:</th>
-              <td align="right">{formatCurrency(ctaRaed)}</td>
-            </tr>
-            <tr>
-              <th>Caja:</th>
-              <td align="right">{formatCurrency(caja)}</td>
-            </tr>
+            {Object.keys(totalesPorCuenta).map((idCuenta) => (
+              <tr key={idCuenta}>
+                <th>{cuentas[idCuenta].descr}</th>
+                <td align="right">
+                  {formatCurrency(totalesPorCuenta[idCuenta])}
+                </td>
+              </tr>
+            ))}
             <tr title="Esta es la parte del sobre que es realmente vuestra">
               <th>Total despues del IVA</th>
               <td align="right">{formatCurrency(saldo)}</td>
@@ -252,7 +263,7 @@ Si es negativo es que Hacienda os debe a vosotros`}
               <th>Referencia</th>
               <th>Concepto</th>
               <th>Total (IVA incluido)</th>
-              <th>Cuenta Raed</th>
+              <th>Cuenta</th>
               <th>IVA</th>
               <th>Importe (sin IVA)</th>
               <th>Saldo</th>

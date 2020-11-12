@@ -12,6 +12,8 @@ import {
   SubmitButton,
 } from 'Components/Form';
 import { DropdownVendedores } from 'App/vendedores/gadgets';
+import { DropdownCuentas } from 'App/cuentas/gadgets';
+
 import { ButtonIconAdd, ButtonIconDelete, ButtonSet } from 'Components/Icons';
 import { Loading } from 'Components/Modals';
 import Page from 'Components/Page';
@@ -104,6 +106,12 @@ export default function EditVenta() {
           <TextField
             name="precioUnitario"
             label="Precio Unitario"
+            methods={methods}
+          />
+          <DropdownCuentas
+            name="cuenta"
+            label="Cuenta"
+            noOption={!idVenta}
             methods={methods}
           />
           <ButtonSet>

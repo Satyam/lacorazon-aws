@@ -22,6 +22,7 @@ import { useModals } from 'Providers/Modals';
 import { ShowVendedor } from 'App/vendedores/gadgets';
 
 import { useVentas, deleteVenta } from './common';
+import { ShowCuenta } from 'App/cuentas/gadgets';
 
 const ListVentas: React.FC<{
   idVendedor?: string;
@@ -78,12 +79,7 @@ const ListVentas: React.FC<{
         {!idVendedor &&
           (venta.idVendedor ? (
             <td>
-              <Link
-                title={`Ver detalle vendedor: \n${venta.idVendedor}`}
-                to={`/vendedores/${venta.idVendedor}`}
-              >
-                <ShowVendedor idVendedor={venta.idVendedor} />
-              </Link>
+              <ShowVendedor idVendedor={venta.idVendedor} />
             </td>
           ) : (
             <td>---</td>
@@ -95,6 +91,9 @@ const ListVentas: React.FC<{
         </td>
         <td align="right">
           {formatCurrency(venta.cantidad! * venta.precioUnitario!)}
+        </td>
+        <td>
+          <ShowCuenta idCuenta={venta.cuenta} />
         </td>
         <td align="center">
           <ButtonGroup size="sm">
@@ -153,6 +152,7 @@ const ListVentas: React.FC<{
               <th>Precio Unitario</th>
               <th>IVA</th>
               <th>Precio Total</th>
+              <th>Cuenta</th>
               <th />
             </tr>
           </thead>

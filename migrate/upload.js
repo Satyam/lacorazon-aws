@@ -75,10 +75,11 @@ function addVentaDirecta() {
   console.log('venta directa')
   const ventas = db.ref('ventas');
   return Promise.all(
-    data.ventaDirecta.sort(byFecha).map(({vendedor, ...venta}) =>
+    data.ventaDirecta.sort(byFecha).map(({vendedor, ctaRaed, ...venta}) =>
       ventas.push({
         ...venta,
-        idVendedor: vendedor ? vendedor.toLowerCase() : null
+        idVendedor: vendedor ? vendedor.toLowerCase() : null,
+        cuenta: ctaRaed ? 'ctaRaed' : 'efvoRoxy'
       })
     )
   );
@@ -88,11 +89,13 @@ function addEnConsigna() {
   console.log('en consigna')
   const consigna = db.ref('consigna');
   return Promise.all(
-    data.enConsigna.sort(byFecha).map(({ codigo, vendedor, ...venta }) =>
+    data.enConsigna.sort(byFecha).map(({ codigo, vendedor, ctaRaed, ...venta }) =>
       consigna.push({
         ...venta,
         idVendedor: vendedor ? vendedor.toLowerCase() : null,
-        idDistribuidor: codigo.toLowerCase()
+        idDistribuidor: codigo.toLowerCase(),
+        cuenta: ctaRaed ? 'ctaRaed' : 'efvoRoxy'
+
       })
     )
   );
@@ -102,14 +105,17 @@ function addSalidas() {
   console.log('salidas')
   const salidas = db.ref('salidas');
   return Promise.all(
-    data.salidas.sort(byFecha).map(({comision, ...salida}) =>
+    data.salidas.sort(byFecha).map(({comision, ctaRaed,...salida}) =>
       salidas.push(
         comision 
         ? {
           ...salida,
-          idVendedor:comision.toLowerCase()
+          idVendedor:comision.toLowerCase(),
+          cuenta: ctaRaed ? 'ctaRaed' : 'efvoRoxy'
         }
-        : salida
+        : {...salida,
+          cuenta: ctaRaed ? 'ctaRaed' : 'efvoRoxy'
+        }
       )
   ));
 }
