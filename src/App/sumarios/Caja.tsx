@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import { Table, Alert } from 'reactstrap';
+import { Table, Alert, TabContent, Nav, NavItem, NavLink } from 'reactstrap';
 import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
 import { useSalidas } from 'App/salidas/common';
@@ -11,6 +11,7 @@ import { ShowVendedor } from 'App/vendedores/gadgets';
 import { ShowDistribuidor } from 'App/distribuidor/gadgets';
 import { useIntl } from 'Providers/Intl';
 import { cuentas, ShowCuenta } from 'App/cuentas/gadgets';
+import classnames from 'classnames';
 
 enum Origen {
   Venta = 'Venta',
@@ -38,7 +39,7 @@ const SumarioCaja: React.FC = () => {
   const [configs, loadingConfigs, errorConfigs] = useConfigs();
 
   const { formatCurrency, formatDate } = useIntl();
-
+  const [activeTab, setActiveTab] = useState<number>(new Date().getFullYear());
   if (loadingSalidas || loadingVentas || loadingConsigna || loadingConfigs)
     return <Loading>Cargando datos</Loading>;
 
@@ -177,7 +178,14 @@ const SumarioCaja: React.FC = () => {
       return entrada;
     });
 
-  console.log({ totalesPorCuenta });
+  const years = [];
+  for (
+    let y = entradas[0].fecha.getFullYear();
+    y <= entradas[entradas.length - 1].fecha.getFullYear();
+    y++
+  ) {
+    years.push(y);
+  }
 
   const rowSumario = (sumario: EntradaDeCaja) => {
     return (
@@ -255,23 +263,46 @@ Si es negativo es que Hacienda os debe a vosotros`}
           </tbody>
         </Table>
 
-        <Table striped hover size="sm" responsive bordered>
-          <thead>
-            <tr>
-              <th>Fecha</th>
-              <th>Origen</th>
-              <th>Referencia</th>
-              <th>Concepto</th>
-              <th>Total (IVA incluido)</th>
-              <th>Cuenta</th>
-              <th>IVA</th>
-              <th>Importe (sin IVA)</th>
-              <th>Saldo</th>
-              <th>IVA Acum</th>
-            </tr>
-          </thead>
-          <tbody>{entradas.map(rowSumario)}</tbody>
-        </Table>
+        <Nav tabs>
+          {years.map((y) => (
+            <NavItem key={y}>
+              <NavLink
+                className={classnames({ active: activeTab === y })}
+                onClick={() => {
+                  setActiveTab(y);
+                }}
+              >
+                {y}
+              </NavLink>
+            </NavItem>
+          ))}
+        </Nav>
+        <TabContent>
+          <Table striped hover size="sm" responsive bordered>
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Origen</th>
+                <th>Referencia</th>
+                <th>Concepto</th>
+                <th>Total (IVA incluido)</th>
+                <th>Cuenta</th>
+                <th>IVA</th>
+                <th>Importe (sin IVA)</th>
+                <th>Saldo</th>
+                <th>IVA Acum</th>
+              </tr>
+            </thead>
+            <tbody>
+              {entradas
+                .filter(
+                  (entrada: EntradaDeCaja) =>
+                    entrada.fecha.getFullYear() === activeTab
+                )
+                .map(rowSumario)}
+            </tbody>
+          </Table>
+        </TabContent>
       </>
     </Page>
   );
