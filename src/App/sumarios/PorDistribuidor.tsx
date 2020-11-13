@@ -7,7 +7,7 @@ import { useDistribuidores } from 'App/distribuidor/common';
 import { useSalidas } from 'App/salidas/common';
 import { useVentas } from 'App/ventas/common';
 import { useConsignas } from 'App/consigna/common';
-import { useConfigs } from 'App/config/common';
+import configs from 'App/config/';
 import { useIntl } from 'Providers/Intl';
 
 type SumarioPorDistribuidor = {
@@ -32,7 +32,6 @@ const SumarioDistribuidores: React.FC = () => {
   const [salidas, loadingSalidas, errorSalidas] = useSalidas();
   const [ventas, loadingVentas, errorVentas] = useVentas();
   const [consignas, loadingConsigna, errorConsigna] = useConsignas();
-  const [configs, loadingConfigs, errorConfigs] = useConfigs();
 
   const { formatCurrency } = useIntl();
 
@@ -40,8 +39,7 @@ const SumarioDistribuidores: React.FC = () => {
     loadingDistribuidores ||
     loadingSalidas ||
     loadingVentas ||
-    loadingConsigna ||
-    loadingConfigs
+    loadingConsigna
   )
     return <Loading>Cargando datos</Loading>;
 
@@ -49,8 +47,6 @@ const SumarioDistribuidores: React.FC = () => {
     return <Alert color="warning">Tabla de salidas está vacía</Alert>;
   if (typeof consignas === 'undefined')
     return <Alert color="warning">Tabla de consignas está vacía</Alert>;
-  if (typeof configs === 'undefined')
-    return <Alert color="warning">Tabla de config está vacía</Alert>;
   if (typeof ventas === 'undefined')
     return <Alert color="warning">Tabla de ventas está vacía</Alert>;
   if (typeof distribuidores === 'undefined')
@@ -166,8 +162,7 @@ const SumarioDistribuidores: React.FC = () => {
         errorDistribuidores?.message ||
         errorSalidas?.message ||
         errorVentas?.message ||
-        errorConsigna?.message ||
-        errorConfigs?.message
+        errorConsigna?.message
       }
     >
       <Table striped hover size="sm" responsive bordered>

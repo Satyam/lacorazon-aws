@@ -6,7 +6,7 @@ import { Loading } from 'Components/Modals';
 import { useSalidas } from 'App/salidas/common';
 import { useVentas } from 'App/ventas/common';
 import { useConsignas } from 'App/consigna/common';
-import { useConfigs } from 'App/config/common';
+import configs from 'App/config/';
 import { ShowVendedor } from 'App/vendedores/gadgets';
 import { ShowDistribuidor } from 'App/distribuidor/gadgets';
 import { useIntl } from 'Providers/Intl';
@@ -36,19 +36,17 @@ const SumarioCaja: React.FC = () => {
   const [salidas, loadingSalidas, errorSalidas] = useSalidas();
   const [ventas, loadingVentas, errorVentas] = useVentas();
   const [consignas, loadingConsigna, errorConsigna] = useConsignas();
-  const [configs, loadingConfigs, errorConfigs] = useConfigs();
 
   const { formatCurrency, formatDate } = useIntl();
   const [activeTab, setActiveTab] = useState<number>(new Date().getFullYear());
-  if (loadingSalidas || loadingVentas || loadingConsigna || loadingConfigs)
+  if (loadingSalidas || loadingVentas || loadingConsigna)
     return <Loading>Cargando datos</Loading>;
 
   if (typeof salidas === 'undefined')
     return <Alert color="warning">Tabla de salidas está vacía</Alert>;
   if (typeof consignas === 'undefined')
     return <Alert color="warning">Tabla de consignas está vacía</Alert>;
-  if (typeof configs === 'undefined')
-    return <Alert color="warning">Tabla de config está vacía</Alert>;
+
   if (typeof ventas === 'undefined')
     return <Alert color="warning">Tabla de ventas está vacía</Alert>;
 
@@ -220,10 +218,7 @@ const SumarioCaja: React.FC = () => {
       title="Sumario Distribuidores"
       heading="Sumario Distribuidores"
       error={
-        errorSalidas?.message ||
-        errorVentas?.message ||
-        errorConsigna?.message ||
-        errorConfigs?.message
+        errorSalidas?.message || errorVentas?.message || errorConsigna?.message
       }
     >
       <>
