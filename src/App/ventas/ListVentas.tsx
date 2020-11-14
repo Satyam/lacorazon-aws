@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import React from 'react';
+import { useHistory, useParams, Link } from 'react-router-dom';
 import {
   Table,
   ButtonGroup,
@@ -7,6 +7,7 @@ import {
   Nav,
   NavItem,
   NavLink,
+  Alert,
 } from 'reactstrap';
 import { FaRegCheckSquare, FaRegSquare } from 'react-icons/fa';
 import classnames from 'classnames';
@@ -30,25 +31,28 @@ const ListVentas: React.FC<{
   wide?: boolean;
 }> = ({ idVendedor, nombreVendedor, wide }) => {
   const history = useHistory();
+  const { year } = useParams<{ year: string }>();
 
   const [ventas, loading, error] = useVentas();
 
   const { formatDate, formatCurrency } = useIntl();
   const { confirmDelete } = useModals();
-  const [activeTab, setActiveTab] = useState<number>(new Date().getFullYear());
 
   if (loading) return <Loading>Cargando ventas</Loading>;
 
+  if (typeof ventas === 'undefined')
+    return <Alert color="danger">Tabla de ventas está vacía</Alert>;
+
+  const minYear = ventas[0].fecha.getFullYear();
+  const maxYear = ventas[ventas.length - 1].fecha.getFullYear();
   const years = [];
   if (Array.isArray(ventas)) {
-    for (
-      let y = ventas[0].fecha.getFullYear();
-      y <= ventas[ventas.length - 1].fecha.getFullYear();
-      y++
-    ) {
+    for (let y = minYear; y <= maxYear; y++) {
       years.push(y);
     }
   }
+
+  const activeYear: number = year ? parseInt(year, 10) : maxYear;
   const onAdd: React.MouseEventHandler<HTMLButtonElement> = (ev) => {
     ev.stopPropagation();
     history.push('/venta/new');
@@ -131,9 +135,9 @@ const ListVentas: React.FC<{
         {years.map((y) => (
           <NavItem key={y}>
             <NavLink
-              className={classnames({ active: activeTab === y })}
+              className={classnames({ active: activeYear === y })}
               onClick={() => {
-                setActiveTab(y);
+                history.replace(`/ventas/${y}`);
               }}
             >
               {y}
@@ -159,7 +163,7 @@ const ListVentas: React.FC<{
           <tbody>
             {(ventas || [])
               .filter(
-                (venta: VentaType) => venta.fecha.getFullYear() === activeTab
+                (venta: VentaType) => venta.fecha.getFullYear() === activeYear
               )
               .map(rowVenta)}
           </tbody>

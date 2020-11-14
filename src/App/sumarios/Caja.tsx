@@ -1,6 +1,8 @@
-import React, { useState, useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 import { Table, TabContent, Nav, NavItem, NavLink } from 'reactstrap';
+import { useParams, useHistory } from 'react-router-dom';
+
 import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
 import { useSalidas } from 'App/salidas/common';
@@ -153,12 +155,14 @@ const useAcumConsigna = () => {
   }, [consignas, loading, error]);
 };
 const SumarioCaja: React.FC = () => {
+  const history = useHistory();
+  const { year } = useParams<{ year: string }>();
   const acumVentas = useAcumVentas();
   const acumSalidas = useAcumSalidas();
   const acumConsigna = useAcumConsigna();
 
   const { formatCurrency, formatDate } = useIntl();
-  const [activeTab, setActiveTab] = useState<number>(new Date().getFullYear());
+
   if (!acumSalidas || !acumVentas || !acumConsigna)
     return <Loading>Cargando datos</Loading>;
 
@@ -193,13 +197,13 @@ const SumarioCaja: React.FC = () => {
     });
 
   const years = [];
-  for (
-    let y = entradas[0].fecha.getFullYear();
-    y <= entradas[entradas.length - 1].fecha.getFullYear();
-    y++
-  ) {
+  const minYear = entradas[0].fecha.getFullYear();
+  const maxYear = entradas[entradas.length - 1].fecha.getFullYear();
+  for (let y = minYear; y <= maxYear; y++) {
     years.push(y);
   }
+
+  const activeYear = year ? parseInt(year, 10) : maxYear;
 
   const rowSumario = (sumario: EntradaDeCaja) => {
     return (
@@ -271,9 +275,9 @@ Si es negativo es que Hacienda os debe a vosotros`}
           {years.map((y) => (
             <NavItem key={y}>
               <NavLink
-                className={classnames({ active: activeTab === y })}
+                className={classnames({ active: activeYear === y })}
                 onClick={() => {
-                  setActiveTab(y);
+                  history.replace(`/sumario/caja/${y}`);
                 }}
               >
                 {y}
@@ -301,7 +305,7 @@ Si es negativo es que Hacienda os debe a vosotros`}
               {entradas
                 .filter(
                   (entrada: EntradaDeCaja) =>
-                    entrada.fecha.getFullYear() === activeTab
+                    entrada.fecha.getFullYear() === activeYear
                 )
                 .map(rowSumario)}
             </tbody>

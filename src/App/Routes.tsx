@@ -50,7 +50,7 @@ const Routes = () => (
         <ShowDistribuidor />
       </Route>
     </Switch>
-    <Route path="/ventas">
+    <Route path="/ventas/:year?">
       <ListVentas />
     </Route>
     <Switch>
@@ -70,7 +70,7 @@ const Routes = () => (
     <Route path="/sumario/porDistribuidor">
       <SumarioDistribuidores />
     </Route>
-    <Route path="/sumario/caja">
+    <Route path="/sumario/caja/:year?">
       <SumarioCaja />
     </Route>
 
