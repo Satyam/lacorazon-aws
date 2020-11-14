@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 
-import { Table, Alert, TabContent, Nav, NavItem, NavLink } from 'reactstrap';
+import { Table, TabContent, Nav, NavItem, NavLink } from 'reactstrap';
 import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
 import { useSalidas } from 'App/salidas/common';
@@ -32,31 +32,20 @@ type EntradaDeCaja = {
   acumIVA?: number;
 };
 
-const SumarioCaja: React.FC = () => {
-  const [salidas, loadingSalidas, errorSalidas] = useSalidas();
-  const [ventas, loadingVentas, errorVentas] = useVentas();
-  const [consignas, loadingConsigna, errorConsigna] = useConsignas();
+const useAcumVentas = () => {
+  const [ventas, loading, error] = useVentas();
 
-  const { formatCurrency, formatDate } = useIntl();
-  const [activeTab, setActiveTab] = useState<number>(new Date().getFullYear());
-  if (loadingSalidas || loadingVentas || loadingConsigna)
-    return <Loading>Cargando datos</Loading>;
+  return useMemo(() => {
+    if (loading) return;
 
-  if (typeof salidas === 'undefined')
-    return <Alert color="warning">Tabla de salidas está vacía</Alert>;
-  if (typeof consignas === 'undefined')
-    return <Alert color="warning">Tabla de consignas está vacía</Alert>;
+    if (error) throw error;
+    if (typeof ventas === 'undefined')
+      throw Error('Tabla de ventas está vacía');
 
-  if (typeof ventas === 'undefined')
-    return <Alert color="warning">Tabla de ventas está vacía</Alert>;
-
-  const { IVALibros } = configs;
-
-  const acumVentas = () => {
-    const factorPrecioSinIva = 1 + IVALibros;
+    const factorPrecioSinIva = 1 + configs.IVALibros;
 
     return ventas
-      ?.filter((venta) => venta.precioUnitario && venta.cantidad)
+      .filter((venta) => venta.precioUnitario && venta.cantidad)
       .map((venta) => {
         const precio = (venta.precioUnitario || 0) * (venta.cantidad || 0);
         var precioSinIVA = venta.iva ? precio / factorPrecioSinIva : precio;
@@ -72,9 +61,18 @@ const SumarioCaja: React.FC = () => {
           importeSinIVA: precioSinIVA,
         } as EntradaDeCaja;
       });
-  };
+  }, [ventas, loading, error]);
+};
 
-  const acumSalidas = () => {
+const useAcumSalidas = () => {
+  const [salidas, loading, error] = useSalidas();
+
+  return useMemo(() => {
+    if (loading) return;
+
+    if (error) throw error;
+    if (typeof salidas === 'undefined')
+      throw new Error('Tabla de salidas está vacía');
     return salidas.map(
       ({
         importe,
@@ -93,11 +91,9 @@ const SumarioCaja: React.FC = () => {
             (idVendedor ? 1 : 0) >
           1
         ) {
-          throw new Error(
-            'En Salidas para la fecha ' +
-              formatDate(fecha) +
-              ' no puede haber más de uno: IVA, Reintegro, Pago IVA o Comision en una misma entrada'
-          );
+          throw new Error(`
+            En Salidas para la fecha ${fecha} no puede haber más de uno: 
+            IVA, Reintegro, Pago IVA o Comision en una misma entrada`);
         }
 
         var importeSinIVA = importe / (1 + iva);
@@ -120,10 +116,19 @@ const SumarioCaja: React.FC = () => {
         } as EntradaDeCaja;
       }
     );
-  };
+  }, [salidas, loading, error]);
+};
 
-  const acumConsigna = () => {
-    var factorPrecioSinIva = 1 + IVALibros;
+const useAcumConsigna = () => {
+  const [consignas, loading, error] = useConsignas();
+
+  return useMemo(() => {
+    if (loading) return;
+
+    if (error) throw error;
+    if (typeof consignas === 'undefined')
+      throw new Error('Tabla de consignas está vacía');
+    const factorPrecioSinIva = 1 + configs.IVALibros;
 
     return consignas
       .filter((consigna) => consigna.cobrado)
@@ -145,7 +150,18 @@ const SumarioCaja: React.FC = () => {
           importeSinIVA: cobradoSinIVA,
         } as EntradaDeCaja;
       });
-  };
+  }, [consignas, loading, error]);
+};
+const SumarioCaja: React.FC = () => {
+  const acumVentas = useAcumVentas();
+  const acumSalidas = useAcumSalidas();
+  const acumConsigna = useAcumConsigna();
+
+  const { formatCurrency, formatDate } = useIntl();
+  const [activeTab, setActiveTab] = useState<number>(new Date().getFullYear());
+  if (!acumSalidas || !acumVentas || !acumConsigna)
+    return <Loading>Cargando datos</Loading>;
+
   let saldo = 0;
   let acumIVA = 0;
   let total = 0;
@@ -157,8 +173,8 @@ const SumarioCaja: React.FC = () => {
     {}
   );
 
-  const entradas: EntradaDeCaja[] = acumSalidas()
-    .concat(acumVentas(), acumConsigna())
+  const entradas: EntradaDeCaja[] = acumSalidas
+    .concat(acumVentas, acumConsigna)
     .sort(
       (a: EntradaDeCaja, b: EntradaDeCaja) =>
         a.fecha.getTime() - b.fecha.getTime()
@@ -213,14 +229,7 @@ const SumarioCaja: React.FC = () => {
   };
 
   return (
-    <Page
-      wide
-      title="Sumario Distribuidores"
-      heading="Sumario Distribuidores"
-      error={
-        errorSalidas?.message || errorVentas?.message || errorConsigna?.message
-      }
-    >
+    <Page wide title="Sumario Distribuidores" heading="Sumario Distribuidores">
       <>
         <Table bordered size="sm" style={{ width: '40%', marginLeft: '30%' }}>
           <tbody>
