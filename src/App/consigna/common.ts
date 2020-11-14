@@ -1,6 +1,14 @@
 import { db } from 'Firebase';
+import memoize from 'memoize-one';
+
 import { useListVals } from 'react-firebase-hooks/database';
 
+const memoizedConsignas = memoize((consignas: ConsignaType[]): ConsignaType[] =>
+  consignas.map<ConsignaType>((consigna) => ({
+    ...consigna,
+    fecha: new Date(consigna.fecha),
+  }))
+);
 export const useConsignas: () => [
   Array<ConsignaType> | undefined,
   boolean,
@@ -10,12 +18,8 @@ export const useConsignas: () => [
     db.ref('consigna').orderByChild('fecha'),
     { keyField: 'idConsigna' }
   );
-  return [
-    consignas?.map<ConsignaType & { fecha: Date }>((consigna) => ({
-      ...consigna,
-      fecha: new Date(consigna.fecha),
-    })),
-    loading,
-    error,
-  ];
+  if (loading || error) return [undefined, loading, error];
+  if (typeof consignas === 'undefined')
+    return [consignas, loading, new Error('Tabla consignas está vacía')];
+  return [memoizedConsignas(consignas), loading, error];
 };

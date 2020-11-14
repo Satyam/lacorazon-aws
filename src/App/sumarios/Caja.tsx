@@ -43,7 +43,6 @@ const useAcumVentas = () => {
     if (error) throw error;
     if (typeof ventas === 'undefined')
       throw Error('Tabla de ventas está vacía');
-
     const factorPrecioSinIva = 1 + configs.IVALibros;
 
     return ventas
