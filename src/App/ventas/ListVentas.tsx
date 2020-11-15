@@ -9,12 +9,13 @@ import {
   NavLink,
   Alert,
 } from 'reactstrap';
-import { FaRegCheckSquare, FaRegSquare } from 'react-icons/fa';
+
 import classnames from 'classnames';
 import {
   ButtonIconAdd,
   ButtonIconEdit,
   ButtonIconDelete,
+  Checkmark,
 } from 'Components/Icons';
 import { useIntl } from 'Providers/Intl';
 import { Loading } from 'Components/Modals';
@@ -91,7 +92,7 @@ const ListVentas: React.FC<{
         <td align="right">{venta.cantidad}</td>
         <td align="right">{formatCurrency(venta.precioUnitario)}</td>
         <td align="center">
-          {venta.iva ? <FaRegCheckSquare /> : <FaRegSquare />}
+          <Checkmark value={venta.iva} />
         </td>
         <td align="right">
           {formatCurrency(venta.cantidad! * venta.precioUnitario!)}
