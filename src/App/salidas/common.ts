@@ -9,6 +9,8 @@ const memoizedVentas = memoize((salidas: SalidaType[]): SalidaType[] =>
   }))
 );
 
+const salidaRef = (idSalida: ID) => db.ref(`salidas/${idSalida}`);
+
 export const useSalidas: () => [
   Array<SalidaType> | undefined,
   boolean,
@@ -23,3 +25,6 @@ export const useSalidas: () => [
     return [salidas, loading, new Error('Tabla salidas está vacía')];
   return [memoizedVentas(salidas), loading, error];
 };
+
+export const deleteSalida: (idSalida: ID) => Promise<any> = (idSalida) =>
+  salidaRef(idSalida).remove();

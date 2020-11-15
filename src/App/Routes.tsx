@@ -4,6 +4,7 @@ import { Route, Switch } from 'react-router-dom';
 // import Users from 'Components/user/ListUsers';
 // import EditUser from 'Components/user/EditUser';
 // import ShowUser from 'Components/user/ShowUser';
+import Salidas from 'App/salidas/ListSalidas';
 import Distribuidores from 'App/distribuidor/ListDistribuidores';
 import EditDistribuidor from 'App/distribuidor/EditDistribuidor';
 import ShowDistribuidor from 'App/distribuidor/ShowDistribuidor';
@@ -22,10 +23,10 @@ https://reacttraining.com/blog/react-router-v5-1/#staying-ahead-of-the-curve
 
 const Routes = () => (
   <>
-    {/* <Route path="/users">
-      <Users />
+    <Route path="/Salidas/:year?/:categoria?">
+      <Salidas />
     </Route>
-    <Switch>
+    {/* <Switch>
       <Route path="/user/new">
         <EditUser />
       </Route>

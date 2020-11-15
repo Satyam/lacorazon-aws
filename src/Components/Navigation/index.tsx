@@ -41,8 +41,8 @@ export function Navigation() {
         <Collapse isOpen={isOpen} navbar>
           <Nav className="ml-auto" navbar>
             <NavItem>
-              <NavLink tag={Link} to="/users">
-                Usuarios
+              <NavLink tag={Link} to="/Salidas">
+                Salidas
               </NavLink>
             </NavItem>
             <NavItem>
