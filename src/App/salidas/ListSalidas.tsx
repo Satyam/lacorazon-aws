@@ -22,16 +22,18 @@ import { useIntl } from 'Providers/Intl';
 import { Loading } from 'Components/Modals';
 import Page from 'Components/Page';
 import { useModals } from 'Providers/Modals';
-import { ShowVendedor } from 'App/vendedores/gadgets';
+import { ShowCategoria } from 'App/salidas/gadgets';
 
-import { useSalidas, deleteSalida } from './common';
+import {
+  useSalidas,
+  deleteSalida,
+  GASTO,
+  REINTEGRO,
+  PAGO_IVA,
+  COMISION,
+} from './common';
 import { ShowCuenta } from 'App/cuentas/gadgets';
-enum Ops {
-  gasto = 'gasto',
-  reintegro = 'reintegro',
-  pagoIva = 'pagoIva',
-  pagoComision = 'pagoComision',
-}
+
 const AddDropdown: React.FC<{}> = () => {
   const history = useHistory();
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -48,16 +50,16 @@ const AddDropdown: React.FC<{}> = () => {
         <FaPlusCircle /> Agregar
       </DropdownToggle>
       <DropdownMenu>
-        <DropdownItem data-operacion={Ops.gasto} onClick={onAdd}>
+        <DropdownItem data-operacion={GASTO} onClick={onAdd}>
           Gasto
         </DropdownItem>
-        <DropdownItem data-operacion={Ops.reintegro} onClick={onAdd}>
+        <DropdownItem data-operacion={REINTEGRO} onClick={onAdd}>
           Reintegro
         </DropdownItem>
-        <DropdownItem data-operacion={Ops.pagoIva} onClick={onAdd}>
+        <DropdownItem data-operacion={PAGO_IVA} onClick={onAdd}>
           Pago Iva
         </DropdownItem>
-        <DropdownItem data-operacion={Ops.pagoComision} onClick={onAdd}>
+        <DropdownItem data-operacion={COMISION} onClick={onAdd}>
           Pago Comisión
         </DropdownItem>
       </DropdownMenu>
@@ -120,13 +122,7 @@ const ListSalidas: React.FC<{}> = () => {
         </td>
         <td>{salida.concepto}</td>
         <td>
-          {salida.idVendedor && (
-            <>
-              Comisión: <ShowVendedor idVendedor={salida.idVendedor} />
-            </>
-          )}
-          {salida.reintegro && 'Reintegro'}
-          {salida.pagoiva && 'Pago IVA'}
+          <ShowCategoria {...salida} />
         </td>
         <td align="right">{formatCurrency(importe)}</td>
         <td>

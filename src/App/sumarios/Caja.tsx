@@ -5,7 +5,8 @@ import { useParams, useHistory } from 'react-router-dom';
 
 import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
-import { useSalidas } from 'App/salidas/common';
+import { useSalidas, PAGO_IVA } from 'App/salidas/common';
+import { ShowCategoria } from 'App/salidas/gadgets';
 import { useVentas } from 'App/ventas/common';
 import { useConsignas } from 'App/consigna/common';
 import configs from 'App/config/';
@@ -26,6 +27,7 @@ type EntradaDeCaja = {
   origen: Origen;
   referencia: string;
   concepto: string;
+  idVendedor: string;
   importe: number;
   cuenta: string;
   iva: number;
@@ -54,7 +56,7 @@ const useAcumVentas = () => {
         return {
           fecha: venta.fecha,
           origen: Origen.Venta,
-          referencia: venta.idVendedor,
+          idVendedor: venta.idVendedor,
           concepto: venta.concepto,
           importe: precio,
           cuenta: venta.cuenta,
@@ -74,49 +76,19 @@ const useAcumSalidas = () => {
     if (error) throw error;
     if (typeof salidas === 'undefined')
       throw new Error('Tabla de salidas está vacía');
-    return salidas.map(
-      ({
-        importe,
-        iva = 0,
-        reintegro,
-        pagoiva,
-        idVendedor,
-        fecha,
-        concepto,
-        cuenta,
-      }) => {
-        if (
-          (iva ? 1 : 0) +
-            (reintegro ? 1 : 0) +
-            (pagoiva ? 1 : 0) +
-            (idVendedor ? 1 : 0) >
-          1
-        ) {
-          throw new Error(`
-            En Salidas para la fecha ${fecha} no puede haber más de uno: 
-            IVA, Reintegro, Pago IVA o Comision en una misma entrada`);
-        }
+    return salidas.map(({ importe, iva = 0, categoria, ...rest }) => {
+      var importeSinIVA = importe / (1 + iva);
 
-        var importeSinIVA = importe / (1 + iva);
-
-        return {
-          fecha,
-          origen: Origen.Salida,
-          referencia: reintegro
-            ? 'Reintegro'
-            : pagoiva
-            ? 'Pago IVA'
-            : idVendedor
-            ? 'Comisión ' + idVendedor
-            : '',
-          concepto: concepto,
-          importe: -importe,
-          cuenta: cuenta,
-          iva: pagoiva ? -importe : -(importe - importeSinIVA) || '',
-          importeSinIVA: pagoiva ? 0 : -importeSinIVA,
-        } as EntradaDeCaja;
-      }
-    );
+      return {
+        origen: Origen.Salida,
+        referencia: categoria,
+        importe: -importe,
+        iva:
+          categoria === PAGO_IVA ? -importe : -(importe - importeSinIVA) || '',
+        importeSinIVA: categoria === PAGO_IVA ? 0 : -importeSinIVA,
+        ...rest,
+      } as EntradaDeCaja;
+    });
   }, [salidas, loading, error]);
 };
 
@@ -208,14 +180,19 @@ const SumarioCaja: React.FC = () => {
     return (
       <tr key={`${sumario.fecha}-${sumario.importe}-${sumario.concepto}`}>
         <td>{formatDate(sumario.fecha)}</td>
-        <td>{sumario.origen}</td>
         <td>
-          {sumario.origen === Origen.Venta ? (
-            <ShowVendedor idVendedor={sumario.referencia} />
-          ) : sumario.origen === Origen.Distribuidor ? (
-            <ShowDistribuidor idDistribuidor={sumario.referencia} />
+          {sumario.origen === Origen.Salida ? (
+            <ShowCategoria categoria={sumario.referencia} />
           ) : (
-            sumario.referencia
+            sumario.origen
+          )}
+        </td>
+        <td>
+          {sumario.idVendedor && (
+            <ShowVendedor idVendedor={sumario.idVendedor} />
+          )}
+          {sumario.origen === Origen.Distribuidor && (
+            <ShowDistribuidor idDistribuidor={sumario.referencia} />
           )}
         </td>
         <td>{sumario.concepto}</td>

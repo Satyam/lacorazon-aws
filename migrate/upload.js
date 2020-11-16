@@ -105,18 +105,20 @@ function addSalidas() {
   console.log('salidas')
   const salidas = db.ref('salidas');
   return Promise.all(
-    data.salidas.sort(byFecha).map(({comision, ctaRaed,...salida}) =>
-      salidas.push(
-        comision 
-        ? {
+    data.salidas.sort(byFecha).map(({comision, ctaRaed, reintegro, pagoiva, ...salida}) =>{
+      let categoria = 'gasto';
+      if (reintegro) categoria = 'reintegro'
+      if (pagoiva) categoria = 'pagoIva'
+      if (comision)   categoria = 'comision'
+      
+      return salidas.push(
+        {
           ...salida,
-          idVendedor:comision.toLowerCase(),
-          cuenta: ctaRaed ? 'ctaRaed' : 'efvoRoxy'
+          cuenta: ctaRaed ? 'ctaRaed' : 'efvoRoxy',
+          categoria,
+          idVendedor: comision ? comision.toLowerCase():  null
         }
-        : {...salida,
-          cuenta: ctaRaed ? 'ctaRaed' : 'efvoRoxy'
-        }
-      )
+      )}
   ));
 }
 

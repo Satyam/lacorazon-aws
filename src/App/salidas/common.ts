@@ -2,6 +2,11 @@ import { db } from 'Firebase';
 import memoize from 'memoize-one';
 import { useListVals } from 'react-firebase-hooks/database';
 
+export const GASTO = 'gasto';
+export const REINTEGRO = 'reintegro';
+export const PAGO_IVA = 'pagoIva';
+export const COMISION = 'comision';
+
 const memoizedVentas = memoize((salidas: SalidaType[]): SalidaType[] =>
   salidas?.map<SalidaType>((salida) => ({
     ...salida,

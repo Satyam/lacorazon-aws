@@ -54,10 +54,9 @@ declare global {
     idSalida: ID;
     fecha: Date;
     concepto: string;
+    categoria: 'gasto' | 'reintegro' | 'pagoIva' | 'comision';
+    idVendedor: string;
     importe: number;
-    reintegro?: boolean;
-    pagoiva?: boolean;
-    idVendedor?: ID;
     cuenta?: string;
     iva?: number;
   };
