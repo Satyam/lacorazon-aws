@@ -6,6 +6,7 @@ import { Route, Switch } from 'react-router-dom';
 // import ShowUser from 'Components/user/ShowUser';
 import ListSalidas from 'App/salidas/ListSalidas';
 import ShowSalida from 'App/salidas/ShowSalida';
+import EditSalida from 'App/salidas/EditSalida';
 import Distribuidores from 'App/distribuidor/ListDistribuidores';
 import EditDistribuidor from 'App/distribuidor/EditDistribuidor';
 import ShowDistribuidor from 'App/distribuidor/ShowDistribuidor';
@@ -28,21 +29,16 @@ const Routes = () => (
       <ListSalidas />
     </Route>
     <Switch>
+      <Route path="/salida/new/:categoria">
+        <EditSalida />
+      </Route>
+      <Route path="/salida/edit/:idSalida">
+        <EditSalida />
+      </Route>
       <Route path="/salida/:idSalida">
         <ShowSalida />
       </Route>
     </Switch>
-    {/* <Switch>
-      <Route path="/user/new">
-        <EditUser />
-      </Route>
-      <Route path="/user/edit/:id">
-        <EditUser />
-      </Route>
-      <Route path="/user/:id">
-        <ShowUser />
-      </Route>
-    </Switch> */}
     <Route path="/distribuidores">
       <Distribuidores />
     </Route>

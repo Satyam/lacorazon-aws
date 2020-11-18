@@ -44,6 +44,7 @@ export default function EditVenta() {
   const { idVenta } = useParams<{ idVenta: ID }>();
   const [venta, loading, error] = useVenta(idVenta);
 
+  console.log('ventaSchema.default', ventaSchema.default());
   const methods = useForm<ShortVenta>({
     defaultValues: ventaSchema.default(),
     resolver: yupResolver(ventaSchema),

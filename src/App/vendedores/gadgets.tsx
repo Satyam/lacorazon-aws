@@ -4,24 +4,22 @@ import { useListVals, useObjectVal } from 'react-firebase-hooks/database';
 import { Link } from 'react-router-dom';
 import { Alert } from 'reactstrap';
 import icon from 'Components/Modals/loading.gif';
-import { DropdownField, LabeledText } from 'Components/Form';
-import { UseFormMethods } from 'react-hook-form';
+import {
+  DropdownField,
+  DropdownFieldProps,
+} from 'Components/Form/DropdownField';
+import { LabeledText, LabeledTextProps } from 'Components/Form/LabeledField';
 
-export const DropdownVendedores: React.FC<
-  {
-    idVendedor?: string;
+export type DropdownVendedoresType = {
+  idVendedor?: string;
+} & Omit<DropdownFieldProps, 'options' | 'optLabel' | 'optValue'>;
 
-    // for DropdownField
-    name: string;
-    noOption: boolean;
-    label?: string;
-    id?: string;
-    rows?: number;
-    help?: string;
-    methods: UseFormMethods<any>;
-    className?: string;
-  } & DOMAttributes<HTMLDivElement>
-> = ({ idVendedor, ...rest }) => {
+export const DropdownVendedores: React.FC<DropdownVendedoresType> = ({
+  idVendedor,
+  name,
+  methods,
+  ...rest
+}) => {
   const [vendedores, loading, error] = useListVals<VendedorType>(
     db.ref('vendedores'),
     { keyField: 'idVendedor' }
@@ -33,6 +31,8 @@ export const DropdownVendedores: React.FC<
     return (
       <DropdownField
         {...rest}
+        name={name}
+        methods={methods}
         options={vendedores}
         optLabel="nombre"
         optValue="idVendedor"
@@ -42,14 +42,14 @@ export const DropdownVendedores: React.FC<
   return null;
 };
 
-export const LabeledVendedores: React.FC<
-  {
-    idVendedor?: string;
-    label: string;
-    help?: string;
-    className?: string;
-  } & DOMAttributes<HTMLDivElement>
-> = ({ idVendedor, ...rest }) => {
+export type LabeledVendedoresProps = {
+  idVendedor?: string;
+} & LabeledTextProps;
+
+export const LabeledVendedores: React.FC<LabeledVendedoresProps> = ({
+  idVendedor,
+  ...rest
+}) => {
   const [vendedor, loading, error] = useObjectVal<VendedorType>(
     db.ref(`vendedores/${idVendedor}`)
   );

@@ -26,22 +26,19 @@ export default function ShowVenta() {
     >
       {venta ? (
         <>
-          <LabeledText
-            label="Fecha"
-            value={formatDate(new Date(venta.fecha))}
-          />
-          <LabeledText label="Concepto" value={venta.concepto} />
+          <LabeledText label="Fecha">
+            {formatDate(new Date(venta.fecha))}
+          </LabeledText>
+          <LabeledText label="Concepto">{venta.concepto}</LabeledText>
           <LabeledVendedores label="Vendedor" idVendedor={venta.idVendedor} />
-          <LabeledText label="Cantidad" value={venta.cantidad} />
-          <LabeledCheckbox label="IVA" value={venta.iva} />
-          <LabeledText
-            label="Precio Unitario"
-            value={formatCurrency(venta.precioUnitario)}
-          />
-          <LabeledText
-            label="Precio Total"
-            value={formatCurrency(venta.precioUnitario! * venta.cantidad!)}
-          />
+          <LabeledText label="Cantidad">{venta.cantidad}</LabeledText>
+          <LabeledCheckbox label="IVA">{venta.iva}</LabeledCheckbox>
+          <LabeledText label="Precio Unitario">
+            {formatCurrency(venta.precioUnitario)}
+          </LabeledText>
+          <LabeledText label="Precio Total">
+            {formatCurrency(venta.precioUnitario! * venta.cantidad!)}
+          </LabeledText>
         </>
       ) : (
         <Alert color="danger">La venta no existe o fue borrada</Alert>

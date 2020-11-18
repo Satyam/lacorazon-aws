@@ -1,8 +1,11 @@
 import React, { DOMAttributes } from 'react';
 import { Badge } from 'reactstrap';
-import { DropdownField, LabeledText } from 'Components/Form';
-import { UseFormMethods } from 'react-hook-form';
 
+import { LabeledText, LabeledTextProps } from 'Components/Form/LabeledField';
+import {
+  DropdownField,
+  DropdownFieldProps,
+} from 'Components/Form/DropdownField';
 export const cuentas: Record<ID, CuentaType> = {
   ctaRaed: {
     idCuenta: 'ctaRaed',
@@ -16,24 +19,21 @@ export const cuentas: Record<ID, CuentaType> = {
   },
 };
 
-export const DropdownCuentas: React.FC<
-  {
-    idCuenta?: string;
+export type DropdownCuentasType = {
+  idCuenta?: string;
+} & Omit<DropdownFieldProps, 'options' | 'optLabel' | 'optValue'>;
 
-    // for DropdownField
-    name: string;
-    noOption: boolean;
-    label?: string;
-    id?: string;
-    rows?: number;
-    help?: string;
-    methods: UseFormMethods<any>;
-    className?: string;
-  } & DOMAttributes<HTMLDivElement>
-> = ({ idCuenta, ...rest }) => {
+export const DropdownCuentas: React.FC<DropdownCuentasType> = ({
+  idCuenta,
+  name,
+  methods,
+  ...rest
+}) => {
   return (
     <DropdownField
       {...rest}
+      name={name}
+      methods={methods}
       options={Object.values(cuentas)}
       optLabel="descr"
       optValue="idCuenta"
@@ -47,7 +47,7 @@ export const LabeledCuentas: React.FC<
     label: string;
     help?: string;
     className?: string;
-  } & DOMAttributes<HTMLDivElement>
+  } & LabeledTextProps
 > = ({ idCuenta, ...rest }) => {
   return (
     <LabeledText {...rest}>

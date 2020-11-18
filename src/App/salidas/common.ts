@@ -1,4 +1,5 @@
-import { db } from 'Firebase';
+import { db, dbUpdate } from 'Firebase';
+import firebase from 'firebase';
 import memoize from 'memoize-one';
 import { useListVals, useObjectVal } from 'react-firebase-hooks/database';
 
@@ -46,11 +47,27 @@ export const useSalida: (
     salidaRef(idSalida),
     { keyField: 'idSalida' }
   );
-
   if (loading || error || typeof salida === 'undefined')
     return [undefined, loading, error];
   return [memoizedSalida(salida), loading, error];
 };
+
+export const createSalida: (
+  values: Partial<SalidaType>
+) => firebase.database.ThenableReference = (values) =>
+  db.ref('salidas').push({
+    ...values,
+    fecha: values.fecha?.toISOString(),
+  });
+
+export const updateSalida: <U extends Partial<SalidaType>>(
+  idSalida: string,
+  newValues: U,
+  origValues: U
+) => Promise<any> = (idSalida, newValues, origValues) =>
+  dbUpdate(`salidas/${idSalida}`, newValues, origValues, (name, value) =>
+    name === 'fecha' ? value.toISOString() : value
+  );
 
 export const deleteSalida: (idSalida: ID) => Promise<any> = (idSalida) =>
   salidaRef(idSalida).remove();

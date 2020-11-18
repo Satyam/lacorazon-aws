@@ -27,18 +27,22 @@ export default function ShowSalida() {
     >
       {salida ? (
         <>
-          <LabeledText
-            label="Fecha"
-            value={formatDate(new Date(salida.fecha))}
-          />
+          <LabeledText label="Fecha">
+            {formatDate(new Date(salida.fecha))}
+          </LabeledText>
+
           <LabeledText label="Categoría">
             <ShowCategoria {...salida} />
           </LabeledText>
 
-          <LabeledText label="Concepto" value={salida.concepto} />
-          <LabeledText label="Importe" value={formatCurrency(salida.importe)} />
+          <LabeledText label="Concepto">{salida.concepto}</LabeledText>
+          <LabeledText label="Importe">
+            {formatCurrency(salida.importe)}
+          </LabeledText>
           <LabeledCuentas label="Cuenta" idCuenta={salida.cuenta} />
-          {salida.iva && <LabeledText label="IVA" value={`${salida.iva}%`} />}
+          {salida.iva && (
+            <LabeledText label="IVA">{`${salida.iva}%`}</LabeledText>
+          )}
         </>
       ) : (
         <Alert color="danger">La salida no existe o fue borrada</Alert>

@@ -22,13 +22,15 @@ export default function ShowDistribuidor() {
     >
       {distribuidor ? (
         <>
-          <LabeledText label="Nombre" value={distribuidor.nombre} />
-          <LabeledText label="eMail" value={distribuidor.email} />
-          <LabeledText label="Localidad" value={distribuidor.localidad} />
-          <LabeledText label="Dirección" value={distribuidor.direccion} pre />
-          <LabeledText label="Contacto" value={distribuidor.contacto} />
-          <LabeledText label="Teléfono" value={distribuidor.telefono} />
-          <LabeledText label="NIF" value={distribuidor.nif} />
+          <LabeledText label="Nombre">{distribuidor.nombre}</LabeledText>
+          <LabeledText label="eMail">{distribuidor.email}</LabeledText>
+          <LabeledText label="Localidad">{distribuidor.localidad}</LabeledText>
+          <LabeledText label="Dirección" pre>
+            {distribuidor.direccion}
+          </LabeledText>
+          <LabeledText label="Contacto">{distribuidor.contacto}</LabeledText>
+          <LabeledText label="Teléfono">{distribuidor.telefono}</LabeledText>
+          <LabeledText label="NIF">{distribuidor.nif}</LabeledText>
         </>
       ) : (
         <Alert color="danger">El distribuidor no existe o fue borrado</Alert>
