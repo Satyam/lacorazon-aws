@@ -1,58 +1,59 @@
 import React, { DOMAttributes } from 'react';
-import { FormGroup, Label, Col } from 'reactstrap';
+import { LabelBox, LabelBoxProps } from '../LabelBox';
+
 import classNames from 'classnames/bind';
-import { FaRegCheckSquare, FaRegSquare } from 'react-icons/fa';
+import { Checkmark } from 'Components/Icons';
 import styles from './styles.module.css';
 
 const cx = classNames.bind(styles);
 
-export const LabeledText: React.FC<
-  {
-    label: string;
-    value?: any;
-    pre?: boolean;
-    className?: string;
-  } & DOMAttributes<HTMLDivElement>
-> = ({ label, value, children, pre, className, ...rest }) => (
-  <FormGroup row>
-    <Label xs={12} lg={2}>
-      {label}
-    </Label>
-    <Col xs={12} lg={8}>
-      <div
-        className={cx(
-          'form-control',
-          'readonly',
-          { 'labeled-pre': pre },
-          className
-        )}
-        {...rest}
-      >
-        {value}
-        {children}
-      </div>
-    </Col>
-  </FormGroup>
+export type LabeledTextProps = LabelBoxProps & {
+  pre?: boolean;
+  className?: string;
+} & DOMAttributes<HTMLDivElement>;
+
+export const LabeledText: React.FC<LabeledTextProps> = ({
+  label,
+  help,
+  children,
+  pre,
+  className,
+  ...rest
+}) => (
+  <LabelBox label={label} help={help}>
+    <div
+      className={cx(
+        'form-control',
+        'readonly',
+        { 'labeled-pre': pre },
+        className
+      )}
+      {...rest}
+    >
+      {children}
+    </div>
+  </LabelBox>
 );
 
-export const LabeledCheckbox: React.FC<{
-  label: string;
-  value?: any;
+export type LabeledCheckboxProps = LabelBoxProps & {
   checked?: boolean;
   className?: string;
-}> = ({ label, value, checked, className, ...rest }) => (
-  <FormGroup row>
-    <Label xs={12} lg={2}>
-      {label}
-    </Label>
-    <Col xs={12} lg={8}>
-      <div
-        style={{ backgroundColor: 'var(--light)' }}
-        className={classNames('form-control', 'border-0', className)}
-        {...rest}
-      >
-        {value || checked ? <FaRegCheckSquare /> : <FaRegSquare />}
-      </div>
-    </Col>
-  </FormGroup>
+} & DOMAttributes<HTMLDivElement>;
+
+export const LabeledCheckbox: React.FC<LabeledCheckboxProps> = ({
+  label,
+  help,
+  checked,
+  className,
+  ...rest
+}) => (
+  <LabelBox label={label} help={help}>
+    <div
+      style={{ backgroundColor: 'var(--light)' }}
+      className={classNames('form-control', 'border-0', className)}
+      {...rest}
+    >
+      <Checkmark value={checked} />
+    </div>
+  </LabelBox>
 );

@@ -201,5 +201,5 @@ export const ButtonSet: React.FC<{
   </div>
 );
 
-export const Checkmark: React.FC<{ value: Boolean }> = ({ value }) =>
+export const Checkmark: React.FC<{ value?: Boolean }> = ({ value = false }) =>
   value ? <FaRegCheckSquare /> : <FaRegSquare />;

@@ -3,12 +3,16 @@ import { Button } from 'reactstrap';
 import { MyButtonProps } from 'Components/Icons';
 import { UseFormMethods } from 'react-hook-form';
 
-const SubmitButton: React.FC<
-  MyButtonProps & {
-    component?: React.ComponentType<MyButtonProps>;
-    methods: UseFormMethods<any>;
-  }
-> = ({ component: Component = Button, methods, ...rest }) => {
+export type SubmitButtonProps = MyButtonProps & {
+  component?: React.ComponentType<MyButtonProps>;
+  methods: UseFormMethods<any>;
+};
+
+export const SubmitButton: React.FC<SubmitButtonProps> = ({
+  component: Component = Button,
+  methods,
+  ...rest
+}) => {
   const {
     errors,
     formState: { isSubmitting, isDirty },

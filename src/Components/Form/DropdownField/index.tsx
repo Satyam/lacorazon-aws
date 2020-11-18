@@ -1,30 +1,21 @@
-import React, { useState } from 'react';
-import {
-  FormGroup,
-  Label,
-  FormFeedback,
-  FormText,
-  Col,
-  Input,
-} from 'reactstrap';
-import { ValidationRules, UseFormMethods } from 'react-hook-form';
-import invariant from 'invariant';
+import React from 'react';
+import { LabelInputBox, LabelInputBoxProps } from '../LabelBox';
 
-let counter = 0;
+import { Input, InputProps } from 'reactstrap';
+import { ValidationRules } from 'react-hook-form';
 
-const DropdownField: React.FC<{
-  name: string;
-  optValue?: string;
-  optLabel?: string;
-  options: { [index: string]: string | number }[];
-  noOption: boolean;
-  label?: string;
-  id?: string;
-  rows?: number;
-  help?: string;
-  validation?: ValidationRules;
-  methods: UseFormMethods<any>;
-}> = ({
+export type DropdownFieldProps = LabelInputBoxProps &
+  InputProps & {
+    validation?: ValidationRules;
+    optValue?: string;
+    optLabel?: string;
+    options:
+      | Record<string, string | number>[]
+      | Record<string, string | number>;
+    noOption?: boolean;
+  };
+
+export const DropdownField: React.FC<DropdownFieldProps> = ({
   name,
   label,
   id,
@@ -32,52 +23,40 @@ const DropdownField: React.FC<{
   optValue = 'id',
   optLabel = 'nombre',
   help,
-  noOption,
+  noOption = false,
   validation,
   methods,
   ...rest
-}) => {
-  invariant(name, 'DropdownField: name argument is mandatory');
-  invariant(options, 'DropdownField: options argument is mandatory');
-
-  const [actualId] = useState(id || `F_DDF_${counter}`);
-  counter = (counter + 1) % Number.MAX_SAFE_INTEGER;
-  const { register, errors } = methods;
-
-  const hasError = name in errors;
-  const error = hasError && (errors[name]?.message || errors[name]);
-
-  return (
-    <FormGroup row>
-      <Label for={actualId} xs={12} lg={2}>
-        {label}
-      </Label>
-      <Col xs={12} lg={8}>
-        <Input
-          type="select"
-          invalid={hasError}
-          name={name}
-          id={actualId}
-          innerRef={validation ? register(validation) : register}
-          {...rest}
-        >
-          {noOption && (
-            <option key=" " value="">
-              {' ----   '}
-            </option>
-          )}
-          {options.map((o) => (
-            <option key={o[optValue]} value={o[optValue]}>
-              {o[optLabel]}
-            </option>
-          ))}
-        </Input>
-
-        {help && <FormText>{help}</FormText>}
-        <FormFeedback>{error}</FormFeedback>
-      </Col>
-    </FormGroup>
-  );
-};
+}) => (
+  <LabelInputBox name={name} label={label} id={id} methods={methods}>
+    {({ name, id, hasError, methods }) => (
+      <Input
+        type="select"
+        invalid={hasError}
+        name={name}
+        id={id}
+        innerRef={validation ? methods.register(validation) : methods.register}
+        {...rest}
+      >
+        {noOption && (
+          <option key=" " value="">
+            {' ----   '}
+          </option>
+        )}
+        {Array.isArray(options)
+          ? options.map((o) => (
+              <option key={o[optValue]} value={o[optValue]}>
+                {o[optLabel]}
+              </option>
+            ))
+          : Object.keys(options).map((key) => (
+              <option key={key} value={key}>
+                {options[key]}
+              </option>
+            ))}
+      </Input>
+    )}
+  </LabelInputBox>
+);
 
 export default DropdownField;
