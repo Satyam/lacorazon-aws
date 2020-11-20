@@ -1,25 +1,23 @@
-import { db } from 'Firebase';
-import memoize from 'memoize-one';
+import { dbTable } from 'Firebase';
 
-import { useListVals } from 'react-firebase-hooks/database';
-
-const memoizedConsignas = memoize((consignas: ConsignaType[]): ConsignaType[] =>
-  consignas.map<ConsignaType>((consigna) => ({
+const { useItem, useList, dbCreate, dbDelete, dbUpdate } = dbTable<
+  ConsignaType,
+  Omit<ConsignaType, 'fecha'> & { fecha: string }
+>(
+  'consigna',
+  'idConsigna',
+  (consigna) => ({
     ...consigna,
-    fecha: new Date(consigna.fecha),
-  }))
+    fecha: new Date(consigna?.fecha),
+  }),
+  (consigna) => ({
+    ...consigna,
+    fecha: consigna.fecha?.toISOString(),
+  })
 );
-export const useConsignas: () => [
-  Array<ConsignaType> | undefined,
-  boolean,
-  any
-] = () => {
-  const [consignas, loading, error] = useListVals<ConsignaType>(
-    db.ref('consigna').orderByChild('fecha'),
-    { keyField: 'idConsigna' }
-  );
-  if (loading || error) return [undefined, loading, error];
-  if (typeof consignas === 'undefined')
-    return [consignas, loading, new Error('Tabla consignas está vacía')];
-  return [memoizedConsignas(consignas), loading, error];
-};
+
+export const useConsigna = useItem;
+export const useConsignas = () => useList('fecha');
+export const createConsigna = dbCreate;
+export const updateConsigna = dbUpdate;
+export const deleteConsigna = dbDelete;

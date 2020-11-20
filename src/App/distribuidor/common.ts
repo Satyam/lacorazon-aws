@@ -1,54 +1,31 @@
-import { db, dbUpdate } from 'Firebase';
-import { useObjectVal, useListVals } from 'react-firebase-hooks/database';
+import { dbTable } from 'Firebase';
 import slugify from 'slugify';
 
-export const DuplicateErrorMessage = 'nombre duplicado';
-export const MissingNombreMessage = 'falta nombre';
+export { CLAVE_DUPLICADA } from 'Firebase';
 
-export const distrRef = (idDistribuidor?: string) =>
-  db.ref(`distribuidores/${idDistribuidor}`);
+export const FALTA_NOMBRE = 'Falta nombre';
 
-export const useDistribuidor = (idDistribuidor: ID) =>
-  useObjectVal<DistribuidorType>(distrRef(idDistribuidor));
+const { useItem, useList, dbCreateWithKey, dbDelete, dbUpdate } = dbTable<
+  DistribuidorType,
+  DistribuidorType
+>('distribuidores', 'idDistribuidor');
 
-export const useDistribuidores = () =>
-  useListVals<DistribuidorType>(
-    db.ref('distribuidores').orderByChild('nombre'),
-    { keyField: 'idDistribuidor' }
-  );
+export const useDistribuidor = useItem;
 
-export const createDistribuidor: (
+export const useDistribuidores = () => useList('nombre');
+
+export const createDistribuidor = async (
   values: Partial<DistribuidorType>
-) => Promise<Partial<DistribuidorType>> = async (values) => {
+): Promise<ID> => {
   if (values.nombre) {
-    var idDistribuidor = slugify(values.nombre, { lower: true });
-    const duplicate = await distrRef(idDistribuidor).once('value');
-    if (duplicate.exists()) {
-      throw new Error(DuplicateErrorMessage);
-    } else {
-      await distrRef(idDistribuidor).set(values);
-      return {
-        ...values,
-        idDistribuidor,
-      };
-    }
+    const idDistribuidor = slugify(values.nombre, { lower: true });
+    await dbCreateWithKey(idDistribuidor, values);
+    return idDistribuidor;
   } else {
-    throw new Error(MissingNombreMessage);
+    throw new Error(FALTA_NOMBRE);
   }
 };
 
-export const updateDistribuidor: <U extends Partial<DistribuidorType>>(
-  idDistribuidor: string,
-  newValues: U,
-  origValues: U
-) => Promise<any> = (idVenta, newValues, origValues) =>
-  dbUpdate(
-    `distribuidores/${idVenta}`,
-    newValues,
-    origValues,
-    (name, value) => value
-  );
+export const updateDistribuidor = dbUpdate;
 
-export const deleteDistribuidor: (idDistribuidor: ID) => Promise<any> = (
-  idDistribuidor
-) => distrRef(idDistribuidor).remove();
+export const deleteDistribuidor = dbDelete;

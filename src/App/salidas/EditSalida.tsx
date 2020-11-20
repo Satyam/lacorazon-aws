@@ -76,11 +76,11 @@ export default function EditSalida() {
   const onSubmit: SubmitHandler<ShortSalida> = async (values) => {
     if (idSalida && salida) {
       openLoading('Actualizando Salida');
-      await updateSalida<ShortSalida>(idSalida, values, salida);
+      await updateSalida(idSalida, values, salida);
     } else {
       openLoading('Creando Salida');
-      const newSalida = await createSalida(values);
-      history.replace(`/salida/edit/${newSalida.key}`);
+      const idSalida = await createSalida(values);
+      history.replace(`/salida/edit/${idSalida}`);
     }
     closeLoading();
   };

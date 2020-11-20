@@ -17,9 +17,9 @@ import {
   useDistribuidor,
   createDistribuidor,
   updateDistribuidor,
-  DuplicateErrorMessage,
-  MissingNombreMessage,
   deleteDistribuidor,
+  CLAVE_DUPLICADA,
+  FALTA_NOMBRE,
 } from './common';
 
 // Types
@@ -76,25 +76,21 @@ const EditDistribuidor: React.FC = () => {
   ): Promise<void> => {
     if (idDistribuidor && distribuidor) {
       openLoading('Actualizando Distribuidor');
-      await updateDistribuidor<ShortDistribuidor>(
-        idDistribuidor,
-        values,
-        distribuidor
-      );
+      await updateDistribuidor(idDistribuidor, values, distribuidor);
     } else {
       openLoading('Creando distribuidor');
       try {
-        const { idDistribuidor } = await createDistribuidor(values);
+        const idDistribuidor = await createDistribuidor(values);
         history.replace(`/distribuidor/edit/${idDistribuidor}`);
       } catch (err) {
         switch (err.message) {
-          case DuplicateErrorMessage:
+          case CLAVE_DUPLICADA:
             methods.setError('nombre', {
               type: 'duplicado',
               message: 'Ese nombre, o uno muy parecido, ya existe',
             });
             break;
-          case MissingNombreMessage:
+          case FALTA_NOMBRE:
             methods.setError('nombre', {
               type: 'missing',
               message: 'Falta indicar el nombre',

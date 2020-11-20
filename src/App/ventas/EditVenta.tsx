@@ -44,7 +44,6 @@ export default function EditVenta() {
   const { idVenta } = useParams<{ idVenta: ID }>();
   const [venta, loading, error] = useVenta(idVenta);
 
-  console.log('ventaSchema.default', ventaSchema.default());
   const methods = useForm<ShortVenta>({
     defaultValues: ventaSchema.default(),
     resolver: yupResolver(ventaSchema),
@@ -63,11 +62,11 @@ export default function EditVenta() {
   const onSubmit: SubmitHandler<ShortVenta> = async (values) => {
     if (idVenta && venta) {
       openLoading('Actualizando Venta');
-      await updateVenta<ShortVenta>(idVenta, values, venta);
+      await updateVenta(idVenta, values, venta);
     } else {
       openLoading('Creando Venta');
-      const newVenta = await createVenta(values);
-      history.replace(`/venta/edit/${newVenta.key}`);
+      const idVenta = await createVenta(values);
+      history.replace(`/venta/edit/${idVenta}`);
     }
     closeLoading();
   };

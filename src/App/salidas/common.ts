@@ -1,73 +1,32 @@
-import { db, dbUpdate } from 'Firebase';
-import firebase from 'firebase';
-import memoize from 'memoize-one';
-import { useListVals, useObjectVal } from 'react-firebase-hooks/database';
+import { dbTable } from 'Firebase';
+
+const { useItem, useList, dbCreate, dbDelete, dbUpdate } = dbTable<
+  SalidaType,
+  Omit<SalidaType, 'fecha'> & { fecha: string }
+>(
+  'salidas',
+  'idSalida',
+  (salida) => ({
+    ...salida,
+    fecha: new Date(salida?.fecha),
+  }),
+  (salida) => ({
+    ...salida,
+    fecha: salida.fecha?.toISOString(),
+  })
+);
 
 export const GASTO = 'gasto';
 export const REINTEGRO = 'reintegro';
 export const PAGO_IVA = 'pagoIva';
 export const COMISION = 'comision';
 
-type InputType = SalidaType & { fecha: string };
+export const useSalida = useItem;
 
-const transform: (input: InputType) => SalidaType = ({ fecha, ...rest }) => ({
-  ...rest,
-  fecha: new Date(fecha),
-});
+export const useSalidas = () => useList('fecha');
 
-const memoizedSalidas = memoize((salidas: InputType[]): SalidaType[] =>
-  salidas?.map(transform)
-);
+export const createSalida = dbCreate;
 
-const memoizedSalida = memoize(
-  (salida: InputType): SalidaType => salida && transform(salida)
-);
+export const updateSalida = dbUpdate;
 
-const salidaRef = (idSalida: ID) => db.ref(`salidas/${idSalida}`);
-
-export const useSalidas: () => [
-  Array<SalidaType> | undefined,
-  boolean,
-  any
-] = () => {
-  const [salidas, loading, error] = useListVals<InputType>(
-    db.ref('salidas').orderByChild('fecha'),
-    { keyField: 'idSalida' }
-  );
-  if (loading || error) return [undefined, loading, error];
-  if (typeof salidas === 'undefined')
-    return [salidas, loading, new Error('Tabla salidas está vacía')];
-  return [memoizedSalidas(salidas), loading, error];
-};
-
-export const useSalida: (
-  idSalida: ID
-) => [SalidaType | undefined, boolean, any] = (idSalida) => {
-  const [salida, loading, error] = useObjectVal<InputType>(
-    salidaRef(idSalida),
-    { keyField: 'idSalida' }
-  );
-  if (loading || error || typeof salida === 'undefined')
-    return [undefined, loading, error];
-  return [memoizedSalida(salida), loading, error];
-};
-
-export const createSalida: (
-  values: Partial<SalidaType>
-) => firebase.database.ThenableReference = (values) =>
-  db.ref('salidas').push({
-    ...values,
-    fecha: values.fecha?.toISOString(),
-  });
-
-export const updateSalida: <U extends Partial<SalidaType>>(
-  idSalida: string,
-  newValues: U,
-  origValues: U
-) => Promise<any> = (idSalida, newValues, origValues) =>
-  dbUpdate(`salidas/${idSalida}`, newValues, origValues, (name, value) =>
-    name === 'fecha' ? value.toISOString() : value
-  );
-
-export const deleteSalida: (idSalida: ID) => Promise<any> = (idSalida) =>
-  salidaRef(idSalida).remove();
+export const deleteSalida = dbDelete;
