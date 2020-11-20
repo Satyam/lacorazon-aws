@@ -39,7 +39,7 @@ declare global {
     email: string;
   };
 
-  interface VentaType {
+  type VentaType = {
     idVenta: ID;
     fecha: Date;
     concepto?: string;
@@ -48,7 +48,7 @@ declare global {
     iva: boolean;
     precioUnitario?: number;
     cuenta?: string;
-  }
+  };
 
   type SalidaType = {
     idSalida: ID;
