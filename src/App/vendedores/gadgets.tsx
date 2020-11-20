@@ -1,6 +1,5 @@
 import React, { DOMAttributes } from 'react';
-import { db } from 'Firebase';
-import { useListVals, useObjectVal } from 'react-firebase-hooks/database';
+import { useVendedor, useVendedores } from './common';
 import { Link } from 'react-router-dom';
 import { Alert } from 'reactstrap';
 import icon from 'Components/Modals/loading.gif';
@@ -20,10 +19,7 @@ export const DropdownVendedores: React.FC<DropdownVendedoresType> = ({
   methods,
   ...rest
 }) => {
-  const [vendedores, loading, error] = useListVals<VendedorType>(
-    db.ref('vendedores'),
-    { keyField: 'idVendedor' }
-  );
+  const [vendedores, loading, error] = useVendedores();
 
   if (error) return <Alert color="danger">{error}</Alert>;
   if (loading) return <img src={icon} alt="loading ..." />;
@@ -50,9 +46,7 @@ export const LabeledVendedores: React.FC<LabeledVendedoresProps> = ({
   idVendedor,
   ...rest
 }) => {
-  const [vendedor, loading, error] = useObjectVal<VendedorType>(
-    db.ref(`vendedores/${idVendedor}`)
-  );
+  const [vendedor, loading, error] = useVendedor(idVendedor || '');
   if (error) return <Alert color="danger">{error}</Alert>;
   if (loading) return <img src={icon} alt="loading ..." />;
   if (vendedor) {
@@ -72,9 +66,7 @@ export const ShowVendedor: React.FC<
     idVendedor: string;
   } & DOMAttributes<HTMLDivElement>
 > = ({ idVendedor }) => {
-  const [vendedor, loading, error] = useObjectVal<VendedorType>(
-    db.ref(`vendedores/${idVendedor}`)
-  );
+  const [vendedor, loading, error] = useVendedor(idVendedor || '');
   if (error) return <Alert color="danger">{error}</Alert>;
   if (loading) return <img src={icon} alt="loading ..." />;
   if (vendedor) {
