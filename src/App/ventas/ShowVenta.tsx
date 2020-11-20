@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 
 import { LabeledText, LabeledCheckbox } from 'Components/Form';
 import { LabeledVendedores } from 'App/vendedores/gadgets';
+import { LabeledCuentas } from 'App/cuentas/gadgets';
 import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
 import { Alert } from 'reactstrap';
@@ -39,6 +40,7 @@ export default function ShowVenta() {
           <LabeledText label="Precio Total">
             {formatCurrency(venta.precioUnitario! * venta.cantidad!)}
           </LabeledText>
+          <LabeledCuentas label="Cuenta" idCuenta={venta.cuenta} />
         </>
       ) : (
         <Alert color="danger">La venta no existe o fue borrada</Alert>
