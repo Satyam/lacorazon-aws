@@ -58,17 +58,11 @@ export const DateField: React.FC<DateFieldProps> = ({
         return (
           <Controller
             render={({ onBlur, onChange, name, value, ref }) => {
-              console.log({ onBlur, onChange, name, value, ref });
-              console.log('values', methods.getValues());
-              debugger;
               return (
                 <ReactDatePicker
                   onBlur={onBlur}
                   // @ts-ignore
-                  onChange={(...args) => {
-                    console.log('onChange', args);
-                    return onChange(...args);
-                  }}
+                  onChange={onChange}
                   name={name}
                   ref={ref}
                   className={classNames('form-control', className, {
