@@ -9,15 +9,24 @@ export type CheckboxFieldProps = LabelInputBoxProps &
   };
 
 export const CheckboxField: React.FC<CheckboxFieldProps> = ({
+  // for LabelInputBox
   name,
   label,
   id,
   help,
-  validation,
   methods,
+  // for form
+  validation,
+  // for Input
   ...rest
 }) => (
-  <LabelInputBox name={name} label={label} id={id} methods={methods}>
+  <LabelInputBox
+    name={name}
+    label={label}
+    id={id}
+    help={help}
+    methods={methods}
+  >
     {({ name, id, hasError, methods }) => (
       <Input
         type="checkbox"

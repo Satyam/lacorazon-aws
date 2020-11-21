@@ -16,19 +16,28 @@ export type DropdownFieldProps = LabelInputBoxProps &
   };
 
 export const DropdownField: React.FC<DropdownFieldProps> = ({
+  // for LabelInputBox
   name,
   label,
   id,
+  help,
+  methods,
+  // for form
+  validation,
+  // for dropdown
   options,
   optValue = 'id',
   optLabel = 'nombre',
-  help,
   noOption = false,
-  validation,
-  methods,
   ...rest
 }) => (
-  <LabelInputBox name={name} label={label} id={id} methods={methods}>
+  <LabelInputBox
+    name={name}
+    label={label}
+    id={id}
+    help={help}
+    methods={methods}
+  >
     {({ name, id, hasError, methods }) => (
       <Input
         type="select"

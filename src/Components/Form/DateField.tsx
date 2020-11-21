@@ -15,15 +15,18 @@ export type DateFieldProps = LabelInputBoxProps & {
 } & Omit<ReactDatePickerProps, 'onChange'>;
 
 export const DateField: React.FC<DateFieldProps> = ({
+  // for LabelInputBox
   name,
   label,
-  help,
-  className,
   id,
+  help,
+  methods,
+  // for form
+  validation,
+  // for DatePicker
+  className,
   minDate,
   maxDate,
-  validation,
-  methods,
   ...rest
 }) => {
   const [dummy, setDummy] = useState(0);
@@ -35,7 +38,13 @@ export const DateField: React.FC<DateFieldProps> = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => setDummy((dummy + 1) % Number.MAX_SAFE_INTEGER), [locale]);
   return (
-    <LabelInputBox name={name} label={label} id={id} methods={methods}>
+    <LabelInputBox
+      name={name}
+      label={label}
+      id={id}
+      help={help}
+      methods={methods}
+    >
       {({ name, id, hasError, methods }) => {
         let actualMin = minDate;
         let actualMax = maxDate;

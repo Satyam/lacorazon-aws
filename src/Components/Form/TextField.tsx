@@ -10,17 +10,26 @@ export type TextFieldProps = LabelInputBoxProps &
   };
 
 export const TextField: React.FC<TextFieldProps> = ({
+  // For LabelInputBox
   name,
-  type,
   label,
   id,
-  rows,
   help,
-  validation,
   methods,
+  // for react-hooks-form
+  validation,
+  // for Input
+  type,
+  rows,
   ...rest
 }) => (
-  <LabelInputBox name={name} label={label} id={id} methods={methods}>
+  <LabelInputBox
+    name={name}
+    label={label}
+    id={id}
+    help={help}
+    methods={methods}
+  >
     {({ name, id, hasError, methods }) => (
       <Input
         name={name}
