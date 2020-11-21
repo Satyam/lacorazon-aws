@@ -17,6 +17,9 @@ type intlType = {
   currency: string;
   setCurrency: (currency: string) => void;
   formatCurrency: (amount?: number) => string;
+  currencySign: string;
+  currencySignPrepend: boolean;
+  currencyDecimals: number;
 };
 
 const notImplemented = () => {
@@ -31,8 +34,14 @@ const initialValues = {
   currency: 'EUR',
   setCurrency: notImplemented,
   formatCurrency: notImplemented,
+  currencySign: '$',
+  currencySignPrepend: true,
+  currencyDecimals: 2,
 };
+
 export const IntlContext = createContext<intlType>(initialValues);
+
+const currRegExp = /(.*)\s*12(.)(\d*)\s*(.*)/;
 
 export const IntlProvider: React.FC<{
   locale?: string;
@@ -47,6 +56,14 @@ export const IntlProvider: React.FC<{
       currency,
     });
 
+    const sample = currFormatter.format(12.345);
+    const sampleParts = currRegExp.exec(sample) || [
+      '12,35 €',
+      '',
+      ',',
+      '35',
+      '€',
+    ];
     setDefaultLocale(locale);
 
     return {
@@ -63,6 +80,9 @@ export const IntlProvider: React.FC<{
       setCurrency,
       formatCurrency: (value?: number) =>
         value ? currFormatter.format(value) : '',
+      currencySign: sampleParts[1] || sampleParts[4],
+      currencySignPrepend: !!sampleParts[1],
+      currencyDecimals: sampleParts[3].length,
     };
   }, [locale, currency]);
 

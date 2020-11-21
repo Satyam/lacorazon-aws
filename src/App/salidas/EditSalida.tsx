@@ -7,6 +7,8 @@ import { Alert, Form } from 'reactstrap';
 
 import {
   TextField,
+  CurrencyField,
+  PercentField,
   DateField,
   SubmitButton,
   DropdownField,
@@ -46,11 +48,13 @@ const salidaSchema = yup.object().shape<ShortSalida>({
     .oneOf([GASTO, REINTEGRO, PAGO_IVA, COMISION])
     .default(GASTO),
   // @ts-ignore
-  idVendedor: yup.string().default(null),
+  idVendedor: yup.string().nullable().default(null),
   // @ts-ignore
-  importe: yup.number().default(0),
-  cuenta: yup.string().default(null),
-  iva: yup.number().positive().max(1).default(null),
+  importe: yup.number().nullable().default(0),
+  // @ts-ignore
+  cuenta: yup.string().nullable().default(null),
+  // @ts-ignore
+  iva: yup.number().nullable().positive().default(0),
 });
 
 export default function EditSalida() {
@@ -60,6 +64,7 @@ export default function EditSalida() {
   const [salida, loading, error] = useSalida(idSalida);
   const methods = useForm<ShortSalida>({
     defaultValues: salidaSchema.default(),
+    // @ts-ignore
     resolver: yupResolver(salidaSchema),
   });
 
@@ -95,7 +100,6 @@ export default function EditSalida() {
       }
     );
   };
-
   return (
     <Page
       title={`Salida - ${salida ? salida.fecha : 'nuevo'}`}
@@ -131,7 +135,7 @@ export default function EditSalida() {
             />
           )}
 
-          <TextField name="importe" label="Importe" methods={methods} />
+          <CurrencyField name="importe" label="Importe" methods={methods} />
 
           <DropdownCuentas
             name="cuenta"
@@ -139,7 +143,7 @@ export default function EditSalida() {
             noOption={!idSalida}
             methods={methods}
           />
-          <TextField name="iva" label="IVA%" methods={methods} />
+          <PercentField name="iva" label="IVA%" methods={methods} />
           <ButtonSet>
             <SubmitButton component={ButtonIconAdd} methods={methods}>
               {isNew ? 'Agregar' : 'Modificar'}

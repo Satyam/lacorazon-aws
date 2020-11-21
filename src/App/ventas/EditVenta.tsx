@@ -9,6 +9,7 @@ import {
   TextField,
   DateField,
   CheckboxField,
+  CurrencyField,
   SubmitButton,
 } from 'Components/Form';
 import { DropdownVendedores } from 'App/vendedores/gadgets';
@@ -101,9 +102,14 @@ export default function EditVenta() {
             methods={methods}
           />
 
-          <TextField name="cantidad" label="Cantidad" methods={methods} />
-          <CheckboxField name="iva" label="IVA" methods={methods} />
           <TextField
+            type="number"
+            name="cantidad"
+            label="Cantidad"
+            methods={methods}
+          />
+          <CheckboxField name="iva" label="IVA" methods={methods} />
+          <CurrencyField
             name="precioUnitario"
             label="Precio Unitario"
             methods={methods}
