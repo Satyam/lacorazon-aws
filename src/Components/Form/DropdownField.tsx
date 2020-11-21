@@ -1,5 +1,5 @@
 import React from 'react';
-import { LabelInputBox, LabelInputBoxProps } from '../LabelBox';
+import { LabelInputBox, LabelInputBoxProps } from './LabelBox';
 
 import { Input, InputProps } from 'reactstrap';
 import { ValidationRules } from 'react-hook-form';

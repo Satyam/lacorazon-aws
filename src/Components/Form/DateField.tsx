@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { LabelInputBox, LabelInputBoxProps } from '../LabelBox';
+import { LabelInputBox, LabelInputBoxProps } from './LabelBox';
 import { Controller, ValidationRules } from 'react-hook-form';
 import ReactDatePicker, { ReactDatePickerProps } from 'react-datepicker';
 

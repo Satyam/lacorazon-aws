@@ -1,5 +1,5 @@
 import React, { DOMAttributes } from 'react';
-import { LabelBox, LabelBoxProps } from '../LabelBox';
+import { LabelBox, LabelBoxProps } from './LabelBox';
 
 import classNames from 'classnames/bind';
 import { Checkmark } from 'Components/Icons';
