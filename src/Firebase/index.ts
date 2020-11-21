@@ -88,18 +88,17 @@ export const dbTable = <
         await ref.set(toDb(newValues));
       }
     },
-    dbUpdate: (id, newValues, origValues) =>
+    dbUpdate: (id, newValues, originalValues) =>
       itemRef(id).transaction((dbValues) => {
-        const currentValues = fromDb(dbValues);
-        const dirtyFields = Object.keys(newValues).filter(
-          (name) => newValues[name] !== origValues[name]
+        const updatedValues = toDb(newValues);
+        const orgValues = toDb(originalValues);
+        const dirtyFields = Object.keys(updatedValues).filter((name) =>
+          name === keyField ? false : updatedValues[name] !== orgValues[name]
         );
-        if (
-          dirtyFields.some((name) => currentValues[name] !== origValues[name])
-        ) {
+        if (dirtyFields.some((name) => dbValues[name] !== orgValues[name])) {
           return;
         }
-        return Object.assign(dbValues, toDb(newValues));
+        return Object.assign(dbValues, updatedValues);
       }),
     dbDelete: (id) => itemRef(id).remove(),
   };
