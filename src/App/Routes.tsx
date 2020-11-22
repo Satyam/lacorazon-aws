@@ -4,9 +4,9 @@ import { Route, Switch } from 'react-router-dom';
 // import Users from 'Components/user/ListUsers';
 // import EditUser from 'Components/user/EditUser';
 // import ShowUser from 'Components/user/ShowUser';
-import ListSalidas from 'App/salidas/ListSalidas';
-import ShowSalida from 'App/salidas/ShowSalida';
-import EditSalida from 'App/salidas/EditSalida';
+import ListGastos from 'App/Gastos/ListGastos';
+import ShowGasto from 'App/Gastos/ShowGasto';
+import EditGasto from 'App/Gastos/EditGasto';
 import Distribuidores from 'App/distribuidor/ListDistribuidores';
 import EditDistribuidor from 'App/distribuidor/EditDistribuidor';
 import ShowDistribuidor from 'App/distribuidor/ShowDistribuidor';
@@ -25,18 +25,18 @@ https://reacttraining.com/blog/react-router-v5-1/#staying-ahead-of-the-curve
 
 const Routes = () => (
   <>
-    <Route path="/Salidas/:year?/:categoria?">
-      <ListSalidas />
+    <Route path="/gastos/:year?">
+      <ListGastos />
     </Route>
     <Switch>
-      <Route path="/salida/new/:categoria">
-        <EditSalida />
+      <Route path="/gasto/new/:categoria">
+        <EditGasto />
       </Route>
-      <Route path="/salida/edit/:idSalida">
-        <EditSalida />
+      <Route path="/gasto/edit/:idGasto">
+        <EditGasto />
       </Route>
-      <Route path="/salida/:idSalida">
-        <ShowSalida />
+      <Route path="/gasto/:idGasto">
+        <ShowGasto />
       </Route>
     </Switch>
     <Route path="/distribuidores">

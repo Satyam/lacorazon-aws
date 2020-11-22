@@ -4,7 +4,7 @@ import { Table, Alert } from 'reactstrap';
 import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
 import { useDistribuidores } from 'App/distribuidor/common';
-import { useSalidas } from 'App/salidas/common';
+import { useGastos } from 'App/Gastos/common';
 import { useVentas } from 'App/ventas/common';
 import { useConsignas } from 'App/consigna/common';
 import configs from 'App/config/';
@@ -29,7 +29,7 @@ const SumarioDistribuidores: React.FC = () => {
     loadingDistribuidores,
     errorDistribuidores,
   ] = useDistribuidores();
-  const [salidas, loadingSalidas, errorSalidas] = useSalidas();
+  const [gastos, loadingGastos, errorGastos] = useGastos();
   const [ventas, loadingVentas, errorVentas] = useVentas();
   const [consignas, loadingConsigna, errorConsigna] = useConsignas();
 
@@ -37,14 +37,14 @@ const SumarioDistribuidores: React.FC = () => {
 
   if (
     loadingDistribuidores ||
-    loadingSalidas ||
+    loadingGastos ||
     loadingVentas ||
     loadingConsigna
   )
     return <Loading>Cargando datos</Loading>;
 
-  if (typeof salidas === 'undefined')
-    return <Alert color="warning">Tabla de salidas está vacía</Alert>;
+  if (typeof gastos === 'undefined')
+    return <Alert color="warning">Tabla de gastos está vacía</Alert>;
   if (typeof consignas === 'undefined')
     return <Alert color="warning">Tabla de consignas está vacía</Alert>;
   if (typeof ventas === 'undefined')
@@ -100,9 +100,9 @@ const SumarioDistribuidores: React.FC = () => {
       sumario.entregados - sumario.vendidos - sumario.devueltos;
   });
 
-  const totales = Object.values(sumarioDistribuidores).reduce<
-    SumarioPorDistribuidor
-  >(
+  const totales = Object.values(
+    sumarioDistribuidores
+  ).reduce<SumarioPorDistribuidor>(
     (totales, sumario) => ({
       ...totales,
       entregados: totales.entregados + sumario.entregados,
@@ -160,7 +160,7 @@ const SumarioDistribuidores: React.FC = () => {
       heading="Sumario Distribuidores"
       error={
         errorDistribuidores?.message ||
-        errorSalidas?.message ||
+        errorGastos?.message ||
         errorVentas?.message ||
         errorConsigna?.message
       }

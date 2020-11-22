@@ -11,9 +11,7 @@ import {
   PercentField,
   DateField,
   SubmitButton,
-  DropdownField,
 } from 'Components/Form';
-import { DropdownVendedores } from 'App/vendedores/gadgets';
 import { DropdownCuentas } from 'App/cuentas/gadgets';
 
 import { ButtonIconAdd, ButtonIconDelete, ButtonSet } from 'Components/Icons';
@@ -22,31 +20,17 @@ import Page from 'Components/Page';
 import { useIntl } from 'Providers/Intl';
 import { useModals } from 'Providers/Modals';
 
-import {
-  useSalida,
-  updateSalida,
-  createSalida,
-  deleteSalida,
-  GASTO,
-  REINTEGRO,
-  PAGO_IVA,
-  COMISION,
-} from './common';
+import { useGasto, updateGasto, createGasto, deleteGasto } from './common';
 
-type ShortSalida = Omit<SalidaType, 'idSalida'>;
+type ShortGasto = Omit<GastoType, 'idGasto'>;
 
-const salidaSchema = yup.object().shape<ShortSalida>({
+const gastoSchema = yup.object().shape<ShortGasto>({
   // @ts-ignore
   fecha: yup
     .date()
     .required()
     .default(() => new Date()),
   concepto: yup.string().trim().required().default(''),
-  // @ts-ignore
-  categoria: yup
-    .string()
-    .oneOf([GASTO, REINTEGRO, PAGO_IVA, COMISION])
-    .default(GASTO),
   // @ts-ignore
   idVendedor: yup.string().nullable().default(null),
   // @ts-ignore
@@ -57,35 +41,35 @@ const salidaSchema = yup.object().shape<ShortSalida>({
   iva: yup.number().nullable().positive().default(0),
 });
 
-export default function EditSalida() {
+export default function EditGasto() {
   const history = useHistory();
-  const { idSalida } = useParams<{ idSalida: ID }>();
-  const isNew: boolean = !idSalida;
-  const [salida, loading, error] = useSalida(idSalida);
-  const methods = useForm<ShortSalida>({
-    defaultValues: salidaSchema.default(),
+  const { idGasto } = useParams<{ idGasto: ID }>();
+  const isNew: boolean = !idGasto;
+  const [gasto, loading, error] = useGasto(idGasto);
+  const methods = useForm<ShortGasto>({
+    defaultValues: gastoSchema.default(),
     // @ts-ignore
-    resolver: yupResolver(salidaSchema),
+    resolver: yupResolver(gastoSchema),
   });
 
   useEffect(() => {
-    if (salida) methods.reset(salida);
+    if (gasto) methods.reset(gasto);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [salida]);
+  }, [gasto]);
 
   const { openLoading, closeLoading, confirmDelete } = useModals();
   const { formatDate } = useIntl();
 
-  if (loading) return <Loading>Cargando salida</Loading>;
+  if (loading) return <Loading>Cargando gasto</Loading>;
 
-  const onSubmit: SubmitHandler<ShortSalida> = async (values) => {
-    if (idSalida && salida) {
-      openLoading('Actualizando Salida');
-      await updateSalida(idSalida, values, salida);
+  const onSubmit: SubmitHandler<ShortGasto> = async (values) => {
+    if (idGasto && gasto) {
+      openLoading('Actualizando Gasto');
+      await updateGasto(idGasto, values, gasto);
     } else {
-      openLoading('Creando Salida');
-      const idSalida = await createSalida(values);
-      history.replace(`/salida/edit/${idSalida}`);
+      openLoading('Creando Gasto');
+      const idGasto = await createGasto(values);
+      history.replace(`/gasto/edit/${idGasto}`);
     }
     closeLoading();
   };
@@ -93,54 +77,32 @@ export default function EditSalida() {
   const onDeleteClick: React.MouseEventHandler<HTMLButtonElement> = (ev) => {
     ev.stopPropagation();
     confirmDelete(
-      `la salida del ${formatDate(salida && salida.fecha)}`,
+      `la gasto del ${formatDate(gasto && gasto.fecha)}`,
       async () => {
-        await deleteSalida(idSalida);
-        history.replace('/salidas');
+        await deleteGasto(idGasto);
+        history.replace('/gastos');
       }
     );
   };
   return (
     <Page
-      title={`Salida - ${salida ? salida.fecha : 'nuevo'}`}
-      heading={`${idSalida ? 'Edit' : 'Add'} Salida`}
+      title={`Gasto - ${gasto ? gasto.fecha : 'nuevo'}`}
+      heading={`${idGasto ? 'Edit' : 'Add'} Gasto`}
       error={error?.name === 'DuplicateError' ? undefined : error?.message}
     >
-      {idSalida && !salida ? (
-        <Alert color="danger">La salida no existe o fue borrada</Alert>
+      {idGasto && !gasto ? (
+        <Alert color="danger">La gasto no existe o fue borrada</Alert>
       ) : (
         <Form onSubmit={methods.handleSubmit(onSubmit)}>
           <DateField name="fecha" label="Fecha" methods={methods} />
           <TextField name="concepto" label="Concepto" methods={methods} />
-          <DropdownField
-            name="categoria"
-            label="Categoría"
-            noOption={isNew}
-            optValue="value"
-            optLabel="label"
-            options={[
-              { label: 'Gasto', value: GASTO },
-              { label: 'Reintegro', value: REINTEGRO },
-              { label: 'Pago de IVA', value: PAGO_IVA },
-              { label: 'Pago Comisión', value: COMISION },
-            ]}
-            methods={methods}
-          />
-          {salida?.categoria === COMISION && (
-            <DropdownVendedores
-              name="idVendedor"
-              label="Vendedor"
-              noOption={isNew}
-              methods={methods}
-            />
-          )}
 
           <CurrencyField name="importe" label="Importe" methods={methods} />
 
           <DropdownCuentas
             name="cuenta"
             label="Cuenta"
-            noOption={!idSalida}
+            noOption={!idGasto}
             methods={methods}
           />
           <PercentField name="iva" label="IVA%" methods={methods} />
@@ -148,8 +110,8 @@ export default function EditSalida() {
             <SubmitButton component={ButtonIconAdd} methods={methods}>
               {isNew ? 'Agregar' : 'Modificar'}
             </SubmitButton>
-            {idSalida && (
-              <ButtonIconDelete disabled={!idSalida} onClick={onDeleteClick}>
+            {idGasto && (
+              <ButtonIconDelete disabled={!idGasto} onClick={onDeleteClick}>
                 Borrar
               </ButtonIconDelete>
             )}

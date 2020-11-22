@@ -5,8 +5,7 @@ import { useParams, useHistory } from 'react-router-dom';
 
 import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
-import { useSalidas, PAGO_IVA } from 'App/salidas/common';
-import { ShowCategoria } from 'App/salidas/gadgets';
+import { useGastos } from 'App/Gastos/common';
 import { useVentas } from 'App/ventas/common';
 import { useConsignas } from 'App/consigna/common';
 import configs from 'App/config/';
@@ -19,7 +18,10 @@ import classnames from 'classnames';
 enum Origen {
   Venta = 'Venta',
   Distribuidor = 'Distribuidor',
-  Salida = 'Gasto',
+  Gasto = 'Gasto',
+  Reintegro = 'Reintegro',
+  PagoIVA = 'Pago de IVA',
+  Comision = 'Comisión',
 }
 
 type EntradaDeCaja = {
@@ -67,29 +69,29 @@ const useAcumVentas = () => {
   }, [ventas, loading, error]);
 };
 
-const useAcumSalidas = () => {
-  const [salidas, loading, error] = useSalidas();
+const useAcumGastos = () => {
+  const [gastos, loading, error] = useGastos();
 
   return useMemo(() => {
     if (loading) return;
 
     if (error) throw error;
-    if (typeof salidas === 'undefined')
-      throw new Error('Tabla de salidas está vacía');
-    return salidas.map(({ importe, iva = 0, categoria, ...rest }) => {
+    if (typeof gastos === 'undefined')
+      throw new Error('Tabla de gastos está vacía');
+    return gastos.map(({ importe, iva = 0, ...rest }) => {
       var importeSinIVA = importe / (1 + iva);
 
       return {
-        origen: Origen.Salida,
-        referencia: categoria,
+        origen: Origen.Gasto,
+        referencia: '',
         importe: -importe,
-        iva:
-          categoria === PAGO_IVA ? -importe : -(importe - importeSinIVA) || '',
-        importeSinIVA: categoria === PAGO_IVA ? 0 : -importeSinIVA,
+        iva: -(importe - importeSinIVA) || '',
+        importeSinIVA: -importeSinIVA,
+        idVendedor: '',
         ...rest,
       } as EntradaDeCaja;
     });
-  }, [salidas, loading, error]);
+  }, [gastos, loading, error]);
 };
 
 const useAcumConsigna = () => {
@@ -129,12 +131,12 @@ const SumarioCaja: React.FC = () => {
   const history = useHistory();
   const { year } = useParams<{ year: string }>();
   const acumVentas = useAcumVentas();
-  const acumSalidas = useAcumSalidas();
+  const acumGastos = useAcumGastos();
   const acumConsigna = useAcumConsigna();
 
   const { formatCurrency, formatDate } = useIntl();
 
-  if (!acumSalidas || !acumVentas || !acumConsigna)
+  if (!acumGastos || !acumVentas || !acumConsigna)
     return <Loading>Cargando datos</Loading>;
 
   let saldo = 0;
@@ -148,7 +150,7 @@ const SumarioCaja: React.FC = () => {
     {}
   );
 
-  const entradas: EntradaDeCaja[] = acumSalidas
+  const entradas: EntradaDeCaja[] = acumGastos
     .concat(acumVentas, acumConsigna)
     .sort(
       (a: EntradaDeCaja, b: EntradaDeCaja) =>
@@ -180,13 +182,7 @@ const SumarioCaja: React.FC = () => {
     return (
       <tr key={`${sumario.fecha}-${sumario.importe}-${sumario.concepto}`}>
         <td>{formatDate(sumario.fecha)}</td>
-        <td>
-          {sumario.origen === Origen.Salida ? (
-            <ShowCategoria categoria={sumario.referencia} />
-          ) : (
-            sumario.origen
-          )}
-        </td>
+        <td>{sumario.origen}</td>
         <td>
           {sumario.idVendedor && (
             <ShowVendedor idVendedor={sumario.idVendedor} />

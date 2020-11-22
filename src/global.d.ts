@@ -50,15 +50,36 @@ declare global {
     cuenta?: string;
   };
 
-  type SalidaType = {
-    idSalida: ID;
+  type GastoType = {
+    idGasto: ID;
     fecha: Date;
     concepto: string;
-    categoria: 'gasto' | 'reintegro' | 'pagoIva' | 'comision';
+    importe: number;
+    cuenta: string;
+    iva?: number;
+  };
+  type ReintegroType = {
+    idReintegro: ID;
+    fecha: Date;
+    concepto: string;
+    importe: number;
+    cuenta: string;
+  };
+
+  type ComisionType = {
+    idComision: ID;
+    fecha: Date;
+    concepto: string;
     idVendedor: string;
     importe: number;
     cuenta?: string;
-    iva?: number;
+  };
+  type PagoIvaType = {
+    idGasto: ID;
+    fecha: Date;
+    concepto: string;
+    importe: number;
+    cuenta: string;
   };
 
   type ConsignaType = {
