@@ -103,20 +103,31 @@ function addEnConsigna() {
 
 function addSalidas() {
   console.log('salidas')
-  const salidas = db.ref('salidas');
+  const gastos = db.ref('gastos');
+  const reintegros = db.ref('reintegros');
+  const comisiones = db.ref('comisiones');
+  const pagosIva = db.ref('pagosIva')
   return Promise.all(
-    data.salidas.sort(byFecha).map(({comision, ctaRaed, reintegro, pagoiva, ...salida}) =>{
-      let categoria = 'gasto';
-      if (reintegro) categoria = 'reintegro'
-      if (pagoiva) categoria = 'pagoIva'
-      if (comision)   categoria = 'comision'
-      
-      return salidas.push(
+    data.salidas.sort(byFecha).map(({comision, ctaRaed, reintegro, pagoiva, iva, ...salida}) =>{
+      const cuenta = ctaRaed ? 'ctaRaed' : 'efvoRoxy';
+
+      if (reintegro) return reintegros.push({
+        ...salida,
+        cuenta
+      })
+      if (pagoiva) return pagosIva.push({
+        ...salida,
+        cuenta
+      })
+      if (comision) return comisiones.push({
+        ...salida,
+        idVendedor: comision ? comision.toLowerCase():  null
+      })
+      return gastos.push(
         {
           ...salida,
-          cuenta: ctaRaed ? 'ctaRaed' : 'efvoRoxy',
-          categoria,
-          idVendedor: comision ? comision.toLowerCase():  null
+          iva: iva || 0,
+          cuenta
         }
       )}
   ));
@@ -127,7 +138,10 @@ db.ref().set({
   vendedores: null,
   distribuidores: null,
   consigna: null,
-  salidas: null
+  gastos: null,
+  reintegros: null,
+  comisiones: null,
+  pagosIva: null
 })
   .then(addConfig)
   .then(addVendedores)
