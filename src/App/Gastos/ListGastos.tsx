@@ -24,7 +24,7 @@ import { useModals } from 'Providers/Modals';
 
 import { useGastos, deleteGasto } from './common';
 import { ShowCuenta } from 'App/cuentas/gadgets';
-import { ShowIVA } from 'App/iva/gadgets';
+import { ShowIVA, calculoIVA } from 'App/iva/gadgets';
 
 const ListGastos: React.FC<{}> = () => {
   const history = useHistory();
@@ -70,8 +70,7 @@ const ListGastos: React.FC<{}> = () => {
     const idGasto = gasto.idGasto;
     const importe = gasto.importe;
     const porcIva: number = gasto.iva || 0;
-    const importeSinIva: number = importe / (1 + porcIva);
-    const importeIva: number = importe - importeSinIva;
+    const { importeSinIva, importeIva } = calculoIVA(importe, porcIva);
     return (
       <tr key={idGasto}>
         <td align="right">

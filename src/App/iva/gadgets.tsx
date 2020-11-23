@@ -50,3 +50,16 @@ export const ShowIVA: React.FC<
     iva?: number;
   } & DOMAttributes<HTMLDivElement>
 > = ({ iva, ...rest }) => <span {...rest}>{iva ? `${iva * 100}%` : null}</span>;
+
+export const calculoIVA: (
+  importeTotal?: number,
+  iva?: number | string
+) => { importeIva: number; importeSinIva: number } = (
+  importeTotal = 0,
+  iva = 0
+) => {
+  const importeSinIva: number =
+    Math.round((importeTotal / (1 + Number(iva))) * 100) / 100;
+  const importeIva: number = importeTotal - importeSinIva;
+  return { importeIva, importeSinIva };
+};

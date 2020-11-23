@@ -10,13 +10,14 @@ import { useIntl } from 'Providers/Intl';
 
 import { useGasto } from './common';
 import { LabeledCuentas } from 'App/cuentas/gadgets';
-import { LabeledIVA } from 'App/iva/gadgets';
+import { LabeledIVA, calculoIVA } from 'App/iva/gadgets';
 export default function ShowGasto() {
   const { idGasto } = useParams<{ idGasto: ID }>();
   const [gasto, loading, error] = useGasto(idGasto);
   const { formatDate, formatCurrency } = useIntl();
 
   if (loading) return <Loading>Cargando gasto</Loading>;
+  const { importeSinIva, importeIva } = calculoIVA(gasto?.importe, gasto?.iva);
 
   return (
     <Page
@@ -35,7 +36,11 @@ export default function ShowGasto() {
             {formatCurrency(gasto.importe)}
           </LabeledText>
           <LabeledCuentas label="Cuenta" idCuenta={gasto.cuenta} />
-          {gasto.iva && <LabeledIVA label="IVA" iva={gasto.iva} />}
+          <LabeledIVA label="IVA%" iva={gasto.iva} />
+          <LabeledText label="IVA">{formatCurrency(importeIva)}</LabeledText>
+          <LabeledText label="Importe sin IVA">
+            {formatCurrency(importeSinIva)}
+          </LabeledText>
         </>
       ) : (
         <Alert color="danger">La gasto no existe o fue borrada</Alert>

@@ -10,9 +10,10 @@ import {
   CurrencyField,
   DateField,
   SubmitButton,
+  LabeledText,
 } from 'Components/Form';
 import { DropdownCuentas } from 'App/cuentas/gadgets';
-import { DropdownIVA } from 'App/iva/gadgets';
+import { DropdownIVA, calculoIVA } from 'App/iva/gadgets';
 import { ButtonIconAdd, ButtonIconDelete, ButtonSet } from 'Components/Icons';
 import { Loading } from 'Components/Modals';
 import Page from 'Components/Page';
@@ -57,7 +58,7 @@ export default function EditGasto() {
   }, [gasto]);
 
   const { openLoading, closeLoading, confirmDelete } = useModals();
-  const { formatDate } = useIntl();
+  const { formatDate, formatCurrency } = useIntl();
 
   if (loading) return <Loading>Cargando gasto</Loading>;
 
@@ -83,6 +84,12 @@ export default function EditGasto() {
       }
     );
   };
+  const { iva, importe } = methods.watch(['iva', 'importe'], {
+    iva: gasto?.iva,
+    importe: gasto?.importe,
+  });
+  const { importeSinIva, importeIva } = calculoIVA(importe, iva);
+
   return (
     <Page
       title={`Gasto - ${gasto ? gasto.fecha : 'nuevo'}`}
@@ -106,6 +113,10 @@ export default function EditGasto() {
           />
 
           <DropdownIVA name="iva" label="IVA%" methods={methods} />
+          <LabeledText label="IVA">{formatCurrency(importeIva)}</LabeledText>
+          <LabeledText label="Importe sin IVA">
+            {formatCurrency(importeSinIva)}
+          </LabeledText>
           <ButtonSet>
             <SubmitButton component={ButtonIconAdd} methods={methods}>
               {isNew ? 'Agregar' : 'Modificar'}
