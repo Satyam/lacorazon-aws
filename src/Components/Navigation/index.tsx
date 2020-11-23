@@ -1,13 +1,10 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import {
   Collapse,
   Navbar,
   NavbarToggler,
   NavbarBrand,
   Nav,
-  NavLink,
-  NavItem,
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
@@ -19,7 +16,7 @@ import { useIntl } from 'Providers/Intl';
 
 import styles from './styles.module.css';
 
-export function Navigation() {
+export const Navigation: React.FC = ({ children }) => {
   const [isOpen, setOpen] = useState(false);
   // const { isAuthenticated, loginWithPopup, logout, user } = useAuth0();
   const { locale, setLocale, locales } = useIntl();
@@ -40,45 +37,7 @@ export function Navigation() {
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="ml-auto" navbar>
-            <NavItem>
-              <NavLink tag={Link} to="/gastos">
-                Gastos
-              </NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink tag={Link} to="/distribuidores">
-                Distribuidores
-              </NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink tag={Link} to="/ventas">
-                Ventas
-              </NavLink>
-            </NavItem>
-            <UncontrolledDropdown nav inNavbar>
-              <DropdownToggle nav caret>
-                Sumarios
-              </DropdownToggle>
-              <DropdownMenu right>
-                <DropdownItem>
-                  <NavLink tag={Link} to="/sumario/porVendedor">
-                    Sumario por vendedor
-                  </NavLink>
-                </DropdownItem>
-                <DropdownItem>
-                  <NavLink tag={Link} to="/sumario/porDistribuidor">
-                    Sumario por distribuidor
-                  </NavLink>
-                </DropdownItem>
-                <DropdownItem>
-                  <NavLink tag={Link} to="/sumario/caja">
-                    Sumario de caja
-                  </NavLink>
-                </DropdownItem>
-                <DropdownItem divider />
-                <DropdownItem>Reset</DropdownItem>
-              </DropdownMenu>
-            </UncontrolledDropdown>
+            {children}
 
             <UncontrolledDropdown nav inNavbar>
               <DropdownToggle nav caret>
@@ -130,6 +89,4 @@ export function Navigation() {
       </Navbar>
     </div>
   );
-}
-
-Navigation.whyDidYouRender = true;
+};
