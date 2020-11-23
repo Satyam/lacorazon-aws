@@ -10,7 +10,7 @@ import { useIntl } from 'Providers/Intl';
 
 import { useGasto } from './common';
 import { LabeledCuentas } from 'App/cuentas/gadgets';
-
+import { LabeledIVA } from 'App/iva/gadgets';
 export default function ShowGasto() {
   const { idGasto } = useParams<{ idGasto: ID }>();
   const [gasto, loading, error] = useGasto(idGasto);
@@ -35,9 +35,7 @@ export default function ShowGasto() {
             {formatCurrency(gasto.importe)}
           </LabeledText>
           <LabeledCuentas label="Cuenta" idCuenta={gasto.cuenta} />
-          {gasto.iva && (
-            <LabeledText label="IVA">{`${gasto.iva}%`}</LabeledText>
-          )}
+          {gasto.iva && <LabeledIVA label="IVA" iva={gasto.iva} />}
         </>
       ) : (
         <Alert color="danger">La gasto no existe o fue borrada</Alert>

@@ -36,6 +36,7 @@ function addConfig() {
     comisionEstandar:0.35,
     IVALibros:0.04,
     comisionInterna:0.25,
+    IVAs: [0,0.04, 0.10, 0.21]
 })
 }
 

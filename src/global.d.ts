@@ -103,6 +103,7 @@ declare global {
     comisionEstandar: number;
     IVALibros: number;
     comisionInterna: number;
+    IVAs: number[];
   };
 
   type CuentaType = {

@@ -24,6 +24,7 @@ import { useModals } from 'Providers/Modals';
 
 import { useGastos, deleteGasto } from './common';
 import { ShowCuenta } from 'App/cuentas/gadgets';
+import { ShowIVA } from 'App/iva/gadgets';
 
 const ListGastos: React.FC<{}> = () => {
   const history = useHistory();
@@ -84,7 +85,9 @@ const ListGastos: React.FC<{}> = () => {
         <td>
           <ShowCuenta idCuenta={gasto.cuenta} />
         </td>
-        <td align="right">{porcIva ? `${porcIva * 100}%` : ''}</td>
+        <td align="right">
+          <ShowIVA iva={porcIva} />
+        </td>
         <td align="right">{formatCurrency(importeIva)}</td>
         <td align="right">{formatCurrency(importeSinIva)}</td>
         <td align="center">

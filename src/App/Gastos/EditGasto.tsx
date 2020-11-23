@@ -8,12 +8,11 @@ import { Alert, Form } from 'reactstrap';
 import {
   TextField,
   CurrencyField,
-  PercentField,
   DateField,
   SubmitButton,
 } from 'Components/Form';
 import { DropdownCuentas } from 'App/cuentas/gadgets';
-
+import { DropdownIVA } from 'App/iva/gadgets';
 import { ButtonIconAdd, ButtonIconDelete, ButtonSet } from 'Components/Icons';
 import { Loading } from 'Components/Modals';
 import Page from 'Components/Page';
@@ -38,7 +37,7 @@ const gastoSchema = yup.object().shape<ShortGasto>({
   // @ts-ignore
   cuenta: yup.string().nullable().default(null),
   // @ts-ignore
-  iva: yup.number().nullable().positive().default(0),
+  iva: yup.number().nullable().min(0).default(0),
 });
 
 export default function EditGasto() {
@@ -105,7 +104,8 @@ export default function EditGasto() {
             noOption={!idGasto}
             methods={methods}
           />
-          <PercentField name="iva" label="IVA%" methods={methods} />
+
+          <DropdownIVA name="iva" label="IVA%" methods={methods} />
           <ButtonSet>
             <SubmitButton component={ButtonIconAdd} methods={methods}>
               {isNew ? 'Agregar' : 'Modificar'}
