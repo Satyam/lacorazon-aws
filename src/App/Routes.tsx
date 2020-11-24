@@ -16,7 +16,7 @@ import ShowVenta from 'App/ventas/ShowVenta';
 import SumarioVendedores from 'App/sumarios/PorVendedor';
 import SumarioDistribuidores from 'App/sumarios/PorDistribuidor';
 import SumarioCaja from 'App/sumarios/Caja';
-// import Profile from 'Components/Profile';
+import Profile from 'App/Profile';
 
 // import PrivateRoute from './PrivateRoute';
 /* Update:
@@ -77,9 +77,9 @@ const Routes = () => (
       <SumarioCaja />
     </Route>
 
-    {/* <PrivateRoute path="/profile">
+    <Route path="/profile">
       <Profile />
-    </PrivateRoute> */}
+    </Route>
   </>
 );
 

@@ -16,6 +16,13 @@ export const db = firebase.database();
 export const auth = firebase.auth();
 auth.useDeviceLanguage();
 
+export const login = () => {
+  auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+};
+export const logout = () => {
+  auth.signOut();
+};
+
 export const CLAVE_DUPLICADA = 'Clave Duplicada';
 
 export const dbTable = <

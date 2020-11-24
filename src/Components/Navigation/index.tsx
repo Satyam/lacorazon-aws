@@ -10,16 +10,26 @@ import {
   DropdownMenu,
   DropdownItem,
 } from 'reactstrap';
-// import { FaUser } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
+import { FaUser } from 'react-icons/fa';
+import { auth, login, logout } from 'Firebase';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { Loading } from 'Components/Modals';
+import { Alert } from 'reactstrap';
 import { useIntl } from 'Providers/Intl';
 
 import styles from './styles.module.css';
 
 export const Navigation: React.FC = ({ children }) => {
   const [isOpen, setOpen] = useState(false);
-  // const { isAuthenticated, loginWithPopup, logout, user } = useAuth0();
   const { locale, setLocale, locales } = useIntl();
+  const [user, loading, error] = useAuthState(auth);
+
+  if (loading) return <Loading>Cargando datos usuario</Loading>;
+  if (error) {
+    return <Alert>Error: {error}</Alert>;
+  }
   function toggle() {
     setOpen(!isOpen);
   }
@@ -55,12 +65,12 @@ export const Navigation: React.FC = ({ children }) => {
                 ))}
               </DropdownMenu>
             </UncontrolledDropdown>
-            {/* <UncontrolledDropdown nav inNavbar>
-              {isAuthenticated && user ? (
+            <UncontrolledDropdown nav inNavbar>
+              {user ? (
                 <>
                   <DropdownToggle nav caret className={styles.user}>
-                    <img src={user.picture} alt="User" />
-                    {user.name}
+                    <img src={user.photoURL} alt="User" />
+                    {user.displayName}
                   </DropdownToggle>
                   <DropdownMenu right>
                     <DropdownItem onClick={() => logout()}>Logout</DropdownItem>
@@ -77,13 +87,11 @@ export const Navigation: React.FC = ({ children }) => {
                     guest
                   </DropdownToggle>
                   <DropdownMenu right>
-                    <DropdownItem onClick={() => loginWithPopup()}>
-                      Login
-                    </DropdownItem>
+                    <DropdownItem onClick={() => login()}>Login</DropdownItem>
                   </DropdownMenu>
                 </>
               )}
-            </UncontrolledDropdown> */}
+            </UncontrolledDropdown>
           </Nav>
         </Collapse>
       </Navbar>
