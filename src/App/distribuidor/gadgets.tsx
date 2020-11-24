@@ -1,7 +1,7 @@
 import React, { DOMAttributes } from 'react';
 import { useDistribuidor } from './common';
 import { Link } from 'react-router-dom';
-import { Alert } from 'reactstrap';
+import ErrorAlert from 'Components/ErrorAlert';
 import icon from 'Components/Modals/loading.gif';
 
 export const ShowDistribuidor: React.FC<
@@ -10,7 +10,8 @@ export const ShowDistribuidor: React.FC<
   } & DOMAttributes<HTMLDivElement>
 > = ({ idDistribuidor }) => {
   const [distribuidor, loading, error] = useDistribuidor(idDistribuidor);
-  if (error) return <Alert color="danger">{error}</Alert>;
+  if (error)
+    return <ErrorAlert error={error}>Cargando distribuidor</ErrorAlert>;
   if (loading) return <img src={icon} alt="loading ..." />;
   if (distribuidor) {
     return (

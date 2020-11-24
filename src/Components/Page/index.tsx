@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import { Container, Row, Col, Alert } from 'reactstrap';
+import { Container, Row, Col } from 'reactstrap';
 import classnames from 'classnames';
-
+import ErrorAlert from 'Components/ErrorAlert';
 import styles from './styles.module.css';
 
 const Page: React.FC<{
@@ -22,7 +22,7 @@ const Page: React.FC<{
             <h1 className={styles.heading}>{heading}</h1>
             <div className={styles.action}>{action}</div>
           </div>
-          {error && <Alert color="danger">{error}</Alert>}
+          {error && <ErrorAlert error={error}>{heading}</ErrorAlert>}
           {children}
         </Col>
       </Row>

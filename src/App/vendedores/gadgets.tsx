@@ -1,7 +1,7 @@
 import React, { DOMAttributes } from 'react';
 import { useVendedor, useVendedores } from './common';
 import { Link } from 'react-router-dom';
-import { Alert } from 'reactstrap';
+import ErrorAlert from 'Components/ErrorAlert';
 import icon from 'Components/Modals/loading.gif';
 import {
   DropdownField,
@@ -21,7 +21,7 @@ export const DropdownVendedores: React.FC<DropdownVendedoresType> = ({
 }) => {
   const [vendedores, loading, error] = useVendedores();
 
-  if (error) return <Alert color="danger">{error}</Alert>;
+  if (error) return <ErrorAlert error={error}>Cargando vendedores</ErrorAlert>;
   if (loading) return <img src={icon} alt="loading ..." />;
   if (vendedores) {
     return (
@@ -47,7 +47,7 @@ export const LabeledVendedores: React.FC<LabeledVendedoresProps> = ({
   ...rest
 }) => {
   const [vendedor, loading, error] = useVendedor(idVendedor || '');
-  if (error) return <Alert color="danger">{error}</Alert>;
+  if (error) return <ErrorAlert error={error}>Cargando vendedores</ErrorAlert>;
   if (loading) return <img src={icon} alt="loading ..." />;
   if (vendedor) {
     return (
@@ -67,7 +67,7 @@ export const ShowVendedor: React.FC<
   } & DOMAttributes<HTMLDivElement>
 > = ({ idVendedor }) => {
   const [vendedor, loading, error] = useVendedor(idVendedor || '');
-  if (error) return <Alert color="danger">{error}</Alert>;
+  if (error) return <ErrorAlert error={error}>Cargando vendedores</ErrorAlert>;
   if (loading) return <img src={icon} alt="loading ..." />;
   if (vendedor) {
     return (

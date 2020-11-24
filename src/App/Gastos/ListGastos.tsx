@@ -7,7 +7,6 @@ import {
   Nav,
   NavItem,
   NavLink,
-  Alert,
 } from 'reactstrap';
 
 import classnames from 'classnames';
@@ -20,6 +19,7 @@ import {
 import { useIntl } from 'Providers/Intl';
 import { Loading } from 'Components/Modals';
 import Page from 'Components/Page';
+import ErrorAlert from 'Components/ErrorAlert';
 import { useModals } from 'Providers/Modals';
 
 import { useGastos, deleteGasto } from './common';
@@ -37,7 +37,7 @@ const ListGastos: React.FC<{}> = () => {
 
   if (loading) return <Loading>Cargando gastos</Loading>;
 
-  if (error) return <Alert color="danger">{error.message}</Alert>;
+  if (error) return <ErrorAlert error={error}>Cargando gastos</ErrorAlert>;
   if (typeof gastos === 'undefined') return null;
 
   const minYear = gastos[0].fecha.getFullYear();
