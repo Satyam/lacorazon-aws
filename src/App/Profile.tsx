@@ -2,15 +2,21 @@ import React from 'react';
 import { auth } from 'Firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { Loading } from 'Components/Modals';
-import { Alert } from 'reactstrap';
+import ErrorAlert from 'Components/ErrorAlert';
 const Profile = () => {
   const [user, loading, error] = useAuthState(auth);
 
   if (loading) return <Loading>Cargando datos usuario</Loading>;
   if (error) {
-    return <Alert>Error: {error}</Alert>;
+    return <ErrorAlert error={error}>Cargando datos usuario</ErrorAlert>;
   }
 
+  if (!user)
+    return (
+      <ErrorAlert error="No hay usuario registrado">
+        Cargando datos usuario
+      </ErrorAlert>
+    );
   return (
     <>
       <img src={user.photoURL} alt="Profile" />
