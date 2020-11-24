@@ -31,20 +31,14 @@ const Nav = () => (
         Sumarios
       </DropdownToggle>
       <DropdownMenu right>
-        <DropdownItem>
-          <NavLink tag={Link} to="/sumario/porVendedor">
-            Sumario por vendedor
-          </NavLink>
+        <DropdownItem tag={Link} to="/sumario/porVendedor">
+          Sumario por vendedor
         </DropdownItem>
-        <DropdownItem>
-          <NavLink tag={Link} to="/sumario/porDistribuidor">
-            Sumario por distribuidor
-          </NavLink>
+        <DropdownItem tag={Link} to="/sumario/porDistribuidor">
+          Sumario por distribuidor
         </DropdownItem>
-        <DropdownItem>
-          <NavLink tag={Link} to="/sumario/caja">
-            Sumario de caja
-          </NavLink>
+        <DropdownItem tag={Link} to="/sumario/caja">
+          Sumario de caja
         </DropdownItem>
       </DropdownMenu>
     </UncontrolledDropdown>
