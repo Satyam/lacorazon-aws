@@ -25,45 +25,48 @@ type SumarioPorDistribuidor = {
 
 type TablaSumario = Record<ID, SumarioPorDistribuidor>;
 
-const useInitSumario = () => {
+const useInitSumario = (): [ventasVendedores?: TablaSumario, error?: any] => {
   const [distribuidores, loading, error] = useDistribuidores();
 
   return useMemo(() => {
-    if (error) throw error;
-    if (loading) return {};
+    if (error) return [undefined, error];
+    if (loading) return [];
     if (typeof distribuidores === 'undefined')
-      throw new Error('Tabla de distribuidores está vacía');
+      return [undefined, 'Tabla de distribuidores está vacía'];
     const { comisionEstandar } = configs;
-    return distribuidores.reduce<TablaSumario>(
-      (vvs, v) => ({
-        ...vvs,
-        [v.idDistribuidor]: {
-          idDistribuidor: v.idDistribuidor,
-          nombre: v.nombre,
+    return [
+      distribuidores.reduce<TablaSumario>(
+        (vvs, v) => ({
+          ...vvs,
+          [v.idDistribuidor]: {
+            idDistribuidor: v.idDistribuidor,
+            nombre: v.nombre,
 
-          entregados: 0,
-          vendidos: 0,
-          devueltos: 0,
-          cantFacturados: 0,
-          existencias: 0,
-          facturado: 0,
-          aCobrar: 0,
-          porcentaje: comisionEstandar,
-          cobrado: 0,
-        },
-      }),
-      {}
-    );
+            entregados: 0,
+            vendidos: 0,
+            devueltos: 0,
+            cantFacturados: 0,
+            existencias: 0,
+            facturado: 0,
+            aCobrar: 0,
+            porcentaje: comisionEstandar,
+            cobrado: 0,
+          },
+        }),
+        {}
+      ),
+    ];
   }, [distribuidores, loading, error]);
 };
 
-const useAcumConsigna = (sumarioDistribuidores: TablaSumario) => {
+const useAcumConsigna = (sumarioDistribuidores?: TablaSumario) => {
   const [consignas, loading, error] = useConsignas();
   return useMemo(() => {
-    if (error) throw error;
+    if (typeof sumarioDistribuidores === 'undefined') return;
+    if (error) return error;
     if (loading) return;
     if (typeof consignas === 'undefined')
-      throw new Error('Tabla de consignas está vacía');
+      return 'Tabla de consignas está vacía';
     consignas.forEach(({ idDistribuidor, ...consigna }) => {
       const sumario = sumarioDistribuidores[idDistribuidor];
       if (!sumario)
@@ -95,13 +98,14 @@ const useAcumConsigna = (sumarioDistribuidores: TablaSumario) => {
   }, [consignas, loading, error, sumarioDistribuidores]);
 };
 
-const useAcumFacturacion = (sumarioDistribuidores: TablaSumario) => {
+const useAcumFacturacion = (sumarioDistribuidores?: TablaSumario) => {
   const [facturaciones, loading, error] = useFacturaciones();
   return useMemo(() => {
-    if (error) throw error;
+    if (typeof sumarioDistribuidores === 'undefined') return;
+    if (error) return error;
     if (loading) return;
     if (typeof facturaciones === 'undefined')
-      throw new Error('Tabla de facturaciones está vacía');
+      return 'Tabla de facturaciones está vacía';
     const { PVP, comisionEstandar } = configs;
 
     facturaciones.forEach(({ idDistribuidor, ...facturacion }) => {
@@ -126,12 +130,15 @@ const useAcumFacturacion = (sumarioDistribuidores: TablaSumario) => {
 };
 
 const SumarioDistribuidores: React.FC = () => {
-  const sumarioDistribuidores = useInitSumario();
-  useAcumConsigna(sumarioDistribuidores);
-  useAcumFacturacion(sumarioDistribuidores);
+  const [sumarioDistribuidores, error] = useInitSumario();
+  let errors = [error];
+  errors.push(useAcumConsigna(sumarioDistribuidores));
+  errors.push(useAcumFacturacion(sumarioDistribuidores));
 
   const { formatCurrency } = useIntl();
 
+  if (typeof sumarioDistribuidores === 'undefined')
+    return <Loading>Cargando Datos</Loading>;
   if (Object.keys(sumarioDistribuidores).length === 0)
     return <Loading>Cargando datos</Loading>;
   const { comisionEstandar } = configs;
@@ -193,7 +200,12 @@ const SumarioDistribuidores: React.FC = () => {
   };
 
   return (
-    <Page wide title="Sumario Distribuidores" heading="Sumario Distribuidores">
+    <Page
+      wide
+      title="Sumario Distribuidores"
+      heading="Sumario Distribuidores"
+      error={errors}
+    >
       <Table striped hover size="sm" responsive bordered>
         <thead>
           <tr>

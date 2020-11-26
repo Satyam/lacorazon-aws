@@ -38,103 +38,120 @@ type EntradaDeCaja = {
   acumIVA?: number;
 };
 
-const useAcumVentas = () => {
+const useAcumVentas = (): [entradas?: EntradaDeCaja[], error?: any] => {
   const [ventas, loading, error] = useVentas();
 
   return useMemo(() => {
-    if (loading) return;
+    if (loading) return [];
 
-    if (error) throw error;
+    if (error) return [undefined, error];
     if (typeof ventas === 'undefined')
-      throw Error('Tabla de ventas está vacía');
+      return [undefined, 'Tabla de ventas está vacía'];
     const factorPrecioSinIva = 1 + configs.IVALibros;
 
-    return ventas
-      .filter((venta) => venta.precioUnitario && venta.cantidad)
-      .map((venta) => {
-        const precio = (venta.precioUnitario || 0) * (venta.cantidad || 0);
-        var precioSinIVA = venta.iva ? precio / factorPrecioSinIva : precio;
+    return [
+      ventas
+        .filter((venta) => venta.precioUnitario && venta.cantidad)
+        .map((venta) => {
+          const precio = (venta.precioUnitario || 0) * (venta.cantidad || 0);
+          var precioSinIVA = venta.iva ? precio / factorPrecioSinIva : precio;
 
-        return {
-          fecha: venta.fecha,
-          origen: Origen.Venta,
-          idVendedor: venta.idVendedor,
-          concepto: venta.concepto,
-          importe: precio,
-          cuenta: venta.cuenta,
-          iva: precio - precioSinIVA || '',
-          importeSinIVA: precioSinIVA,
-        } as EntradaDeCaja;
-      });
+          return {
+            fecha: venta.fecha,
+            origen: Origen.Venta,
+            idVendedor: venta.idVendedor,
+            concepto: venta.concepto,
+            importe: precio,
+            cuenta: venta.cuenta,
+            iva: precio - precioSinIVA || '',
+            importeSinIVA: precioSinIVA,
+          } as EntradaDeCaja;
+        }),
+    ];
   }, [ventas, loading, error]);
 };
 
-const useAcumGastos = () => {
+const useAcumGastos = (): [entradas?: EntradaDeCaja[], error?: any] => {
   const [gastos, loading, error] = useGastos();
 
   return useMemo(() => {
-    if (loading) return;
+    if (loading) return [];
 
-    if (error) throw error;
+    if (error) return [undefined, error];
     if (typeof gastos === 'undefined')
-      throw new Error('Tabla de gastos está vacía');
-    return gastos.map(({ importe, iva = 0, ...rest }) => {
-      var importeSinIVA = importe / (1 + iva);
+      return [undefined, 'Tabla de gastos está vacía'];
+    return [
+      gastos.map(({ importe, iva = 0, ...rest }) => {
+        var importeSinIVA = importe / (1 + iva);
 
-      return {
-        origen: Origen.Gasto,
-        referencia: '',
-        importe: -importe,
-        iva: -(importe - importeSinIVA) || '',
-        importeSinIVA: -importeSinIVA,
-        idVendedor: '',
-        ...rest,
-      } as EntradaDeCaja;
-    });
+        return {
+          origen: Origen.Gasto,
+          referencia: '',
+          importe: -importe,
+          iva: -(importe - importeSinIVA) || '',
+          importeSinIVA: -importeSinIVA,
+          idVendedor: '',
+          ...rest,
+        } as EntradaDeCaja;
+      }),
+    ];
   }, [gastos, loading, error]);
 };
 
-const useAcumFacturacion = () => {
+const useAcumFacturacion = (): [entradas?: EntradaDeCaja[], error?: any] => {
   const [facturaciones, loading, error] = useFacturaciones();
 
   return useMemo(() => {
-    if (loading) return;
+    if (loading) return [];
 
-    if (error) throw error;
+    if (error) return [undefined, error];
     if (typeof facturaciones === 'undefined')
-      throw new Error('Tabla de facturaciones está vacía');
+      return [undefined, 'Tabla de facturaciones está vacía'];
     const factorPrecioSinIva = 1 + configs.IVALibros;
 
-    return facturaciones
-      .filter((facturacion) => facturacion.cobrado)
-      .map(({ cobrado, nroFactura, fecha, idDistribuidor, cuenta }) => {
-        const cobradoSinIVA = nroFactura
-          ? cobrado / factorPrecioSinIva
-          : cobrado;
+    return [
+      facturaciones
+        .filter((facturacion) => facturacion.cobrado)
+        .map(({ cobrado, nroFactura, fecha, idDistribuidor, cuenta }) => {
+          const cobradoSinIVA = nroFactura
+            ? cobrado / factorPrecioSinIva
+            : cobrado;
 
-        return {
-          fecha: fecha,
-          origen: Origen.Distribuidor,
-          referencia: idDistribuidor,
-          concepto: nroFactura
-            ? nroFactura + ' de ' + idDistribuidor
-            : idDistribuidor,
-          importe: cobrado,
-          cuenta: cuenta,
-          iva: cobrado - cobradoSinIVA || '',
-          importeSinIVA: cobradoSinIVA,
-        } as EntradaDeCaja;
-      });
+          return {
+            fecha: fecha,
+            origen: Origen.Distribuidor,
+            referencia: idDistribuidor,
+            concepto: nroFactura
+              ? nroFactura + ' de ' + idDistribuidor
+              : idDistribuidor,
+            importe: cobrado,
+            cuenta: cuenta,
+            iva: cobrado - cobradoSinIVA || '',
+            importeSinIVA: cobradoSinIVA,
+          } as EntradaDeCaja;
+        }),
+    ];
   }, [facturaciones, loading, error]);
 };
+
 const SumarioCaja: React.FC = () => {
   const history = useHistory();
   const { year } = useParams<{ year: string }>();
-  const acumVentas = useAcumVentas();
-  const acumGastos = useAcumGastos();
-  const acumFacturacion = useAcumFacturacion();
+  const [acumVentas, errVentas] = useAcumVentas();
+  const [acumGastos, errGastos] = useAcumGastos();
+  const [acumFacturacion, errFacturacion] = useAcumFacturacion();
 
   const { formatCurrency, formatDate } = useIntl();
+
+  if (errVentas || errGastos || errFacturacion)
+    return (
+      <Page
+        wide
+        title="Caja"
+        heading="Caja"
+        error={[errVentas, errGastos, errFacturacion]}
+      ></Page>
+    );
 
   if (!acumGastos || !acumVentas || !acumFacturacion)
     return <Loading>Cargando datos</Loading>;

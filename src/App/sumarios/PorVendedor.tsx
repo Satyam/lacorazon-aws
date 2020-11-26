@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
-import { Table, Alert } from 'reactstrap';
+import { Table } from 'reactstrap';
 import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
 import { useVendedores } from 'App/vendedores/common';
@@ -23,74 +23,114 @@ type SumarioPorVendedor = {
   promedio: number;
 };
 
-const SumarioVendedores: React.FC = () => {
-  const [vendedores, loadingVendedores, errorVendedores] = useVendedores();
-  const [comisiones, loadingComisiones, errorComisiones] = useComisiones();
-  const [ventas, loadingVentas, errorVentas] = useVentas();
-  const [
-    facturaciones,
-    loadingFacturacion,
-    errorFacturacion,
-  ] = useFacturaciones();
+type TablaSumarioPorVendedor = Record<ID, SumarioPorVendedor>;
 
+const useInitVendedores = (): [
+  ventasVendedores?: TablaSumarioPorVendedor,
+  error?: any
+] => {
+  const [vendedores, loading, error] = useVendedores();
+  return useMemo(() => {
+    if (error) return [undefined, error];
+    if (loading) return [];
+    if (typeof vendedores === 'undefined')
+      return [undefined, 'Tabla de distribuidores está vacía'];
+    console.log('useInitVendedores');
+    return [
+      vendedores.reduce<TablaSumarioPorVendedor>(
+        (vvs, v) => ({
+          ...vvs,
+          [v.idVendedor]: {
+            idVendedor: v.idVendedor,
+            vendido: 0,
+            regalado: 0,
+            total: 0,
+            precio: 0,
+            comisionVD: 0,
+            comisionEC: 0,
+            comisionPagada: 0,
+            promedio: 0,
+          },
+        }),
+        {}
+      ),
+    ];
+  }, [vendedores, loading, error]);
+};
+
+const useAcumComisiones = (ventasVendedores?: TablaSumarioPorVendedor) => {
+  const [comisiones, loading, error] = useComisiones();
+  return useMemo(() => {
+    if (typeof ventasVendedores === 'undefined') return;
+    if (error) return error;
+    if (loading) return;
+    if (typeof comisiones === 'undefined')
+      return 'Tabla de comisiones está vacía';
+    console.log('useAcumComisiones');
+    comisiones.forEach((comision) => {
+      if (comision.idVendedor) {
+        ventasVendedores[comision.idVendedor].comisionPagada +=
+          comision.importe;
+      }
+    });
+  }, [comisiones, loading, error, ventasVendedores]);
+};
+
+const useAcumVentas = (ventasVendedores?: TablaSumarioPorVendedor) => {
+  const [ventas, loading, error] = useVentas();
+  return useMemo(() => {
+    if (typeof ventasVendedores === 'undefined') return;
+    if (error) return error;
+    if (loading) return;
+    if (typeof ventas === 'undefined') return 'Tabla de comisiones está vacía';
+    const { comisionInterna } = configs;
+    console.log('useAcumVentas');
+    ventas.forEach(({ idVendedor = '??', precioUnitario, cantidad }) => {
+      const acumVtasPorVendedor = ventasVendedores[idVendedor];
+
+      acumVtasPorVendedor.total += cantidad;
+      if (precioUnitario) {
+        acumVtasPorVendedor.vendido += cantidad;
+        acumVtasPorVendedor.precio += cantidad * precioUnitario;
+        acumVtasPorVendedor.comisionVD +=
+          cantidad * precioUnitario * comisionInterna;
+      } else {
+        acumVtasPorVendedor.regalado += cantidad;
+      }
+    });
+  }, [ventas, loading, error, ventasVendedores]);
+};
+
+const useAcumFacturacion = (ventasVendedores?: TablaSumarioPorVendedor) => {
+  const [facturaciones, loading, error] = useFacturaciones();
+  return useMemo(() => {
+    if (typeof ventasVendedores === 'undefined') return;
+    if (error) return error;
+    if (loading) return;
+    if (typeof facturaciones === 'undefined')
+      return 'Tabla de facturaciones está vacía';
+    console.log('useAcumFacturacion');
+    const { comisionInterna } = configs;
+    facturaciones
+      .filter(
+        (facturacion) => facturacion.facturado > 0 && facturacion.idVendedor
+      )
+      .forEach(({ idVendedor, facturado }) => {
+        ventasVendedores[idVendedor].comisionEC += comisionInterna * facturado;
+      });
+  }, [facturaciones, loading, error, ventasVendedores]);
+};
+
+const SumarioVendedores: React.FC = () => {
+  const [ventasVendedores, error] = useInitVendedores();
+  const errors = [error];
+  errors.push(useAcumComisiones(ventasVendedores));
+  errors.push(useAcumVentas(ventasVendedores));
+  errors.push(useAcumFacturacion(ventasVendedores));
   const { formatCurrency } = useIntl();
 
-  if (
-    loadingVendedores ||
-    loadingComisiones ||
-    loadingVentas ||
-    loadingFacturacion
-  )
-    return <Loading>Cargando datos</Loading>;
-
-  if (typeof comisiones === 'undefined')
-    return <Alert color="warning">Tabla de comisiones está vacía</Alert>;
-  if (typeof facturaciones === 'undefined')
-    return <Alert color="warning">Tabla de facturaciones está vacía</Alert>;
-  if (typeof ventas === 'undefined')
-    return <Alert color="warning">Tabla de ventas está vacía</Alert>;
-  if (typeof vendedores === 'undefined')
-    return <Alert color="warning">Tabla de vendedores está vacía</Alert>;
-
-  const { comisionInterna } = configs;
-
-  const ventasVendedores = vendedores.reduce<Record<ID, SumarioPorVendedor>>(
-    (vvs, v) => ({
-      ...vvs,
-      [v.idVendedor]: {
-        idVendedor: v.idVendedor,
-        vendido: 0,
-        regalado: 0,
-        total: 0,
-        precio: 0,
-        comisionVD: 0,
-        comisionEC: 0,
-        comisionPagada: 0,
-        promedio: 0,
-      },
-    }),
-    {}
-  );
-
-  comisiones.forEach((comision) => {
-    if (comision.idVendedor) {
-      ventasVendedores[comision.idVendedor].comisionPagada += comision.importe;
-    }
-  });
-
-  ventas.forEach(({ idVendedor = '??', precioUnitario, cantidad }) => {
-    const acumVtasPorVendedor = ventasVendedores[idVendedor];
-
-    acumVtasPorVendedor.total += cantidad;
-    if (precioUnitario) {
-      acumVtasPorVendedor.vendido += cantidad;
-      acumVtasPorVendedor.precio += cantidad * precioUnitario;
-      acumVtasPorVendedor.comisionVD +=
-        cantidad * precioUnitario * comisionInterna;
-    } else {
-      acumVtasPorVendedor.regalado += cantidad;
-    }
-  });
+  if (typeof ventasVendedores === 'undefined')
+    return <Loading>Cargando Datos</Loading>;
 
   for (const v in ventasVendedores) {
     var row = ventasVendedores[v];
@@ -98,13 +138,6 @@ const SumarioVendedores: React.FC = () => {
       row.promedio = row.precio / row.vendido;
     }
   }
-  facturaciones
-    .filter(
-      (facturacion) => facturacion.facturado > 0 && facturacion.idVendedor
-    )
-    .forEach(({ idVendedor, facturado }) => {
-      ventasVendedores[idVendedor].comisionEC += comisionInterna * facturado;
-    });
 
   const totales = Object.values(ventasVendedores).reduce<SumarioPorVendedor>(
     (totales, sumario) => ({
@@ -126,6 +159,7 @@ const SumarioVendedores: React.FC = () => {
       promedio: 0,
     }
   );
+
   const rowSumario = (sumario: SumarioPorVendedor) => {
     const idVendedor = sumario.idVendedor;
     return (
@@ -163,12 +197,7 @@ const SumarioVendedores: React.FC = () => {
       wide
       title="Sumario Vendedores"
       heading="Sumario Vendedores"
-      error={
-        errorVendedores?.message ||
-        errorComisiones?.message ||
-        errorVentas?.message ||
-        errorFacturacion?.message
-      }
+      error={errors}
     >
       <Table striped hover size="sm" responsive bordered>
         <thead>
