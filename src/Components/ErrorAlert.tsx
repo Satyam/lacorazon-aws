@@ -1,14 +1,27 @@
 import React from 'react';
 import { Alert } from 'reactstrap';
-const ErrorAlert: React.FC<{ error?: Error | string }> = ({
+
+export type ErrorAlertError = Error | string | Array<Error | string>;
+export const ErrorAlert: React.FC<{ error?: ErrorAlertError }> = ({
   error,
   children,
-}) =>
-  error ? (
+}) => {
+  if (!error) return null;
+  let e = '';
+  if (typeof error === 'string') e = error;
+  if (error instanceof Error) e = error.toString();
+  if (Array.isArray(error)) {
+    e = error.reduce<string>(
+      (errors, err) => (err ? errors + '\n' + err.toString() : errors),
+      ''
+    );
+  }
+
+  return e.length ? (
     <Alert color="danger">
       {children}
-      <pre>{error.toString()}</pre>
+      <pre>{e}</pre>
     </Alert>
   ) : null;
-
+};
 export default ErrorAlert;

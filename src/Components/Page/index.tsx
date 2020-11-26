@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Container, Row, Col } from 'reactstrap';
 import classnames from 'classnames';
-import ErrorAlert from 'Components/ErrorAlert';
+import { ErrorAlert, ErrorAlertError } from 'Components/ErrorAlert';
 import styles from './styles.module.css';
 
 const Page: React.FC<{
@@ -9,7 +9,7 @@ const Page: React.FC<{
   title?: string;
   heading: string;
   action?: React.ReactNode;
-  error?: string;
+  error?: ErrorAlertError;
 }> = ({ wide, children, title, heading, action, error }) => {
   useEffect(() => {
     if (title) document.title = `La Corazón - ${title}`;
@@ -22,7 +22,7 @@ const Page: React.FC<{
             <h1 className={styles.heading}>{heading}</h1>
             <div className={styles.action}>{action}</div>
           </div>
-          {error && <ErrorAlert error={error}>{heading}</ErrorAlert>}
+          <ErrorAlert error={error}>{heading}</ErrorAlert>
           {children}
         </Col>
       </Row>
