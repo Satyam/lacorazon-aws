@@ -8,6 +8,7 @@ admin.initializeApp({
 });
 
 const db = admin.database();
+const auth = admin.auth();
 
 const data = require('./La Corazon.json');
 
@@ -22,6 +23,23 @@ function filterEmpty(obj) {
         };
   }, {});
 }
+
+function addClaims() {
+  console.log('auth claims');
+  return Promise.all([
+    auth.setCustomUserClaims('7VQcpiofBaeVjvw79nat55QThwC2', {
+      admin: true,
+      operador: true,
+    }),
+    // 'roxanacabut@gmail.com': {
+    //   role: 'operador'
+    // },
+    // 'reyezuelo@gmail.com': {
+    //   role: 'operador'
+    // }
+  ]);
+}
+
 function addVendedores() {
   console.log('vendedores');
   return db.ref('vendedores').set({
@@ -40,20 +58,20 @@ function addVendedores() {
   });
 }
 
-function addUsers() {
-  console.log('users');
-  return db.ref('users').set({
-    '7VQcpiofBaeVjvw79nat55QThwC2': {
-      role: 'admin',
-    },
-    // 'roxanacabut@gmail.com': {
-    //   role: 'operador'
-    // },
-    // 'reyezuelo@gmail.com': {
-    //   role: 'operador'
-    // }
-  });
-}
+// function addUsers() {
+//   console.log('users');
+//   return db.ref('users').set({
+//     '7VQcpiofBaeVjvw79nat55QThwC2': {
+//       role: 'admin',
+//     },
+//     // 'roxanacabut@gmail.com': {
+//     //   role: 'operador'
+//     // },
+//     // 'reyezuelo@gmail.com': {
+//     //   role: 'operador'
+//     // }
+//   });
+// }
 
 const PVP = 12;
 const comisionEstandar = 0.35;
@@ -110,6 +128,7 @@ function byFecha(a, b) {
 function addVentaDirecta() {
   console.log('venta directa');
   const ventas = db.ref('ventas');
+  ventas.set(null);
   return Promise.all(
     data.ventaDirecta.sort(byFecha).map(({ vendedor, ctaRaed, ...venta }) =>
       ventas.push({
@@ -124,7 +143,9 @@ function addVentaDirecta() {
 function addEnConsigna() {
   console.log('en consigna');
   const consigna = db.ref('consigna');
+  consigna.set(null);
   const facturas = db.ref('facturas');
+  facturas.set(null);
   const porcentajes = {};
   return Promise.all(
     data.enConsigna
@@ -183,19 +204,34 @@ function addEnConsigna() {
             );
           }
           if (facturado) {
-            return consigna.push(
-              filterEmpty({
-                idDistribuidor,
-                fecha,
-                concepto,
-                movimiento: 'facturados',
-                cantidad: Math.round(
-                  facturado /
-                    (1 - (porcentajes[idDistribuidor] || comisionEstandar)) /
-                    PVP
-                ),
-              })
-            );
+            return consigna
+              .push(
+                filterEmpty({
+                  idDistribuidor,
+                  fecha,
+                  concepto,
+                  movimiento: 'facturados',
+                  cantidad: Math.round(
+                    facturado /
+                      (1 - (porcentajes[idDistribuidor] || comisionEstandar)) /
+                      PVP
+                  ),
+                })
+              )
+              .then(() =>
+                facturas.push(
+                  filterEmpty({
+                    idDistribuidor,
+                    fecha,
+                    concepto,
+                    idVendedor: vendedor ? vendedor.toLowerCase() : null,
+                    porcentaje: porcentajes[idDistribuidor] || comisionEstandar,
+                    nroFactura,
+                    cobrado,
+                    cuenta: ctaRaed ? 'ctaRaed' : 'efvoRoxy',
+                  })
+                )
+              );
           }
           return facturas.push(
             filterEmpty({
@@ -217,9 +253,13 @@ function addEnConsigna() {
 function addSalidas() {
   console.log('salidas');
   const gastos = db.ref('gastos');
+  gastos.set(null);
   const reintegros = db.ref('reintegros');
+  reintegros.set(null);
   const comisiones = db.ref('comisiones');
+  comisiones.set(null);
   const pagosIva = db.ref('pagosIva');
+  pagosIva.set(null);
   return Promise.all(
     data.salidas
       .sort(byFecha)
@@ -250,21 +290,9 @@ function addSalidas() {
   );
 }
 
-db.ref()
-  .set({
-    config: null,
-    vendedores: null,
-    distribuidores: null,
-    consigna: null,
-    facturas: null,
-    gastos: null,
-    reintegros: null,
-    comisiones: null,
-    pagosIva: null,
-  })
-  .then(addConfig)
+addClaims()
   .then(addVendedores)
-  .then(addUsers)
+  .then(addConfig)
   .then(addDistribuidores)
   .then(addVentaDirecta)
   .then(addEnConsigna)

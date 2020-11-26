@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import firebase from 'firebase';
 import { auth, login, logout } from 'Firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import ErrorAlert from 'Components/ErrorAlert';
 import { Alert, Button } from 'reactstrap';
-import { useUser } from './common';
 
 export const ADMIN = 'admin';
 export const OPERADOR = 'operador';
@@ -16,34 +15,31 @@ export const WithRole: React.FC<{
   ofreceLogin?: boolean;
   alt?: React.ReactNode;
 }> = ({ children, role, alerta, ofreceLogin, alt }) => {
-  const [authUser, loadingAuth, errorAuth]: [
+  const [authUser, loading, error]: [
     firebase.User | null,
     boolean,
     any
   ] = useAuthState(auth);
-  const [dbUser, loadingDb, errorDb] = useUser(authUser?.uid || '');
+  const [claims, setClaims] = useState<
+    Record<string, any> | undefined | null
+  >();
 
-  if (loadingAuth || loadingDb) return null;
-  if (errorAuth)
-    return <ErrorAlert error={errorAuth}>Verificando usuario</ErrorAlert>;
-  if (errorDb && errorDb.code !== 'PERMISSION_DENIED') {
-    return <ErrorAlert error={errorDb}>Verificando rol usuario</ErrorAlert>;
+  useEffect(() => {
+    if (authUser) {
+      authUser.getIdTokenResult().then((data) => {
+        console.log(data.claims);
+        setClaims(data.claims.aud === 'lacorazon-d66fd' ? data.claims : null);
+      });
+    }
+  }, [authUser]);
+
+  if (loading) return null;
+  if (error && error.code !== 'PERMISSION_DENIED') {
+    return <ErrorAlert error={error}>Verificando rol usuario</ErrorAlert>;
   }
+  console.log({ authUser, claims });
 
-  if (authUser && !dbUser) {
-    logout();
-    return (
-      <ErrorAlert error={authUser.displayName || ''}>
-        Usuario no registrado
-      </ErrorAlert>
-    );
-  }
-
-  const userRole = dbUser?.role;
-  if (
-    authUser === null ||
-    (Array.isArray(role) ? role : [role]).some((r) => r === userRole) === false
-  ) {
+  if (!authUser) {
     return (
       <>
         {alt}
@@ -57,5 +53,31 @@ export const WithRole: React.FC<{
     );
   }
 
-  return typeof children === 'function' ? children(authUser, dbUser) : children;
+  if (claims === null) {
+    logout();
+    return (
+      <ErrorAlert error={authUser?.displayName || ''}>
+        Usuario no registrado
+      </ErrorAlert>
+    );
+  }
+
+  if (role) {
+    if (
+      claims &&
+      (Array.isArray(role) ? role : [role]).some((r) => claims[r]) === false
+    )
+      return (
+        <>
+          {alt}
+          {alerta && <Alert color="danger">{alerta}</Alert>}
+          {ofreceLogin && (
+            <Button color="primary" onClick={login}>
+              Login
+            </Button>
+          )}
+        </>
+      );
+  }
+  return typeof children === 'function' ? children(authUser, claims) : children;
 };
