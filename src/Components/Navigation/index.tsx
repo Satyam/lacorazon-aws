@@ -5,6 +5,8 @@ import {
   NavbarToggler,
   NavbarBrand,
   Nav,
+  NavItem,
+  NavLink,
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
@@ -13,23 +15,17 @@ import {
 import { Link } from 'react-router-dom';
 
 import { FaUser } from 'react-icons/fa';
-import { auth, login, logout } from 'Firebase';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { Loading } from 'Components/Modals';
-import { Alert } from 'reactstrap';
+import firebase from 'firebase';
+import { login, logout } from 'Firebase';
 import { useIntl } from 'Providers/Intl';
+import { WithRole, ADMIN, OPERADOR, VER } from 'App/users/gadgets';
 
 import styles from './styles.module.css';
 
 export const Navigation: React.FC = ({ children }) => {
   const [isOpen, setOpen] = useState(false);
   const { locale, setLocale, locales } = useIntl();
-  const [user, loading, error] = useAuthState(auth);
 
-  if (loading) return <Loading>Cargando datos usuario</Loading>;
-  if (error) {
-    return <Alert>Error: {error}</Alert>;
-  }
   function toggle() {
     setOpen(!isOpen);
   }
@@ -47,7 +43,7 @@ export const Navigation: React.FC = ({ children }) => {
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="ml-auto" navbar>
-            {children}
+            <WithRole role={[ADMIN, OPERADOR]}>{children}</WithRole>
 
             <UncontrolledDropdown nav inNavbar>
               <DropdownToggle nav caret>
@@ -65,12 +61,22 @@ export const Navigation: React.FC = ({ children }) => {
                 ))}
               </DropdownMenu>
             </UncontrolledDropdown>
-            <UncontrolledDropdown nav inNavbar>
-              {user ? (
+            <WithRole
+              role={[ADMIN, OPERADOR, VER]}
+              alt={
                 <>
+                  <FaUser />
+                  <NavItem>
+                    <NavLink onClick={login}>Login</NavLink>
+                  </NavItem>
+                </>
+              }
+            >
+              {(user: firebase.User) => (
+                <UncontrolledDropdown nav inNavbar>
                   <DropdownToggle nav caret className={styles.user}>
-                    <img src={user.photoURL} alt="User" />
-                    {user.displayName}
+                    <img src={user?.photoURL || ''} alt="User" />
+                    {user?.displayName}
                   </DropdownToggle>
                   <DropdownMenu right>
                     <DropdownItem onClick={() => logout()}>Logout</DropdownItem>
@@ -79,19 +85,9 @@ export const Navigation: React.FC = ({ children }) => {
                       Profile
                     </DropdownItem>
                   </DropdownMenu>
-                </>
-              ) : (
-                <>
-                  <DropdownToggle nav caret className={styles.user}>
-                    <FaUser />
-                    guest
-                  </DropdownToggle>
-                  <DropdownMenu right>
-                    <DropdownItem onClick={() => login()}>Login</DropdownItem>
-                  </DropdownMenu>
-                </>
+                </UncontrolledDropdown>
               )}
-            </UncontrolledDropdown>
+            </WithRole>
           </Nav>
         </Collapse>
       </Navbar>
