@@ -43,7 +43,7 @@ function addVendedores() {
 function addUsers() {
   console.log('users');
   return db.ref('users').set({
-    118059719715363805543: {
+    '7VQcpiofBaeVjvw79nat55QThwC2': {
       role: 'admin',
     },
     // 'roxanacabut@gmail.com': {
