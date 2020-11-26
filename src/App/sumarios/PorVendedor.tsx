@@ -4,9 +4,9 @@ import { Table, Alert } from 'reactstrap';
 import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
 import { useVendedores } from 'App/vendedores/common';
-import { useGastos } from 'App/Gastos/common';
+import { useComisiones } from 'App/comisiones/common';
 import { useVentas } from 'App/ventas/common';
-import { useConsignas } from 'App/consigna/common';
+import { useFacturaciones } from 'App/facturacion/common';
 import configs from 'App/config/';
 import { ShowVendedor } from 'App/vendedores/gadgets';
 import { useIntl } from 'Providers/Intl';
@@ -25,19 +25,28 @@ type SumarioPorVendedor = {
 
 const SumarioVendedores: React.FC = () => {
   const [vendedores, loadingVendedores, errorVendedores] = useVendedores();
-  const [gastos, loadingGastos, errorGastos] = useGastos();
+  const [comisiones, loadingComisiones, errorComisiones] = useComisiones();
   const [ventas, loadingVentas, errorVentas] = useVentas();
-  const [consignas, loadingConsigna, errorConsigna] = useConsignas();
+  const [
+    facturaciones,
+    loadingFacturacion,
+    errorFacturacion,
+  ] = useFacturaciones();
 
   const { formatCurrency } = useIntl();
 
-  if (loadingVendedores || loadingGastos || loadingVentas || loadingConsigna)
+  if (
+    loadingVendedores ||
+    loadingComisiones ||
+    loadingVentas ||
+    loadingFacturacion
+  )
     return <Loading>Cargando datos</Loading>;
 
-  if (typeof gastos === 'undefined')
-    return <Alert color="warning">Tabla de gastos está vacía</Alert>;
-  if (typeof consignas === 'undefined')
-    return <Alert color="warning">Tabla de consignas está vacía</Alert>;
+  if (typeof comisiones === 'undefined')
+    return <Alert color="warning">Tabla de comisiones está vacía</Alert>;
+  if (typeof facturaciones === 'undefined')
+    return <Alert color="warning">Tabla de facturaciones está vacía</Alert>;
   if (typeof ventas === 'undefined')
     return <Alert color="warning">Tabla de ventas está vacía</Alert>;
   if (typeof vendedores === 'undefined')
@@ -63,12 +72,11 @@ const SumarioVendedores: React.FC = () => {
     {}
   );
 
-  // TODO: leer de Comisiones
-  // gastos.forEach((gasto) => {
-  //   if (gasto.idVendedor) {
-  //     ventasVendedores[gasto.idVendedor].comisionPagada += gasto.importe;
-  //   }
-  // });
+  comisiones.forEach((comision) => {
+    if (comision.idVendedor) {
+      ventasVendedores[comision.idVendedor].comisionPagada += comision.importe;
+    }
+  });
 
   ventas.forEach(({ idVendedor = '??', precioUnitario, cantidad }) => {
     const acumVtasPorVendedor = ventasVendedores[idVendedor];
@@ -90,8 +98,10 @@ const SumarioVendedores: React.FC = () => {
       row.promedio = row.precio / row.vendido;
     }
   }
-  consignas
-    .filter((consigna) => consigna.facturado > 0 && consigna.idVendedor)
+  facturaciones
+    .filter(
+      (facturacion) => facturacion.facturado > 0 && facturacion.idVendedor
+    )
     .forEach(({ idVendedor, facturado }) => {
       ventasVendedores[idVendedor].comisionEC += comisionInterna * facturado;
     });
@@ -155,9 +165,9 @@ const SumarioVendedores: React.FC = () => {
       heading="Sumario Vendedores"
       error={
         errorVendedores?.message ||
-        errorGastos?.message ||
+        errorComisiones?.message ||
         errorVentas?.message ||
-        errorConsigna?.message
+        errorFacturacion?.message
       }
     >
       <Table striped hover size="sm" responsive bordered>

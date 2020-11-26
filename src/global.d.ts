@@ -27,12 +27,6 @@ declare global {
     nif?: string;
   };
 
-  type UsuarioType = {
-    idUsuario: ID;
-    nombre: string;
-    email: string;
-  };
-
   type VendedorType = {
     idVendedor: ID;
     nombre: string;
@@ -86,16 +80,22 @@ declare global {
     idConsigna: ID;
     idDistribuidor: ID;
     fecha: Date;
+    concepto: string;
+    movimiento: 'entregados' | 'vendidos' | 'devueltos' | 'facturados';
+    cantidad: number;
+  };
+
+  type FacturacionType = {
+    idFacturacion: ID;
+    idDistribuidor: ID;
+    fecha: Date;
+    concepto: string;
     idVendedor: ID;
-    entregados: number;
     porcentaje: number;
-    vendidos: number;
-    devueltos: number;
     facturado: number;
     nroFactura: string;
     cobrado: number;
     cuenta: string;
-    comentarios: string;
   };
 
   type ConfigType = {
@@ -110,6 +110,12 @@ declare global {
     idCuenta: ID;
     descr: string;
     color: string;
+  };
+
+  type UserType = {
+    idUser: ID;
+    email: string;
+    role: string | string[];
   };
 }
 

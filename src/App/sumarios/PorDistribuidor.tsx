@@ -1,12 +1,11 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
-import { Table, Alert } from 'reactstrap';
+import { Table } from 'reactstrap';
 import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
 import { useDistribuidores } from 'App/distribuidor/common';
-import { useGastos } from 'App/Gastos/common';
-import { useVentas } from 'App/ventas/common';
 import { useConsignas } from 'App/consigna/common';
+import { useFacturaciones } from 'App/facturacion/common';
 import configs from 'App/config/';
 import { useIntl } from 'Providers/Intl';
 
@@ -16,6 +15,7 @@ type SumarioPorDistribuidor = {
   entregados: number;
   vendidos: number;
   devueltos: number;
+  cantFacturados: number;
   existencias: number;
   facturado: number;
   aCobrar: number;
@@ -23,82 +23,118 @@ type SumarioPorDistribuidor = {
   cobrado: number;
 };
 
+type TablaSumario = Record<ID, SumarioPorDistribuidor>;
+
+const useInitSumario = () => {
+  const [distribuidores, loading, error] = useDistribuidores();
+
+  return useMemo(() => {
+    if (error) throw error;
+    if (loading) return {};
+    if (typeof distribuidores === 'undefined')
+      throw new Error('Tabla de distribuidores está vacía');
+    const { comisionEstandar } = configs;
+    return distribuidores.reduce<TablaSumario>(
+      (vvs, v) => ({
+        ...vvs,
+        [v.idDistribuidor]: {
+          idDistribuidor: v.idDistribuidor,
+          nombre: v.nombre,
+
+          entregados: 0,
+          vendidos: 0,
+          devueltos: 0,
+          cantFacturados: 0,
+          existencias: 0,
+          facturado: 0,
+          aCobrar: 0,
+          porcentaje: comisionEstandar,
+          cobrado: 0,
+        },
+      }),
+      {}
+    );
+  }, [distribuidores, loading, error]);
+};
+
+const useAcumConsigna = (sumarioDistribuidores: TablaSumario) => {
+  const [consignas, loading, error] = useConsignas();
+  return useMemo(() => {
+    if (error) throw error;
+    if (loading) return;
+    if (typeof consignas === 'undefined')
+      throw new Error('Tabla de consignas está vacía');
+    consignas.forEach(({ idDistribuidor, ...consigna }) => {
+      const sumario = sumarioDistribuidores[idDistribuidor];
+      if (!sumario)
+        throw new Error(
+          `Código de Distribuidor "${idDistribuidor}" desconocido`
+        );
+
+      switch (consigna.movimiento) {
+        case 'entregados':
+          sumario.entregados += consigna.cantidad;
+          break;
+        case 'vendidos':
+          sumario.vendidos += consigna.cantidad;
+          break;
+        case 'devueltos':
+          sumario.devueltos += consigna.cantidad;
+          break;
+        case 'facturados':
+          sumario.cantFacturados += consigna.cantidad;
+          break;
+        default:
+          throw new Error(
+            `Movimiento desconocido en consigna: ${consigna.movimiento}`
+          );
+      }
+      sumario.existencias =
+        sumario.entregados - sumario.vendidos - sumario.devueltos;
+    });
+  }, [consignas, loading, error, sumarioDistribuidores]);
+};
+
+const useAcumFacturacion = (sumarioDistribuidores: TablaSumario) => {
+  const [facturaciones, loading, error] = useFacturaciones();
+  return useMemo(() => {
+    if (error) throw error;
+    if (loading) return;
+    if (typeof facturaciones === 'undefined')
+      throw new Error('Tabla de facturaciones está vacía');
+    const { PVP, comisionEstandar } = configs;
+
+    facturaciones.forEach(({ idDistribuidor, ...facturacion }) => {
+      const sumario = sumarioDistribuidores[idDistribuidor];
+      if (!sumario)
+        throw new Error(
+          `Código de Distribuidor "${idDistribuidor}" desconocido`
+        );
+
+      let porcentaje = facturacion.porcentaje;
+      if (typeof porcentaje === 'undefined')
+        porcentaje = sumario.porcentaje || comisionEstandar;
+      else sumario.porcentaje = porcentaje;
+
+      const facturado = facturacion.facturado || 0;
+      sumario.facturado += facturado;
+
+      sumario.aCobrar = PVP * sumario.vendidos * (1 - porcentaje) - facturado;
+      sumario.cobrado += facturacion.cobrado || 0;
+    });
+  }, [facturaciones, loading, error, sumarioDistribuidores]);
+};
+
 const SumarioDistribuidores: React.FC = () => {
-  const [
-    distribuidores,
-    loadingDistribuidores,
-    errorDistribuidores,
-  ] = useDistribuidores();
-  const [gastos, loadingGastos, errorGastos] = useGastos();
-  const [ventas, loadingVentas, errorVentas] = useVentas();
-  const [consignas, loadingConsigna, errorConsigna] = useConsignas();
+  const sumarioDistribuidores = useInitSumario();
+  useAcumConsigna(sumarioDistribuidores);
+  useAcumFacturacion(sumarioDistribuidores);
 
   const { formatCurrency } = useIntl();
 
-  if (
-    loadingDistribuidores ||
-    loadingGastos ||
-    loadingVentas ||
-    loadingConsigna
-  )
+  if (Object.keys(sumarioDistribuidores).length === 0)
     return <Loading>Cargando datos</Loading>;
-
-  if (typeof gastos === 'undefined')
-    return <Alert color="warning">Tabla de gastos está vacía</Alert>;
-  if (typeof consignas === 'undefined')
-    return <Alert color="warning">Tabla de consignas está vacía</Alert>;
-  if (typeof ventas === 'undefined')
-    return <Alert color="warning">Tabla de ventas está vacía</Alert>;
-  if (typeof distribuidores === 'undefined')
-    return <Alert color="warning">Tabla de distribuidores está vacía</Alert>;
-
-  const { PVP, comisionEstandar } = configs;
-  const sumarioDistribuidores = distribuidores.reduce<
-    Record<ID, SumarioPorDistribuidor>
-  >(
-    (vvs, v) => ({
-      ...vvs,
-      [v.idDistribuidor]: {
-        idDistribuidor: v.idDistribuidor,
-        nombre: v.nombre,
-
-        entregados: 0,
-        vendidos: 0,
-        devueltos: 0,
-        existencias: 0,
-        facturado: 0,
-        aCobrar: 0,
-        porcentaje: comisionEstandar,
-        cobrado: 0,
-      },
-    }),
-    {}
-  );
-
-  consignas.forEach(({ idDistribuidor, ...consigna }) => {
-    const sumario = sumarioDistribuidores[idDistribuidor];
-    if (!sumario)
-      throw new Error(`Código de Distribuidor "${idDistribuidor}" desconocido`);
-    sumario.entregados += consigna.entregados || 0;
-
-    let porcentaje = consigna.porcentaje;
-    if (typeof porcentaje === 'undefined')
-      porcentaje = sumario.porcentaje || comisionEstandar;
-    else sumario.porcentaje = porcentaje;
-
-    sumario.vendidos += consigna.vendidos || 0;
-
-    sumario.devueltos += consigna.devueltos || 0;
-
-    const facturado = consigna.facturado || 0;
-    sumario.facturado += facturado;
-
-    sumario.aCobrar = PVP * sumario.vendidos * (1 - porcentaje) - facturado;
-    sumario.cobrado += consigna.cobrado || 0;
-
-    sumario.existencias =
-      sumario.entregados - sumario.vendidos - sumario.devueltos;
-  });
+  const { comisionEstandar } = configs;
 
   const totales = Object.values(
     sumarioDistribuidores
@@ -109,6 +145,7 @@ const SumarioDistribuidores: React.FC = () => {
       vendidos: totales.vendidos + sumario.vendidos,
       devueltos: totales.devueltos + sumario.devueltos,
       existencias: totales.existencias + sumario.existencias,
+      cantFacturados: totales.cantFacturados + sumario.cantFacturados,
       facturado: totales.facturado + sumario.facturado,
       aCobrar: totales.aCobrar + sumario.aCobrar,
       cobrado: totales.cobrado + sumario.cobrado,
@@ -121,6 +158,7 @@ const SumarioDistribuidores: React.FC = () => {
       vendidos: 0,
       devueltos: 0,
       existencias: 0,
+      cantFacturados: 0,
       facturado: 0,
       aCobrar: 0,
       porcentaje: comisionEstandar,
@@ -136,6 +174,7 @@ const SumarioDistribuidores: React.FC = () => {
         <td align="right">{sumario.vendidos}</td>
         <td align="right">{sumario.devueltos}</td>
         <td align="right">{sumario.existencias}</td>
+        <td align="right">{sumario.cantFacturados}</td>
         <td
           align="right"
           style={
@@ -154,17 +193,7 @@ const SumarioDistribuidores: React.FC = () => {
   };
 
   return (
-    <Page
-      wide
-      title="Sumario Distribuidores"
-      heading="Sumario Distribuidores"
-      error={
-        errorDistribuidores?.message ||
-        errorGastos?.message ||
-        errorVentas?.message ||
-        errorConsigna?.message
-      }
-    >
+    <Page wide title="Sumario Distribuidores" heading="Sumario Distribuidores">
       <Table striped hover size="sm" responsive bordered>
         <thead>
           <tr>
@@ -173,6 +202,11 @@ const SumarioDistribuidores: React.FC = () => {
             <th>Vendidos</th>
             <th>Devueltos</th>
             <th>Existencias</th>
+            <th>
+              Cantidad
+              <br />
+              Facturados
+            </th>
             <th>Porcentaje</th>
             <th>Por cobrar</th>
             <th>Facturado</th>
@@ -188,6 +222,8 @@ const SumarioDistribuidores: React.FC = () => {
             <td align="right">{totales.vendidos}</td>
             <td align="right">{totales.devueltos}</td>
             <td align="right">{totales.existencias}</td>
+            <td align="right">{totales.cantFacturados}</td>
+
             <td></td>
             <td align="right">{formatCurrency(totales.aCobrar)}</td>
             <td align="right">{formatCurrency(totales.facturado)}</td>

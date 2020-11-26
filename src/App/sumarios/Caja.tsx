@@ -7,7 +7,7 @@ import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
 import { useGastos } from 'App/Gastos/common';
 import { useVentas } from 'App/ventas/common';
-import { useConsignas } from 'App/consigna/common';
+import { useFacturaciones } from 'App/facturacion/common';
 import configs from 'App/config/';
 import { ShowVendedor } from 'App/vendedores/gadgets';
 import { ShowDistribuidor } from 'App/distribuidor/gadgets';
@@ -94,19 +94,19 @@ const useAcumGastos = () => {
   }, [gastos, loading, error]);
 };
 
-const useAcumConsigna = () => {
-  const [consignas, loading, error] = useConsignas();
+const useAcumFacturacion = () => {
+  const [facturaciones, loading, error] = useFacturaciones();
 
   return useMemo(() => {
     if (loading) return;
 
     if (error) throw error;
-    if (typeof consignas === 'undefined')
-      throw new Error('Tabla de consignas está vacía');
+    if (typeof facturaciones === 'undefined')
+      throw new Error('Tabla de facturaciones está vacía');
     const factorPrecioSinIva = 1 + configs.IVALibros;
 
-    return consignas
-      .filter((consigna) => consigna.cobrado)
+    return facturaciones
+      .filter((facturacion) => facturacion.cobrado)
       .map(({ cobrado, nroFactura, fecha, idDistribuidor, cuenta }) => {
         const cobradoSinIVA = nroFactura
           ? cobrado / factorPrecioSinIva
@@ -125,18 +125,18 @@ const useAcumConsigna = () => {
           importeSinIVA: cobradoSinIVA,
         } as EntradaDeCaja;
       });
-  }, [consignas, loading, error]);
+  }, [facturaciones, loading, error]);
 };
 const SumarioCaja: React.FC = () => {
   const history = useHistory();
   const { year } = useParams<{ year: string }>();
   const acumVentas = useAcumVentas();
   const acumGastos = useAcumGastos();
-  const acumConsigna = useAcumConsigna();
+  const acumFacturacion = useAcumFacturacion();
 
   const { formatCurrency, formatDate } = useIntl();
 
-  if (!acumGastos || !acumVentas || !acumConsigna)
+  if (!acumGastos || !acumVentas || !acumFacturacion)
     return <Loading>Cargando datos</Loading>;
 
   let saldo = 0;
@@ -151,7 +151,7 @@ const SumarioCaja: React.FC = () => {
   );
 
   const entradas: EntradaDeCaja[] = acumGastos
-    .concat(acumVentas, acumConsigna)
+    .concat(acumVentas, acumFacturacion)
     .sort(
       (a: EntradaDeCaja, b: EntradaDeCaja) =>
         a.fecha.getTime() - b.fecha.getTime()
@@ -205,7 +205,7 @@ const SumarioCaja: React.FC = () => {
   };
 
   return (
-    <Page wide title="Sumario Distribuidores" heading="Sumario Distribuidores">
+    <Page wide title="Caja" heading="Caja">
       <>
         <Table bordered size="sm" style={{ width: '40%', marginLeft: '30%' }}>
           <tbody>
