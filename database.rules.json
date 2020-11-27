@@ -1,7 +1,7 @@
 {
   "rules": {
-    ".read": false,
-    ".write": false,
+    ".read": "auth.uid != null && (auth.token.admin == true || auth.token.operador == true || auth.token.ver == true)",
+    ".write": "auth.uid != null && (auth.token.admin == true || auth.token.operador == true || auth.token.ver == true)",
     "distribuidores": {
       ".indexOn": ["nombre"]
     }
