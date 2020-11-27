@@ -27,7 +27,6 @@ export const WithRole: React.FC<{
   useEffect(() => {
     if (authUser) {
       authUser.getIdTokenResult().then((data) => {
-        console.log(data.claims);
         setClaims(data.claims.aud === 'lacorazon-d66fd' ? data.claims : null);
       });
     }
@@ -37,20 +36,21 @@ export const WithRole: React.FC<{
   if (error && error.code !== 'PERMISSION_DENIED') {
     return <ErrorAlert error={error}>Verificando rol usuario</ErrorAlert>;
   }
-  console.log({ authUser, claims });
+
+  const noGo = () => (
+    <>
+      {alt}
+      {alerta && <Alert color="danger">{alerta}</Alert>}
+      {ofreceLogin && (
+        <Button color="primary" onClick={login}>
+          Login
+        </Button>
+      )}
+    </>
+  );
 
   if (!authUser) {
-    return (
-      <>
-        {alt}
-        {alerta && <Alert color="danger">{alerta}</Alert>}
-        {ofreceLogin && (
-          <Button color="primary" onClick={login}>
-            Login
-          </Button>
-        )}
-      </>
-    );
+    return noGo();
   }
 
   if (claims === null) {
@@ -67,17 +67,9 @@ export const WithRole: React.FC<{
       claims &&
       (Array.isArray(role) ? role : [role]).some((r) => claims[r]) === false
     )
-      return (
-        <>
-          {alt}
-          {alerta && <Alert color="danger">{alerta}</Alert>}
-          {ofreceLogin && (
-            <Button color="primary" onClick={login}>
-              Login
-            </Button>
-          )}
-        </>
-      );
+      return noGo();
   }
   return typeof children === 'function' ? children(authUser, claims) : children;
 };
+
+export default WithRole;
