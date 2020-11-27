@@ -1,21 +1,37 @@
-const admin = require('firebase-admin');
+const TEST = false;
 
-const serviceAccount = require('./lacorazon-d66fd-firebase-adminsdk-thy14-92e97d72c9.json');
+let db;
+let auth;
+if (TEST) {
+  db = {
+    ref: (path) => ({
+      set: (val) => Promise.resolve(console.log('set', path, val)),
+      push: (val) => Promise.resolve(console.log('push', path, val)),
+    }),
+  };
+  auth = {
+    setCustomUserClaims: (uid, claim) =>
+      Promise.resolve(console.log('claim for', uid, claim)),
+  };
+} else {
+  const admin = require('firebase-admin');
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: 'https://lacorazon-d66fd.firebaseio.com',
-});
+  const serviceAccount = require('./lacorazon-d66fd-firebase-adminsdk-thy14-92e97d72c9.json');
 
-const db = admin.database();
-const auth = admin.auth();
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: 'https://lacorazon-d66fd.firebaseio.com',
+  });
+  db = admin.database();
+  auth = admin.auth();
+}
 
 const data = require('./La Corazon.json');
 
 function filterEmpty(obj) {
   return Object.keys(obj).reduce((out, k) => {
     const val = obj[k];
-    return typeof val === 'undefined' || val === null
+    return typeof val === 'undefined' || val === null || val === ''
       ? out
       : {
           ...out,
@@ -75,11 +91,12 @@ function addVendedores() {
 
 const PVP = 12;
 const comisionEstandar = 0.35;
+
 function addConfig() {
   console.log('config');
   return db.ref('config').set({
-    PVP: 12,
-    comisionEstandar: 0.35,
+    PVP,
+    comisionEstandar,
     IVALibros: 0.04,
     comisionInterna: 0.25,
     IVAs: [0, 0.04, 0.1, 0.21],
@@ -165,47 +182,59 @@ function addEnConsigna() {
           cobrado,
           comentarios,
         }) => {
+          if (TEST)
+            console.log('-------------------', {
+              fecha,
+              codigo,
+              vendedor,
+              ctaRaed,
+              entregados,
+              vendidos,
+              devueltos,
+              facturado,
+              nroFactura,
+              porcentaje,
+              cobrado,
+              comentarios,
+            });
           const idDistribuidor = codigo.toLowerCase();
           const concepto = comentarios;
           if (porcentaje) {
             porcentajes[idDistribuidor] = porcentaje;
           }
-          if (entregados) {
-            return consigna.push(
-              filterEmpty({
-                idDistribuidor,
-                fecha,
-                concepto,
-                movimiento: 'entregados',
-                cantidad: entregados,
-              })
-            );
-          }
-          if (vendidos) {
-            return consigna.push(
-              filterEmpty({
-                idDistribuidor,
-                fecha,
-                concepto,
-                movimiento: 'vendidos',
-                cantidad: vendidos,
-              })
-            );
-          }
-          if (devueltos) {
-            return consigna.push(
-              filterEmpty({
-                idDistribuidor,
-                fecha,
-                concepto,
-                movimiento: 'devueltos',
-                cantidad: devueltos,
-              })
-            );
-          }
-          if (facturado) {
-            return consigna
-              .push(
+          return Promise.all([
+            entregados &&
+              consigna.push(
+                filterEmpty({
+                  idDistribuidor,
+                  fecha,
+                  concepto,
+                  movimiento: 'entregados',
+                  cantidad: entregados,
+                })
+              ),
+            vendidos &&
+              consigna.push(
+                filterEmpty({
+                  idDistribuidor,
+                  fecha,
+                  concepto,
+                  movimiento: 'vendidos',
+                  cantidad: vendidos,
+                })
+              ),
+            devueltos &&
+              consigna.push(
+                filterEmpty({
+                  idDistribuidor,
+                  fecha,
+                  concepto,
+                  movimiento: 'devueltos',
+                  cantidad: devueltos,
+                })
+              ),
+            facturado &&
+              consigna.push(
                 filterEmpty({
                   idDistribuidor,
                   fecha,
@@ -217,34 +246,26 @@ function addEnConsigna() {
                       PVP
                   ),
                 })
-              )
-              .then(() =>
-                facturas.push(
-                  filterEmpty({
-                    idDistribuidor,
-                    fecha,
-                    concepto,
-                    idVendedor: vendedor ? vendedor.toLowerCase() : null,
-                    porcentaje: porcentajes[idDistribuidor] || comisionEstandar,
-                    nroFactura,
-                    cobrado,
-                    cuenta: ctaRaed ? 'ctaRaed' : 'efvoRoxy',
-                  })
-                )
-              );
-          }
-          return facturas.push(
-            filterEmpty({
-              idDistribuidor,
-              fecha,
-              concepto,
-              idVendedor: vendedor ? vendedor.toLowerCase() : null,
-              porcentaje: porcentajes[idDistribuidor] || comisionEstandar,
-              nroFactura,
-              cobrado,
-              cuenta: ctaRaed ? 'ctaRaed' : 'efvoRoxy',
-            })
-          );
+              ),
+
+            (porcentaje || facturado || cobrado) &&
+              facturas.push(
+                filterEmpty({
+                  idDistribuidor,
+                  fecha,
+                  concepto,
+                  idVendedor: vendedor ? vendedor.toLowerCase() : null,
+                  porcentaje:
+                    porcentaje ||
+                    porcentajes[idDistribuidor] ||
+                    comisionEstandar,
+                  nroFactura,
+                  facturado,
+                  cobrado,
+                  cuenta: ctaRaed ? 'ctaRaed' : 'efvoRoxy',
+                })
+              ),
+          ]);
         }
       )
   );
@@ -265,7 +286,16 @@ function addSalidas() {
       .sort(byFecha)
       .map(({ comision, ctaRaed, reintegro, pagoiva, iva, ...salida }) => {
         const cuenta = ctaRaed ? 'ctaRaed' : 'efvoRoxy';
-
+        if ((reintegro && 1) + (pagoiva && 1) + (comision && 1) > 1) {
+          console.error('demasiadas operaciones', {
+            comision,
+            ctaRaed,
+            reintegro,
+            pagoiva,
+            iva,
+            ...salida,
+          });
+        }
         if (reintegro)
           return reintegros.push({
             ...salida,
