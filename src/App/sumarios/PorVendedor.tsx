@@ -2,7 +2,6 @@ import React, { useMemo } from 'react';
 
 import { Table } from 'reactstrap';
 import Page from 'Components/Page';
-import { Loading } from 'Components/Modals';
 import { useVendedores } from 'App/vendedores/common';
 import { useComisiones } from 'App/comisiones/common';
 import { useVentas } from 'App/ventas/common';
@@ -11,23 +10,33 @@ import configs from 'App/config/';
 import { ShowVendedor } from 'App/vendedores/gadgets';
 import { useIntl } from 'Providers/Intl';
 
-type SumarioPorVendedor = {
+type Vendedor = {
   idVendedor: ID;
-  vendido: number;
-  regalado: number;
-  total: number;
-  precio: number;
-  comisionVD: number;
-  comisionEC: number;
+};
+type AcumComisionesPagadas = {
   comisionPagada: number;
-  promedio: number;
 };
 
-type TablaSumarioPorVendedor = Record<ID, SumarioPorVendedor>;
+type AcumVentas = {
+  total: number;
+  vendido: number;
+  regalado: number;
+  precio: number;
+  comisionVD: number;
+};
+
+type AcumFacturacion = {
+  comisionEC: number;
+};
+
+type SumarioPorVendedor = Vendedor &
+  AcumComisionesPagadas &
+  AcumVentas &
+  AcumFacturacion;
 
 const useInitVendedores = (): [
-  ventasVendedores?: TablaSumarioPorVendedor,
-  error?: any
+  vendedores?: Record<ID, Vendedor>,
+  error?: Error | string
 ] => {
   const [vendedores, loading, error] = useVendedores();
   return useMemo(() => {
@@ -35,21 +44,12 @@ const useInitVendedores = (): [
     if (loading) return [];
     if (typeof vendedores === 'undefined')
       return [undefined, 'Tabla de distribuidores está vacía'];
-    console.log('useInitVendedores');
     return [
-      vendedores.reduce<TablaSumarioPorVendedor>(
+      vendedores.reduce<Record<ID, Vendedor>>(
         (vvs, v) => ({
           ...vvs,
           [v.idVendedor]: {
             idVendedor: v.idVendedor,
-            vendido: 0,
-            regalado: 0,
-            total: 0,
-            precio: 0,
-            comisionVD: 0,
-            comisionEC: 0,
-            comisionPagada: 0,
-            promedio: 0,
           },
         }),
         {}
@@ -58,105 +58,169 @@ const useInitVendedores = (): [
   }, [vendedores, loading, error]);
 };
 
-const useAcumComisiones = (ventasVendedores?: TablaSumarioPorVendedor) => {
+const useAcumComisionesPagadas = (): [
+  comisionPagada?: Record<ID, AcumComisionesPagadas>,
+  error?: Error | string
+] => {
   const [comisiones, loading, error] = useComisiones();
   return useMemo(() => {
-    if (typeof ventasVendedores === 'undefined') return;
-    if (error) return error;
-    if (loading) return;
+    if (error) return [undefined, error];
+    if (loading) return [];
     if (typeof comisiones === 'undefined')
-      return 'Tabla de comisiones está vacía';
-    console.log('useAcumComisiones');
-    comisiones.forEach((comision) => {
-      if (comision.idVendedor) {
-        ventasVendedores[comision.idVendedor].comisionPagada +=
-          comision.importe;
-      }
-    });
-  }, [comisiones, loading, error, ventasVendedores]);
+      return [undefined, 'Tabla de comisiones está vacía'];
+    return [
+      comisiones.reduce<Record<ID, AcumComisionesPagadas>>(
+        (comisiones, { idVendedor, importe }) => {
+          const pagadas = comisiones[idVendedor]?.comisionPagada || 0;
+          return {
+            ...comisiones,
+            [idVendedor]: { comisionPagada: pagadas + importe },
+          };
+        },
+        {}
+      ),
+    ];
+  }, [comisiones, loading, error]);
 };
 
-const useAcumVentas = (ventasVendedores?: TablaSumarioPorVendedor) => {
+const useAcumVentas = (): [
+  ventas?: Record<ID, AcumVentas>,
+  error?: Error | string
+] => {
   const [ventas, loading, error] = useVentas();
   return useMemo(() => {
-    if (typeof ventasVendedores === 'undefined') return;
-    if (error) return error;
-    if (loading) return;
-    if (typeof ventas === 'undefined') return 'Tabla de comisiones está vacía';
+    if (error) return [undefined, error];
+    if (loading) return [];
+    if (typeof ventas === 'undefined')
+      return [undefined, 'Tabla de comisiones está vacía'];
     const { comisionInterna } = configs;
-    console.log('useAcumVentas');
-    ventas.forEach(({ idVendedor = '??', precioUnitario, cantidad }) => {
-      const acumVtasPorVendedor = ventasVendedores[idVendedor];
+    return [
+      ventas.reduce<Record<ID, AcumVentas>>(
+        (
+          acumVentas,
+          { idVendedor = '', precioUnitario, cantidad, ...rest }
+        ) => {
+          const acumVtasPorVendedor: AcumVentas = acumVentas[idVendedor] || {
+            total: 0,
+            vendido: 0,
+            regalado: 0,
+            precio: 0,
+            comisionVD: 0,
+          };
 
-      acumVtasPorVendedor.total += cantidad;
-      if (precioUnitario) {
-        acumVtasPorVendedor.vendido += cantidad;
-        acumVtasPorVendedor.precio += cantidad * precioUnitario;
-        acumVtasPorVendedor.comisionVD +=
-          cantidad * precioUnitario * comisionInterna;
-      } else {
-        acumVtasPorVendedor.regalado += cantidad;
-      }
-    });
-  }, [ventas, loading, error, ventasVendedores]);
+          acumVtasPorVendedor.total += cantidad;
+          if (precioUnitario) {
+            acumVtasPorVendedor.vendido += cantidad;
+            acumVtasPorVendedor.precio += cantidad * precioUnitario;
+            acumVtasPorVendedor.comisionVD +=
+              cantidad * precioUnitario * comisionInterna;
+          } else {
+            acumVtasPorVendedor.regalado += cantidad;
+          }
+          return {
+            ...acumVentas,
+            [idVendedor]: acumVtasPorVendedor,
+          };
+        },
+        {}
+      ),
+    ];
+  }, [ventas, loading, error]);
 };
 
-const useAcumFacturacion = (ventasVendedores?: TablaSumarioPorVendedor) => {
+const useAcumFacturacion = (): [
+  facturacion?: Record<ID, AcumFacturacion>,
+  error?: Error | string
+] => {
   const [facturaciones, loading, error] = useFacturaciones();
   return useMemo(() => {
-    if (typeof ventasVendedores === 'undefined') return;
-    if (error) return error;
-    if (loading) return;
+    if (error) return [undefined, error];
+    if (loading) return [];
     if (typeof facturaciones === 'undefined')
-      return 'Tabla de facturaciones está vacía';
-    console.log('useAcumFacturacion');
+      return [undefined, 'Tabla de facturaciones está vacía'];
     const { comisionInterna } = configs;
-    facturaciones
-      .filter(
-        (facturacion) => facturacion.facturado > 0 && facturacion.idVendedor
-      )
-      .forEach(({ idVendedor, facturado }) => {
-        ventasVendedores[idVendedor].comisionEC += comisionInterna * facturado;
-      });
-  }, [facturaciones, loading, error, ventasVendedores]);
+    return [
+      facturaciones
+        .filter(
+          (facturacion) => facturacion.facturado && facturacion.idVendedor
+        )
+        .reduce<Record<ID, AcumFacturacion>>(
+          (acumFacturacion, { idVendedor = '', facturado }) => {
+            if (!facturado) return acumFacturacion;
+            const acumFacturado: AcumFacturacion = acumFacturacion[
+              idVendedor
+            ] || {
+              comisionEC: 0,
+            };
+            acumFacturado.comisionEC += comisionInterna * facturado;
+            return {
+              ...acumFacturacion,
+              [idVendedor]: acumFacturado,
+            };
+          },
+          {}
+        ),
+    ];
+  }, [facturaciones, loading, error]);
 };
 
 const SumarioVendedores: React.FC = () => {
-  const [ventasVendedores, error] = useInitVendedores();
-  const errors = [error];
-  errors.push(useAcumComisiones(ventasVendedores));
-  errors.push(useAcumVentas(ventasVendedores));
-  errors.push(useAcumFacturacion(ventasVendedores));
+  const [vendedores = {}, error1] = useInitVendedores();
+  const [acumComisionesPagadas = {}, error2] = useAcumComisionesPagadas();
+  const [acumVentas = {}, error3] = useAcumVentas();
+  const [acumFacturacion = {}, error4] = useAcumFacturacion();
   const { formatCurrency } = useIntl();
 
-  if (typeof ventasVendedores === 'undefined')
-    return <Loading>Cargando Datos</Loading>;
+  const idVendedores = Object.keys(vendedores)
+    .concat(
+      Object.keys(acumComisionesPagadas),
+      Object.keys(acumVentas),
+      Object.keys(acumFacturacion)
+    )
+    .filter((value, index, self) => self.indexOf(value) === index)
+    .sort();
 
-  for (const v in ventasVendedores) {
-    var row = ventasVendedores[v];
-    if (row.vendido) {
-      row.promedio = row.precio / row.vendido;
-    }
-  }
+  const ventasVendedores = Object.values(
+    idVendedores.reduce<Record<ID, SumarioPorVendedor>>(
+      (sumario, idVendedor) => ({
+        ...sumario,
+        [idVendedor]: Object.assign(
+          {
+            vendido: 0,
+            regalado: 0,
+            total: 0,
+            precio: 0,
+            comisionVD: 0,
+            comisionEC: 0,
+            comisionPagada: 0,
+          },
+          vendedores[idVendedor],
+          acumComisionesPagadas[idVendedor],
+          acumVentas[idVendedor],
+          acumFacturacion[idVendedor]
+        ),
+      }),
+      {}
+    )
+  );
 
-  const totales = Object.values(ventasVendedores).reduce<SumarioPorVendedor>(
+  const totales = ventasVendedores.reduce<{
+    vendido: number;
+    regalado: number;
+    total: number;
+    precio: number;
+  }>(
     (totales, sumario) => ({
-      ...totales,
       vendido: totales.vendido + sumario.vendido,
       regalado: totales.regalado + sumario.regalado,
       total: totales.total + sumario.total,
       precio: totales.precio + sumario.precio,
     }),
     {
-      idVendedor: '',
       vendido: 0,
       regalado: 0,
       total: 0,
       precio: 0,
-      comisionVD: 0,
-      comisionEC: 0,
-      comisionPagada: 0,
-      promedio: 0,
     }
   );
 
@@ -171,7 +235,9 @@ const SumarioVendedores: React.FC = () => {
         <td align="right">{sumario.regalado}</td>
         <td align="right">{sumario.total}</td>
         <td align="right">{formatCurrency(sumario.precio)}</td>
-        <td align="right">{formatCurrency(sumario.promedio)}</td>
+        <td align="right">
+          {sumario.vendido && formatCurrency(sumario.precio / sumario.vendido)}
+        </td>
         <td align="right">
           {idVendedor === 'rora' ? '' : formatCurrency(sumario.comisionVD)}
         </td>
@@ -197,7 +263,7 @@ const SumarioVendedores: React.FC = () => {
       wide
       title="Sumario Vendedores"
       heading="Sumario Vendedores"
-      error={errors}
+      error={[error1, error2, error3, error4]}
     >
       <Table striped hover size="sm" responsive bordered>
         <thead>
@@ -219,7 +285,7 @@ const SumarioVendedores: React.FC = () => {
             <th>A Pagar</th>
           </tr>
         </thead>
-        <tbody>{Object.values(ventasVendedores).map(rowSumario)}</tbody>
+        <tbody>{ventasVendedores.map(rowSumario)}</tbody>
         <tbody style={{ borderTop: 'silver double' }}>
           <tr>
             <th>Totales</th>
