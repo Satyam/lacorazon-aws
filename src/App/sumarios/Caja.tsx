@@ -38,15 +38,19 @@ type EntradaDeCaja = {
   acumIVA?: number;
 };
 
-const useAcumVentas = (): [entradas?: EntradaDeCaja[], error?: any] => {
+const useAcumVentas = (): [
+  entradas: EntradaDeCaja[] | undefined,
+  loading: boolean,
+  error?: any
+] => {
   const [ventas, loading, error] = useVentas();
 
   return useMemo(() => {
-    if (loading) return [];
+    if (error) return [undefined, false, error];
+    if (loading) return [undefined, loading];
 
-    if (error) return [undefined, error];
     if (typeof ventas === 'undefined')
-      return [undefined, 'Tabla de ventas está vacía'];
+      return [undefined, false, 'Tabla de ventas está vacía'];
     const factorPrecioSinIva = 1 + configs.IVALibros;
 
     return [
@@ -67,19 +71,24 @@ const useAcumVentas = (): [entradas?: EntradaDeCaja[], error?: any] => {
             importeSinIVA: precioSinIVA,
           } as EntradaDeCaja;
         }),
+      false,
     ];
   }, [ventas, loading, error]);
 };
 
-const useAcumGastos = (): [entradas?: EntradaDeCaja[], error?: any] => {
+const useAcumGastos = (): [
+  entradas: EntradaDeCaja[] | undefined,
+  loading: boolean,
+  error?: any
+] => {
   const [gastos, loading, error] = useGastos();
 
   return useMemo(() => {
-    if (loading) return [];
+    if (error) return [undefined, false, error];
+    if (loading) return [undefined, loading];
 
-    if (error) return [undefined, error];
     if (typeof gastos === 'undefined')
-      return [undefined, 'Tabla de gastos está vacía'];
+      return [undefined, false, 'Tabla de gastos está vacía'];
     return [
       gastos.map(({ importe, iva = 0, ...rest }) => {
         var importeSinIVA = importe / (1 + iva);
@@ -94,19 +103,23 @@ const useAcumGastos = (): [entradas?: EntradaDeCaja[], error?: any] => {
           ...rest,
         } as EntradaDeCaja;
       }),
+      false,
     ];
   }, [gastos, loading, error]);
 };
 
-const useAcumFacturacion = (): [entradas?: EntradaDeCaja[], error?: any] => {
+const useAcumFacturacion = (): [
+  entradas: EntradaDeCaja[] | undefined,
+  loading: boolean,
+  error?: any
+] => {
   const [facturaciones, loading, error] = useFacturaciones();
 
   return useMemo(() => {
-    if (loading) return [];
-
-    if (error) return [undefined, error];
+    if (error) return [undefined, false, error];
+    if (loading) return [undefined, loading];
     if (typeof facturaciones === 'undefined')
-      return [undefined, 'Tabla de facturaciones está vacía'];
+      return [undefined, false, 'Tabla de facturaciones está vacía'];
     const factorPrecioSinIva = 1 + configs.IVALibros;
 
     return [
@@ -130,6 +143,7 @@ const useAcumFacturacion = (): [entradas?: EntradaDeCaja[], error?: any] => {
             importeSinIVA: cobradoSinIVA,
           } as EntradaDeCaja;
         }),
+      false,
     ];
   }, [facturaciones, loading, error]);
 };
@@ -137,9 +151,9 @@ const useAcumFacturacion = (): [entradas?: EntradaDeCaja[], error?: any] => {
 const SumarioCaja: React.FC = () => {
   const history = useHistory();
   const { year } = useParams<{ year: string }>();
-  const [acumVentas, errVentas] = useAcumVentas();
-  const [acumGastos, errGastos] = useAcumGastos();
-  const [acumFacturacion, errFacturacion] = useAcumFacturacion();
+  const [acumVentas, loading1, errVentas] = useAcumVentas();
+  const [acumGastos, loading2, errGastos] = useAcumGastos();
+  const [acumFacturacion, loading3, errFacturacion] = useAcumFacturacion();
 
   const { formatCurrency, formatDate } = useIntl();
 
@@ -222,7 +236,13 @@ const SumarioCaja: React.FC = () => {
   };
 
   return (
-    <Page wide title="Caja" heading="Caja">
+    <Page
+      wide
+      title="Caja"
+      heading="Caja"
+      loading={loading1 || loading2 || loading3}
+      loadingMsg="Cargando datos"
+    >
       <>
         <Table bordered size="sm" style={{ width: '40%', marginLeft: '30%' }}>
           <tbody>

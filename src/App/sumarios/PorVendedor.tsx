@@ -35,15 +35,16 @@ type SumarioPorVendedor = Vendedor &
   AcumFacturacion;
 
 const useInitVendedores = (): [
-  vendedores?: Record<ID, Vendedor>,
+  vendedores: Record<ID, Vendedor> | undefined,
+  loading: boolean,
   error?: Error | string
 ] => {
   const [vendedores, loading, error] = useVendedores();
   return useMemo(() => {
-    if (error) return [undefined, error];
-    if (loading) return [];
+    if (error) return [undefined, false, error];
+    if (loading) return [undefined, loading];
     if (typeof vendedores === 'undefined')
-      return [undefined, 'Tabla de distribuidores está vacía'];
+      return [undefined, false, 'Tabla de distribuidores está vacía'];
     return [
       vendedores.reduce<Record<ID, Vendedor>>(
         (vvs, v) => ({
@@ -54,20 +55,22 @@ const useInitVendedores = (): [
         }),
         {}
       ),
+      false,
     ];
   }, [vendedores, loading, error]);
 };
 
 const useAcumComisionesPagadas = (): [
-  comisionPagada?: Record<ID, AcumComisionesPagadas>,
+  comisionPagada: Record<ID, AcumComisionesPagadas> | undefined,
+  loading: boolean,
   error?: Error | string
 ] => {
   const [comisiones, loading, error] = useComisiones();
   return useMemo(() => {
-    if (error) return [undefined, error];
-    if (loading) return [];
+    if (error) return [undefined, false, error];
+    if (loading) return [undefined, loading];
     if (typeof comisiones === 'undefined')
-      return [undefined, 'Tabla de comisiones está vacía'];
+      return [undefined, false, 'Tabla de comisiones está vacía'];
     return [
       comisiones.reduce<Record<ID, AcumComisionesPagadas>>(
         (comisiones, { idVendedor, importe }) => {
@@ -79,20 +82,22 @@ const useAcumComisionesPagadas = (): [
         },
         {}
       ),
+      false,
     ];
   }, [comisiones, loading, error]);
 };
 
 const useAcumVentas = (): [
-  ventas?: Record<ID, AcumVentas>,
+  ventas: Record<ID, AcumVentas> | undefined,
+  loading: boolean,
   error?: Error | string
 ] => {
   const [ventas, loading, error] = useVentas();
   return useMemo(() => {
-    if (error) return [undefined, error];
-    if (loading) return [];
+    if (error) return [undefined, false, error];
+    if (loading) return [undefined, false];
     if (typeof ventas === 'undefined')
-      return [undefined, 'Tabla de comisiones está vacía'];
+      return [undefined, false, 'Tabla de comisiones está vacía'];
     const { comisionInterna } = configs;
     return [
       ventas.reduce<Record<ID, AcumVentas>>(
@@ -124,20 +129,22 @@ const useAcumVentas = (): [
         },
         {}
       ),
+      false,
     ];
   }, [ventas, loading, error]);
 };
 
 const useAcumFacturacion = (): [
-  facturacion?: Record<ID, AcumFacturacion>,
+  facturacion: Record<ID, AcumFacturacion> | undefined,
+  loading: boolean,
   error?: Error | string
 ] => {
   const [facturaciones, loading, error] = useFacturaciones();
   return useMemo(() => {
-    if (error) return [undefined, error];
-    if (loading) return [];
+    if (error) return [undefined, false, error];
+    if (loading) return [undefined, loading];
     if (typeof facturaciones === 'undefined')
-      return [undefined, 'Tabla de facturaciones está vacía'];
+      return [undefined, false, 'Tabla de facturaciones está vacía'];
     const { comisionInterna } = configs;
     return [
       facturaciones
@@ -160,16 +167,31 @@ const useAcumFacturacion = (): [
           },
           {}
         ),
+      false,
     ];
   }, [facturaciones, loading, error]);
 };
 
 const SumarioVendedores: React.FC = () => {
-  const [vendedores = {}, error1] = useInitVendedores();
-  const [acumComisionesPagadas = {}, error2] = useAcumComisionesPagadas();
-  const [acumVentas = {}, error3] = useAcumVentas();
-  const [acumFacturacion = {}, error4] = useAcumFacturacion();
+  const [vendedores = {}, loading1, error1] = useInitVendedores();
+  const [
+    acumComisionesPagadas = {},
+    loading2,
+    error2,
+  ] = useAcumComisionesPagadas();
+  const [acumVentas = {}, loading3, error3] = useAcumVentas();
+  const [acumFacturacion = {}, loading4, error4] = useAcumFacturacion();
   const { formatCurrency } = useIntl();
+
+  if (error1 || error2 || error3 || error4)
+    return (
+      <Page
+        wide
+        title="Sumario Vendedores"
+        heading="Sumario Vendedores"
+        error={[error1, error2, error3, error4]}
+      ></Page>
+    );
 
   const idVendedores = Object.keys(vendedores)
     .concat(
@@ -263,7 +285,8 @@ const SumarioVendedores: React.FC = () => {
       wide
       title="Sumario Vendedores"
       heading="Sumario Vendedores"
-      error={[error1, error2, error3, error4]}
+      loading={loading1 || loading2 || loading3 || loading4}
+      loadingMsg="Cargando datos"
     >
       <Table striped hover size="sm" responsive bordered>
         <thead>

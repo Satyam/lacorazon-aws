@@ -35,16 +35,17 @@ type SumarioPorDistribuidor = Distribuidor &
   };
 
 const useInitDistribuidores = (): [
-  distribuidores?: Record<ID, Distribuidor>,
+  distribuidores: Record<ID, Distribuidor> | undefined,
+  loading: boolean,
   error?: Error | string
 ] => {
   const [distribuidores, loading, error] = useDistribuidores();
 
   return useMemo(() => {
-    if (error) return [undefined, error];
-    if (loading) return [];
+    if (error) return [undefined, false, error];
+    if (loading) return [undefined, loading];
     if (typeof distribuidores === 'undefined')
-      return [undefined, 'Tabla de distribuidores está vacía'];
+      return [undefined, false, 'Tabla de distribuidores está vacía'];
     return [
       distribuidores.reduce<Record<ID, Distribuidor>>(
         (vvs, v) => ({
@@ -56,20 +57,22 @@ const useInitDistribuidores = (): [
         }),
         {}
       ),
+      false,
     ];
   }, [distribuidores, loading, error]);
 };
 
 const useAcumConsigna = (): [
-  acumConsigna?: Record<ID, AcumConsigna>,
+  acumConsigna: Record<ID, AcumConsigna> | undefined,
+  loading: boolean,
   error?: Error | string
 ] => {
   const [consignas, loading, error] = useConsignas();
   return useMemo(() => {
-    if (error) return [undefined, error];
-    if (loading) return [];
+    if (error) return [undefined, false, error];
+    if (loading) return [undefined, loading];
     if (typeof consignas === 'undefined')
-      return [undefined, 'Tabla de consignas está vacía'];
+      return [undefined, true, 'Tabla de consignas está vacía'];
     return [
       consignas.reduce<Record<ID, AcumConsigna>>(
         (acum, { idDistribuidor, cantidad, movimiento }) => {
@@ -105,20 +108,22 @@ const useAcumConsigna = (): [
         },
         {}
       ),
+      false,
     ];
   }, [consignas, loading, error]);
 };
 
 const useAcumFacturacion = (): [
-  comisionPagada?: Record<ID, AcumFacturacion>,
+  comisionPagada: Record<ID, AcumFacturacion> | undefined,
+  loading: boolean,
   error?: Error | string
 ] => {
   const [facturaciones, loading, error] = useFacturaciones();
   return useMemo(() => {
-    if (error) return [undefined, error];
-    if (loading) return [];
+    if (error) return [undefined, false, error];
+    if (loading) return [undefined, loading];
     if (typeof facturaciones === 'undefined')
-      return [undefined, 'Tabla de facturaciones está vacía'];
+      return [undefined, true, 'Tabla de facturaciones está vacía'];
     const { comisionEstandar } = configs;
     const porcentajes: Record<ID, number> = {};
 
@@ -144,16 +149,27 @@ const useAcumFacturacion = (): [
         },
         {}
       ),
+      false,
     ];
   }, [facturaciones, loading, error]);
 };
 
 const SumarioDistribuidores: React.FC = () => {
-  const [distribuidores = {}, error1] = useInitDistribuidores();
-  const [acumConsigna = {}, error2] = useAcumConsigna();
-  const [acumFacturacion = {}, error3] = useAcumFacturacion();
+  const [distribuidores = {}, loading1, error1] = useInitDistribuidores();
+  const [acumConsigna = {}, loading2, error2] = useAcumConsigna();
+  const [acumFacturacion = {}, loading3, error3] = useAcumFacturacion();
 
   const { formatCurrency } = useIntl();
+
+  if (error1 || error2 || error3)
+    return (
+      <Page
+        wide
+        title="Sumario Distribuidores"
+        heading="Sumario Distribuidores"
+        error={[error1, error2, error3]}
+      ></Page>
+    );
 
   const { PVP, comisionEstandar } = configs;
 
@@ -267,7 +283,8 @@ const SumarioDistribuidores: React.FC = () => {
       wide
       title="Sumario Distribuidores"
       heading="Sumario Distribuidores"
-      error={[error1, error2, error3]}
+      loading={loading1 || loading2 || loading3}
+      loadingMsg="Cargando datos"
     >
       <Table striped hover size="sm" responsive bordered>
         <thead>
