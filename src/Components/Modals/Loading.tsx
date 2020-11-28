@@ -1,13 +1,15 @@
 import React from 'react';
 import icon from './loading.gif';
-import { Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, ModalHeaderProps } from 'reactstrap';
 import styles from './styles.module.css';
 
-const Loading: React.FC<{
-  title?: string;
-  noIcon?: boolean;
-  isOpen?: boolean;
-}> = ({
+const Loading: React.FC<
+  {
+    title?: string;
+    noIcon?: boolean;
+    isOpen?: boolean;
+  } & ModalHeaderProps
+> = ({
   title = 'Cargando ....',
   children,
   noIcon,
