@@ -2,30 +2,42 @@ import React, { useMemo } from 'react';
 
 import { Table } from 'reactstrap';
 import Page from 'Components/Page';
-import { Loading } from 'Components/Modals';
 import { useDistribuidores } from 'App/distribuidor/common';
 import { useConsignas } from 'App/consigna/common';
 import { useFacturaciones } from 'App/facturacion/common';
 import configs from 'App/config/';
 import { useIntl } from 'Providers/Intl';
 
-type SumarioPorDistribuidor = {
+type Distribuidor = {
   idDistribuidor: ID;
   nombre: string;
+};
+
+type AcumConsigna = {
   entregados: number;
   vendidos: number;
   devueltos: number;
   cantFacturados: number;
   existencias: number;
+};
+
+type AcumFacturacion = {
   facturado: number;
-  aCobrar: number;
   porcentaje: number;
   cobrado: number;
 };
 
-type TablaSumario = Record<ID, SumarioPorDistribuidor>;
+type SumarioPorDistribuidor = Distribuidor &
+  AcumConsigna &
+  AcumFacturacion & {
+    porFacturar: number;
+    porCobrar: number;
+  };
 
-const useInitSumario = (): [ventasVendedores?: TablaSumario, error?: any] => {
+const useInitDistribuidores = (): [
+  distribuidores?: Record<ID, Distribuidor>,
+  error?: Error | string
+] => {
   const [distribuidores, loading, error] = useDistribuidores();
 
   return useMemo(() => {
@@ -33,24 +45,13 @@ const useInitSumario = (): [ventasVendedores?: TablaSumario, error?: any] => {
     if (loading) return [];
     if (typeof distribuidores === 'undefined')
       return [undefined, 'Tabla de distribuidores está vacía'];
-    const { comisionEstandar } = configs;
     return [
-      distribuidores.reduce<TablaSumario>(
+      distribuidores.reduce<Record<ID, Distribuidor>>(
         (vvs, v) => ({
           ...vvs,
           [v.idDistribuidor]: {
             idDistribuidor: v.idDistribuidor,
             nombre: v.nombre,
-
-            entregados: 0,
-            vendidos: 0,
-            devueltos: 0,
-            cantFacturados: 0,
-            existencias: 0,
-            facturado: 0,
-            aCobrar: 0,
-            porcentaje: comisionEstandar,
-            cobrado: 0,
           },
         }),
         {}
@@ -59,93 +60,152 @@ const useInitSumario = (): [ventasVendedores?: TablaSumario, error?: any] => {
   }, [distribuidores, loading, error]);
 };
 
-const useAcumConsigna = (sumarioDistribuidores?: TablaSumario) => {
+const useAcumConsigna = (): [
+  acumConsigna?: Record<ID, AcumConsigna>,
+  error?: Error | string
+] => {
   const [consignas, loading, error] = useConsignas();
   return useMemo(() => {
-    if (typeof sumarioDistribuidores === 'undefined') return;
-    if (error) return error;
-    if (loading) return;
+    if (error) return [undefined, error];
+    if (loading) return [];
     if (typeof consignas === 'undefined')
-      return 'Tabla de consignas está vacía';
-    consignas.forEach(({ idDistribuidor, ...consigna }) => {
-      const sumario = sumarioDistribuidores[idDistribuidor];
-      if (!sumario)
-        throw new Error(
-          `Código de Distribuidor "${idDistribuidor}" desconocido`
-        );
-
-      switch (consigna.movimiento) {
-        case 'entregados':
-          sumario.entregados += consigna.cantidad;
-          break;
-        case 'vendidos':
-          sumario.vendidos += consigna.cantidad;
-          break;
-        case 'devueltos':
-          sumario.devueltos += consigna.cantidad;
-          break;
-        case 'facturados':
-          sumario.cantFacturados += consigna.cantidad;
-          break;
-        default:
-          throw new Error(
-            `Movimiento desconocido en consigna: ${consigna.movimiento}`
-          );
-      }
-      sumario.existencias =
-        sumario.entregados - sumario.vendidos - sumario.devueltos;
-    });
-  }, [consignas, loading, error, sumarioDistribuidores]);
+      return [undefined, 'Tabla de consignas está vacía'];
+    return [
+      consignas.reduce<Record<ID, AcumConsigna>>(
+        (acum, { idDistribuidor, cantidad, movimiento }) => {
+          const sumario: AcumConsigna = acum[idDistribuidor] || {
+            entregados: 0,
+            vendidos: 0,
+            devueltos: 0,
+            cantFacturados: 0,
+            existencias: 0,
+          };
+          switch (movimiento) {
+            case 'entregados':
+              sumario.entregados += cantidad;
+              break;
+            case 'vendidos':
+              sumario.vendidos += cantidad;
+              break;
+            case 'devueltos':
+              sumario.devueltos += cantidad;
+              break;
+            case 'facturados':
+              sumario.cantFacturados += cantidad;
+              break;
+            default:
+              break;
+          }
+          sumario.existencias =
+            sumario.entregados - sumario.vendidos - sumario.devueltos;
+          return {
+            ...acum,
+            [idDistribuidor]: sumario,
+          };
+        },
+        {}
+      ),
+    ];
+  }, [consignas, loading, error]);
 };
 
-const useAcumFacturacion = (sumarioDistribuidores?: TablaSumario) => {
+const useAcumFacturacion = (): [
+  comisionPagada?: Record<ID, AcumFacturacion>,
+  error?: Error | string
+] => {
   const [facturaciones, loading, error] = useFacturaciones();
   return useMemo(() => {
-    if (typeof sumarioDistribuidores === 'undefined') return;
-    if (error) return error;
-    if (loading) return;
+    if (error) return [undefined, error];
+    if (loading) return [];
     if (typeof facturaciones === 'undefined')
-      return 'Tabla de facturaciones está vacía';
-    const { PVP, comisionEstandar } = configs;
+      return [undefined, 'Tabla de facturaciones está vacía'];
+    const { comisionEstandar } = configs;
+    const porcentajes: Record<ID, number> = {};
 
-    facturaciones.forEach(({ idDistribuidor, ...facturacion }) => {
-      const sumario = sumarioDistribuidores[idDistribuidor];
-      if (!sumario)
-        throw new Error(
-          `Código de Distribuidor "${idDistribuidor}" desconocido`
-        );
+    return [
+      facturaciones.reduce<Record<ID, AcumFacturacion>>(
+        (acum, { idDistribuidor, porcentaje, facturado = 0, cobrado = 0 }) => {
+          const sumario: AcumFacturacion = acum[idDistribuidor] || {
+            facturado: 0,
 
-      let porcentaje = facturacion.porcentaje;
-      if (typeof porcentaje === 'undefined')
-        porcentaje = sumario.porcentaje || comisionEstandar;
-      else sumario.porcentaje = porcentaje;
-
-      const facturado = facturacion.facturado || 0;
-      sumario.facturado += facturado;
-
-      sumario.aCobrar = PVP * sumario.vendidos * (1 - porcentaje) - facturado;
-      sumario.cobrado += facturacion.cobrado || 0;
-    });
-  }, [facturaciones, loading, error, sumarioDistribuidores]);
+            porcentaje: 0,
+            cobrado: 0,
+          };
+          const pct =
+            porcentaje || porcentajes[idDistribuidor] || comisionEstandar;
+          porcentajes[idDistribuidor] = pct;
+          sumario.porcentaje = pct;
+          sumario.facturado += facturado;
+          sumario.cobrado += cobrado;
+          return {
+            ...acum,
+            [idDistribuidor]: sumario,
+          };
+        },
+        {}
+      ),
+    ];
+  }, [facturaciones, loading, error]);
 };
 
 const SumarioDistribuidores: React.FC = () => {
-  const [sumarioDistribuidores, error] = useInitSumario();
-  let errors = [error];
-  errors.push(useAcumConsigna(sumarioDistribuidores));
-  errors.push(useAcumFacturacion(sumarioDistribuidores));
+  const [distribuidores = {}, error1] = useInitDistribuidores();
+  const [acumConsigna = {}, error2] = useAcumConsigna();
+  const [acumFacturacion = {}, error3] = useAcumFacturacion();
 
   const { formatCurrency } = useIntl();
 
-  if (typeof sumarioDistribuidores === 'undefined')
-    return <Loading>Cargando Datos</Loading>;
-  if (Object.keys(sumarioDistribuidores).length === 0)
-    return <Loading>Cargando datos</Loading>;
-  const { comisionEstandar } = configs;
+  const { PVP, comisionEstandar } = configs;
 
-  const totales = Object.values(
-    sumarioDistribuidores
-  ).reduce<SumarioPorDistribuidor>(
+  const idDistribuidores = Object.keys(distribuidores)
+    .concat(Object.keys(acumConsigna), Object.keys(acumFacturacion))
+    .filter((value, index, self) => self.indexOf(value) === index);
+
+  const sumarioDistribuidores = Object.values(
+    idDistribuidores.reduce<Record<ID, SumarioPorDistribuidor>>(
+      (sumario, idDistribuidor) => {
+        const consigna = acumConsigna[idDistribuidor];
+        const facturacion = acumFacturacion[idDistribuidor];
+        // if (idDistribuidor === 'beatriz') {
+        //   console.log(consigna, facturacion);
+        // }
+        return {
+          ...sumario,
+          [idDistribuidor]: Object.assign(
+            {
+              idDistribuidor: '',
+              nombre: '',
+              entregados: 0,
+              vendidos: 0,
+              devueltos: 0,
+              cantFacturados: 0,
+              existencias: 0,
+              facturado: 0,
+              porcentaje: comisionEstandar,
+              cobrado: 0,
+            },
+            distribuidores[idDistribuidor],
+            consigna,
+            facturacion,
+            {
+              porFacturar:
+                consigna && facturacion
+                  ? PVP *
+                    (consigna.vendidos - consigna.cantFacturados) *
+                    (1 - facturacion.porcentaje)
+                  : 0,
+              porCobrar: facturacion
+                ? facturacion.facturado - facturacion.cobrado
+                : 0,
+            }
+          ),
+        };
+      },
+      {}
+    )
+  );
+
+  const totales = sumarioDistribuidores.reduce<SumarioPorDistribuidor>(
     (totales, sumario) => ({
       ...totales,
       entregados: totales.entregados + sumario.entregados,
@@ -154,8 +214,9 @@ const SumarioDistribuidores: React.FC = () => {
       existencias: totales.existencias + sumario.existencias,
       cantFacturados: totales.cantFacturados + sumario.cantFacturados,
       facturado: totales.facturado + sumario.facturado,
-      aCobrar: totales.aCobrar + sumario.aCobrar,
+      porFacturar: totales.porFacturar + sumario.porFacturar,
       cobrado: totales.cobrado + sumario.cobrado,
+      porCobrar: totales.porCobrar + sumario.porCobrar,
     }),
     {
       idDistribuidor: '',
@@ -167,9 +228,10 @@ const SumarioDistribuidores: React.FC = () => {
       existencias: 0,
       cantFacturados: 0,
       facturado: 0,
-      aCobrar: 0,
+      porFacturar: 0,
       porcentaje: comisionEstandar,
       cobrado: 0,
+      porCobrar: 0,
     }
   );
   const rowSumario = (sumario: SumarioPorDistribuidor) => {
@@ -192,9 +254,10 @@ const SumarioDistribuidores: React.FC = () => {
         >
           {sumario.porcentaje * 100}%
         </td>
-        <td align="right">{formatCurrency(sumario.aCobrar)}</td>
+        <td align="right">{formatCurrency(sumario.porFacturar)}</td>
         <td align="right">{formatCurrency(sumario.facturado)}</td>
         <td align="right">{formatCurrency(sumario.cobrado)}</td>
+        <td align="right">{formatCurrency(sumario.porCobrar)}</td>
       </tr>
     );
   };
@@ -204,25 +267,26 @@ const SumarioDistribuidores: React.FC = () => {
       wide
       title="Sumario Distribuidores"
       heading="Sumario Distribuidores"
-      error={errors}
+      error={[error1, error2, error3]}
     >
       <Table striped hover size="sm" responsive bordered>
         <thead>
           <tr>
-            <th>Distribuidor</th>
+            <th rowSpan={2}>Distribuidor</th>
+            <th colSpan={5}>Cantidades</th>
+            <th rowSpan={2}>Porcentaje</th>
+            <th colSpan={4}>Importes</th>
+          </tr>
+          <tr>
             <th>Entregados</th>
             <th>Vendidos</th>
             <th>Devueltos</th>
             <th>Existencias</th>
-            <th>
-              Cantidad
-              <br />
-              Facturados
-            </th>
-            <th>Porcentaje</th>
-            <th>Por cobrar</th>
+            <th>Facturados</th>
+            <th>Por Facturar</th>
             <th>Facturado</th>
             <th>Cobrado</th>
+            <th>Por Cobrar</th>
           </tr>
         </thead>
         <tbody
@@ -237,12 +301,21 @@ const SumarioDistribuidores: React.FC = () => {
             <td align="right">{totales.cantFacturados}</td>
 
             <td></td>
-            <td align="right">{formatCurrency(totales.aCobrar)}</td>
+            <td align="right">{formatCurrency(totales.porFacturar)}</td>
             <td align="right">{formatCurrency(totales.facturado)}</td>
             <td align="right">{formatCurrency(totales.cobrado)}</td>
+            <td align="right">{formatCurrency(totales.porCobrar)}</td>
           </tr>
         </tbody>
-        <tbody>{Object.values(sumarioDistribuidores).map(rowSumario)}</tbody>
+        <tbody>
+          {sumarioDistribuidores
+            .sort((a, b) => {
+              if (a.nombre < b.nombre) return -1;
+              if (a.nombre > b.nombre) return 1;
+              return 0;
+            })
+            .map(rowSumario)}
+        </tbody>
       </Table>
     </Page>
   );
