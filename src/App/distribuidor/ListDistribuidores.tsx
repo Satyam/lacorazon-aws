@@ -9,6 +9,8 @@ import {
 } from 'Components/Icons';
 import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
+import { ErrorAlert } from 'Components/ErrorAlert';
+
 import { useModals } from 'Providers/Modals';
 
 import { deleteDistribuidor, useDistribuidores } from './common';
@@ -20,7 +22,8 @@ export default function ListDistribuidores() {
 
   const { confirmDelete } = useModals();
 
-  if (loading) return <Loading>Cargando distribuidores</Loading>;
+  if (error)
+    return <ErrorAlert error={error}>Cargando distribuidores</ErrorAlert>;
 
   const onDelete: React.MouseEventHandler<HTMLButtonElement> = (ev) => {
     const { nombre, id } = ev.currentTarget.dataset;
@@ -85,8 +88,8 @@ export default function ListDistribuidores() {
           Agregar
         </ButtonIconAdd>
       }
-      error={error?.message}
     >
+      {loading && <Loading>Cargando distribuidores</Loading>}
       <Table striped hover size="sm" responsive bordered>
         <thead>
           <tr>

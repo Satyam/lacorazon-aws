@@ -17,6 +17,7 @@ import { DropdownCuentas } from 'App/cuentas/gadgets';
 
 import { ButtonIconAdd, ButtonIconDelete, ButtonSet } from 'Components/Icons';
 import { Loading } from 'Components/Modals';
+import { ErrorAlert } from 'Components/ErrorAlert';
 import Page from 'Components/Page';
 import { useIntl } from 'Providers/Intl';
 import { useModals } from 'Providers/Modals';
@@ -57,7 +58,7 @@ export default function EditVenta() {
 
   const { openLoading, closeLoading, confirmDelete } = useModals();
   const { formatDate } = useIntl();
-
+  if (error) return <ErrorAlert error={error}>Cargando ventas</ErrorAlert>;
   if (loading) return <Loading>Cargando venta</Loading>;
 
   const onSubmit: SubmitHandler<ShortVenta> = async (values) => {
@@ -87,7 +88,6 @@ export default function EditVenta() {
     <Page
       title={`Venta - ${venta ? venta.fecha : 'nuevo'}`}
       heading={`${idVenta ? 'Edit' : 'Add'} Venta`}
-      error={error?.name === 'DuplicateError' ? undefined : error?.message}
     >
       {idVenta && !venta ? (
         <Alert color="danger">La venta no existe o fue borrada</Alert>

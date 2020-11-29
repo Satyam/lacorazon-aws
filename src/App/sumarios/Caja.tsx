@@ -5,6 +5,8 @@ import { useParams, useHistory } from 'react-router-dom';
 
 import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
+import { ErrorAlert } from 'Components/ErrorAlert';
+
 import { useGastos } from 'App/Gastos/common';
 import { useVentas } from 'App/ventas/common';
 import { useFacturaciones } from 'App/facturacion/common';
@@ -151,24 +153,21 @@ const useAcumFacturacion = (): [
 const SumarioCaja: React.FC = () => {
   const history = useHistory();
   const { year } = useParams<{ year: string }>();
-  const [acumVentas, loading1, errVentas] = useAcumVentas();
-  const [acumGastos, loading2, errGastos] = useAcumGastos();
-  const [acumFacturacion, loading3, errFacturacion] = useAcumFacturacion();
+  const [acumVentas = [], loadingVentas, errorVentas] = useAcumVentas();
+  const [acumGastos = [], loadingGastos, errorGastos] = useAcumGastos();
+  const [
+    acumFacturacion = [],
+    loadingFacturacion,
+    errFacturacion,
+  ] = useAcumFacturacion();
 
   const { formatCurrency, formatDate } = useIntl();
-
-  if (errVentas || errGastos || errFacturacion)
-    return (
-      <Page
-        wide
-        title="Caja"
-        heading="Caja"
-        error={[errVentas, errGastos, errFacturacion]}
-      ></Page>
-    );
-
-  if (!acumGastos || !acumVentas || !acumFacturacion)
-    return <Loading>Cargando datos</Loading>;
+  if (errorVentas)
+    return <ErrorAlert error={errorVentas}>Cargando ventas</ErrorAlert>;
+  if (errorGastos)
+    return <ErrorAlert error={errorGastos}>Cargando gastos</ErrorAlert>;
+  if (errFacturacion)
+    return <ErrorAlert error={errFacturacion}>Cargando facturación</ErrorAlert>;
 
   let saldo = 0;
   let acumIVA = 0;
@@ -236,14 +235,12 @@ const SumarioCaja: React.FC = () => {
   };
 
   return (
-    <Page
-      wide
-      title="Caja"
-      heading="Caja"
-      loading={loading1 || loading2 || loading3}
-      loadingMsg="Cargando datos"
-    >
+    <Page wide title="Caja" heading="Caja">
       <>
+        {loadingGastos && <Loading>Cargando gastos</Loading>}
+        {loadingVentas && <Loading>Cargando ventas</Loading>}
+        {loadingFacturacion && <Loading>Cargando facturación</Loading>}
+
         <Table bordered size="sm" style={{ width: '40%', marginLeft: '30%' }}>
           <tbody>
             <tr

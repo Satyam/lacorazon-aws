@@ -18,8 +18,8 @@ import {
 
 import { useIntl } from 'Providers/Intl';
 import { Loading } from 'Components/Modals';
+import { ErrorAlert } from 'Components/ErrorAlert';
 import Page from 'Components/Page';
-import ErrorAlert from 'Components/ErrorAlert';
 import { useModals } from 'Providers/Modals';
 
 import { useGastos, deleteGasto } from './common';
@@ -34,8 +34,7 @@ const ListGastos: React.FC<{}> = () => {
 
   const { formatDate, formatCurrency } = useIntl();
   const { confirmDelete } = useModals();
-
-  if (loading) return <Loading>Cargando gastos</Loading>;
+  if (error) return <ErrorAlert error={error}>Cargando gastos</ErrorAlert>;
 
   if (error) return <ErrorAlert error={error}>Cargando gastos</ErrorAlert>;
   if (typeof gastos === 'undefined') return null;
@@ -113,13 +112,13 @@ const ListGastos: React.FC<{}> = () => {
     <Page
       title="Gastos"
       heading="Gastos"
-      error={error}
       action={
         <ButtonIconAdd outline onClick={onAdd}>
           Agregar
         </ButtonIconAdd>
       }
     >
+      {loading && <Loading>Cargando gastos</Loading>}
       <Nav tabs>
         {years.map((y) => (
           <NavItem key={y}>

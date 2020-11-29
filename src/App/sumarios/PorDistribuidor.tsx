@@ -2,6 +2,8 @@ import React, { useMemo } from 'react';
 
 import { Table } from 'reactstrap';
 import Page from 'Components/Page';
+import { Loading } from 'Components/Modals';
+import { ErrorAlert } from 'Components/ErrorAlert';
 import { useDistribuidores } from 'App/distribuidor/common';
 import { useConsignas } from 'App/consigna/common';
 import { useFacturaciones } from 'App/facturacion/common';
@@ -155,20 +157,31 @@ const useAcumFacturacion = (): [
 };
 
 const SumarioDistribuidores: React.FC = () => {
-  const [distribuidores = {}, loading1, error1] = useInitDistribuidores();
-  const [acumConsigna = {}, loading2, error2] = useAcumConsigna();
-  const [acumFacturacion = {}, loading3, error3] = useAcumFacturacion();
+  const [
+    distribuidores = {},
+    loadingDistribuidores,
+    errorDistribuidores,
+  ] = useInitDistribuidores();
+  const [acumConsigna = {}, loadingConsigna, errorConsigna] = useAcumConsigna();
+  const [
+    acumFacturacion = {},
+    loadingFacturacion,
+    errorFacturacion,
+  ] = useAcumFacturacion();
 
   const { formatCurrency } = useIntl();
 
-  if (error1 || error2 || error3)
+  if (errorDistribuidores)
     return (
-      <Page
-        wide
-        title="Sumario Distribuidores"
-        heading="Sumario Distribuidores"
-        error={[error1, error2, error3]}
-      ></Page>
+      <ErrorAlert error={errorDistribuidores}>
+        Cargando distribuidores
+      </ErrorAlert>
+    );
+  if (errorConsigna)
+    return <ErrorAlert error={errorConsigna}>Cargando consigna</ErrorAlert>;
+  if (errorFacturacion)
+    return (
+      <ErrorAlert error={errorFacturacion}>Cargando facturación</ErrorAlert>
     );
 
   const { PVP, comisionEstandar } = configs;
@@ -279,13 +292,10 @@ const SumarioDistribuidores: React.FC = () => {
   };
 
   return (
-    <Page
-      wide
-      title="Sumario Distribuidores"
-      heading="Sumario Distribuidores"
-      loading={loading1 || loading2 || loading3}
-      loadingMsg="Cargando datos"
-    >
+    <Page wide title="Sumario Distribuidores" heading="Sumario Distribuidores">
+      {loadingDistribuidores && <Loading>Cargando distribuidores</Loading>}
+      {loadingConsigna && <Loading>Cargando consigna</Loading>}
+      {loadingFacturacion && <Loading>Cargando facturación</Loading>}
       <Table striped hover size="sm" responsive bordered>
         <thead>
           <tr>

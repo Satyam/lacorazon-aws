@@ -11,6 +11,7 @@ import { TextField, SubmitButton } from 'Components/Form';
 import { ButtonIconAdd, ButtonIconDelete, ButtonSet } from 'Components/Icons';
 import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
+import { ErrorAlert } from 'Components/ErrorAlert';
 import { useModals } from 'Providers/Modals';
 
 import {
@@ -55,6 +56,8 @@ const EditDistribuidor: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [distribuidor]);
 
+  if (error)
+    return <ErrorAlert error={error}>Cargando distribuidor</ErrorAlert>;
   if (loading) {
     return <Loading>Cargando distribuidor</Loading>;
   }
@@ -115,7 +118,6 @@ const EditDistribuidor: React.FC = () => {
     <Page
       title={`Distribuidor - ${distribuidor ? distribuidor.nombre : 'nuevo'}`}
       heading={`${idDistribuidor ? 'Edit' : 'Add'} Distribuidor`}
-      error={error?.name === 'DuplicateError' ? undefined : error?.message}
     >
       {idDistribuidor && !distribuidor ? (
         <Alert color="danger">El distribuidor no existe o fue borrado</Alert>

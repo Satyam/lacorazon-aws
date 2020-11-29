@@ -2,6 +2,8 @@ import React, { useMemo } from 'react';
 
 import { Table } from 'reactstrap';
 import Page from 'Components/Page';
+import { Loading } from 'Components/Modals';
+import { ErrorAlert } from 'Components/ErrorAlert';
 import { useVendedores } from 'App/vendedores/common';
 import { useComisiones } from 'App/comisiones/common';
 import { useVentas } from 'App/ventas/common';
@@ -173,24 +175,33 @@ const useAcumFacturacion = (): [
 };
 
 const SumarioVendedores: React.FC = () => {
-  const [vendedores = {}, loading1, error1] = useInitVendedores();
+  const [
+    vendedores = {},
+    loadingVendedores,
+    errorVendedores,
+  ] = useInitVendedores();
   const [
     acumComisionesPagadas = {},
-    loading2,
-    error2,
+    loadingComisiones,
+    errorComisiones,
   ] = useAcumComisionesPagadas();
-  const [acumVentas = {}, loading3, error3] = useAcumVentas();
-  const [acumFacturacion = {}, loading4, error4] = useAcumFacturacion();
+  const [acumVentas = {}, loadingVentas, errorVentas] = useAcumVentas();
+  const [
+    acumFacturacion = {},
+    loadingFacturacion,
+    errorFacturacion,
+  ] = useAcumFacturacion();
   const { formatCurrency } = useIntl();
 
-  if (error1 || error2 || error3 || error4)
+  if (errorVendedores)
+    return <ErrorAlert error={errorVendedores}>Cargando vendedores</ErrorAlert>;
+  if (errorComisiones)
+    return <ErrorAlert error={errorComisiones}>Cargando comisiones</ErrorAlert>;
+  if (errorVentas)
+    return <ErrorAlert error={errorVentas}>Cargando ventas</ErrorAlert>;
+  if (errorFacturacion)
     return (
-      <Page
-        wide
-        title="Sumario Vendedores"
-        heading="Sumario Vendedores"
-        error={[error1, error2, error3, error4]}
-      ></Page>
+      <ErrorAlert error={errorFacturacion}>Cargando facturación</ErrorAlert>
     );
 
   const idVendedores = Object.keys(vendedores)
@@ -281,13 +292,11 @@ const SumarioVendedores: React.FC = () => {
   };
 
   return (
-    <Page
-      wide
-      title="Sumario Vendedores"
-      heading="Sumario Vendedores"
-      loading={loading1 || loading2 || loading3 || loading4}
-      loadingMsg="Cargando datos"
-    >
+    <Page wide title="Sumario Vendedores" heading="Sumario Vendedores">
+      {loadingVendedores && <Loading>Cargando vendedores</Loading>}
+      {loadingComisiones && <Loading>Cargando conmisiones</Loading>}
+      {loadingVentas && <Loading>Cargando ventas</Loading>}
+      {loadingFacturacion && <Loading>Cargando facturación</Loading>}
       <Table striped hover size="sm" responsive bordered>
         <thead>
           <tr>

@@ -6,6 +6,7 @@ import { LabeledVendedores } from 'App/vendedores/gadgets';
 import { LabeledCuentas } from 'App/cuentas/gadgets';
 import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
+import { ErrorAlert } from 'Components/ErrorAlert';
 import { Alert } from 'reactstrap';
 import { useIntl } from 'Providers/Intl';
 
@@ -16,15 +17,11 @@ export default function ShowVenta() {
   const [venta, loading, error] = useVenta(idVenta);
 
   const { formatDate, formatCurrency } = useIntl();
-
+  if (error) return <ErrorAlert error={error}>Cargando venta</ErrorAlert>;
   if (loading) return <Loading>Cargando venta</Loading>;
 
   return (
-    <Page
-      title={`Venta - ${venta ? venta.fecha : '??'}`}
-      heading={`Venta`}
-      error={error}
-    >
+    <Page title={`Venta - ${venta ? venta.fecha : '??'}`} heading={`Venta`}>
       {venta ? (
         <>
           <LabeledText label="Fecha">

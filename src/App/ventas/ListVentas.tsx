@@ -19,6 +19,7 @@ import {
 } from 'Components/Icons';
 import { useIntl } from 'Providers/Intl';
 import { Loading } from 'Components/Modals';
+import { ErrorAlert } from 'Components/ErrorAlert';
 import Page from 'Components/Page';
 import { useModals } from 'Providers/Modals';
 import { ShowVendedor } from 'App/vendedores/gadgets';
@@ -39,7 +40,7 @@ const ListVentas: React.FC<{
   const { formatDate, formatCurrency } = useIntl();
   const { confirmDelete } = useModals();
 
-  if (loading) return <Loading>Cargando ventas</Loading>;
+  if (error) return <ErrorAlert error={error}>Cargando ventas</ErrorAlert>;
 
   if (typeof ventas === 'undefined')
     return <Alert color="danger">Tabla de ventas está vacía</Alert>;
@@ -130,8 +131,8 @@ const ListVentas: React.FC<{
           Agregar
         </ButtonIconAdd>
       }
-      error={error}
     >
+      {loading && <Loading>Cargando ventas</Loading>}
       <Nav tabs>
         {years.map((y) => (
           <NavItem key={y}>
