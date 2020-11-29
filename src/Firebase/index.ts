@@ -24,6 +24,7 @@ export const logout = () => {
 };
 
 export const CLAVE_DUPLICADA = 'Clave Duplicada';
+export const FALTA_ORDER_BY = 'Para usar equalTo debe especificarse orderBy';
 
 export const dbTable = <
   ItemType extends Record<string, any>,
@@ -35,7 +36,10 @@ export const dbTable = <
   toDb: (item: Partial<ItemType>) => Partial<DbType> = (item) => item as DbType
 ): {
   useItem: (id: ID) => [ItemType | undefined, boolean, any];
-  useList: (sortField?: string) => [ItemType[] | undefined, boolean, any];
+  useList: (
+    sortField?: string,
+    equalTo?: any
+  ) => [ItemType[] | undefined, boolean, any];
   dbCreate: (newValues: Partial<ItemType>) => Promise<ID>;
   dbCreateWithKey: (id: ID, newValues: Partial<ItemType>) => Promise<void>;
   /**
@@ -71,11 +75,13 @@ export const dbTable = <
         return [undefined, loading, error];
       return [memoizedItem(item), loading, error];
     },
-    useList: (sortField) => {
-      const [list, loading, error] = useListVals<DbType>(
-        sortField ? db.ref(path).orderByChild(sortField) : db.ref(path),
-        { keyField }
-      );
+    useList: (sortField, equalTo) => {
+      if (typeof equalTo !== 'undefined' && typeof sortField === 'undefined')
+        throw new Error(FALTA_ORDER_BY);
+      let ref: firebase.database.Query = db.ref(path);
+      if (sortField) ref = ref.orderByChild(sortField);
+      if (equalTo) ref = ref.equalTo(equalTo);
+      const [list, loading, error] = useListVals<DbType>(ref, { keyField });
 
       if (loading || error) return [undefined, loading, error];
       if (typeof list === 'undefined')
