@@ -200,12 +200,15 @@ const SumarioCaja: React.FC = () => {
     });
 
   const years = [];
-  const minYear = entradas[0].fecha.getFullYear();
-  const maxYear = entradas[entradas.length - 1].fecha.getFullYear();
+  let minYear = 0;
+  let maxYear = 1;
+  if (entradas.length) {
+    minYear = entradas[0].fecha.getFullYear();
+    maxYear = entradas[entradas.length - 1].fecha.getFullYear();
+  }
   for (let y = minYear; y <= maxYear; y++) {
     years.push(y);
   }
-
   const activeYear = year ? parseInt(year, 10) : maxYear;
 
   const rowSumario = (sumario: EntradaDeCaja) => {
