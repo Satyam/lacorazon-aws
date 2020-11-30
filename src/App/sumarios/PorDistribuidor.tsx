@@ -126,7 +126,7 @@ const useAcumFacturacion = (): [
     if (loading) return [undefined, loading];
     if (typeof facturaciones === 'undefined')
       return [undefined, true, 'Tabla de facturaciones está vacía'];
-    const { comisionEstandar } = configs;
+    // const { comisionEstandar } = configs;
     const porcentajes: Record<ID, number> = {};
 
     return [
@@ -138,8 +138,7 @@ const useAcumFacturacion = (): [
             porcentaje: 0,
             cobrado: 0,
           };
-          const pct =
-            porcentaje || porcentajes[idDistribuidor] || comisionEstandar;
+          const pct = porcentaje || porcentajes[idDistribuidor]; // || comisionEstandar;
           porcentajes[idDistribuidor] = pct;
           sumario.porcentaje = pct;
           sumario.facturado += facturado;
@@ -195,6 +194,12 @@ const SumarioDistribuidores: React.FC = () => {
       (sumario, idDistribuidor) => {
         const consigna = acumConsigna[idDistribuidor];
         const facturacion = acumFacturacion[idDistribuidor];
+        const porFacturar =
+          consigna && facturacion
+            ? PVP *
+              (consigna.vendidos - consigna.cantFacturados) *
+              (1 - (facturacion.porcentaje || 0))
+            : 0;
         // if (idDistribuidor === 'beatriz') {
         //   console.log(consigna, facturacion);
         // }
@@ -210,21 +215,16 @@ const SumarioDistribuidores: React.FC = () => {
               cantFacturados: 0,
               existencias: 0,
               facturado: 0,
-              porcentaje: comisionEstandar,
+              porcentaje: 0, // comisionEstandar,
               cobrado: 0,
             },
             distribuidores[idDistribuidor],
             consigna,
             facturacion,
             {
-              porFacturar:
-                consigna && facturacion
-                  ? PVP *
-                    (consigna.vendidos - consigna.cantFacturados) *
-                    (1 - facturacion.porcentaje)
-                  : 0,
+              porFacturar,
               porCobrar: facturacion
-                ? facturacion.facturado - facturacion.cobrado
+                ? (facturacion.facturado || porFacturar) - facturacion.cobrado
                 : 0,
             }
           ),
@@ -258,7 +258,7 @@ const SumarioDistribuidores: React.FC = () => {
       cantFacturados: 0,
       facturado: 0,
       porFacturar: 0,
-      porcentaje: comisionEstandar,
+      porcentaje: 0, // comisionEstandar,
       cobrado: 0,
       porCobrar: 0,
     }
@@ -281,7 +281,7 @@ const SumarioDistribuidores: React.FC = () => {
               : {}
           }
         >
-          {sumario.porcentaje * 100}%
+          {sumario.porcentaje ? `${sumario.porcentaje * 100}%` : ''}
         </td>
         <td align="right">{formatCurrency(sumario.porFacturar)}</td>
         <td align="right">{formatCurrency(sumario.facturado)}</td>

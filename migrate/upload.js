@@ -91,12 +91,13 @@ function addVendedores() {
 
 const PVP = 12;
 const comisionEstandar = 0.35;
-
+const PrecioDescontado = 10;
 function addConfig() {
   console.log('config');
   return db.ref('config').set({
     PVP,
     comisionEstandar,
+    PrecioDescontado,
     IVALibros: 0.04,
     comisionInterna: 0.25,
     IVAs: [0, 0.04, 0.1, 0.21],
@@ -200,8 +201,35 @@ function addEnConsigna() {
           const idDistribuidor = codigo.toLowerCase();
           const concepto = comentarios;
           if (porcentaje) {
-            porcentajes[idDistribuidor] = porcentaje;
+            /* Ignorar SOLO el porcentaje en los siguientes registros:
+
+    {
+      "codigo": "Beatriz",
+      "fecha": "2018-11-01T23:00:00.000Z",
+      "vendedor": "Ro",
+      "entregados": 10,
+      "porcentaje": 0.1666
+    },
+
+        {
+      "codigo": "Carla Penna",
+      "fecha": "2019-03-19T23:00:00.000Z",
+      "vendedor": "Ro",
+      "entregados": 4,
+      "porcentaje": 0.17
+    },
+          */
+            if (
+              !(
+                (codigo === 'Beatriz' &&
+                  fecha === '2018-11-01T23:00:00.000Z') ||
+                (codigo === 'Carla Penna' &&
+                  fecha === '2019-03-19T23:00:00.000Z')
+              )
+            )
+              porcentajes[idDistribuidor] = porcentaje;
           }
+          const pct = porcentajes[idDistribuidor];
           return Promise.all([
             entregados &&
               consigna.push(
@@ -241,9 +269,9 @@ function addEnConsigna() {
                   concepto,
                   movimiento: 'facturados',
                   cantidad: Math.round(
-                    facturado /
-                      (1 - (porcentajes[idDistribuidor] || comisionEstandar)) /
-                      PVP
+                    pct
+                      ? facturado / (1 - pct) / PVP
+                      : facturado / PrecioDescontado
                   ),
                 })
               ),
@@ -255,10 +283,8 @@ function addEnConsigna() {
                   fecha,
                   concepto,
                   idVendedor: vendedor ? vendedor.toLowerCase() : null,
-                  porcentaje:
-                    porcentaje ||
-                    porcentajes[idDistribuidor] ||
-                    comisionEstandar,
+                  porcentaje: pct,
+                  // ||   comisionEstandar,
                   nroFactura,
                   facturado,
                   cobrado,
