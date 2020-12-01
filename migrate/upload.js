@@ -200,34 +200,18 @@ function addEnConsigna() {
             });
           const idDistribuidor = codigo.toLowerCase();
           const concepto = comentarios;
-          if (porcentaje) {
-            /* Ignorar SOLO el porcentaje en los siguientes registros:
-
-    {
-      "codigo": "Beatriz",
-      "fecha": "2018-11-01T23:00:00.000Z",
-      "vendedor": "Ro",
-      "entregados": 10,
-      "porcentaje": 0.1666
-    },
-
-        {
-      "codigo": "Carla Penna",
-      "fecha": "2019-03-19T23:00:00.000Z",
-      "vendedor": "Ro",
-      "entregados": 4,
-      "porcentaje": 0.17
-    },
-          */
-            if (
-              !(
-                (codigo === 'Beatriz' &&
-                  fecha === '2018-11-01T23:00:00.000Z') ||
-                (codigo === 'Carla Penna' &&
-                  fecha === '2019-03-19T23:00:00.000Z')
-              )
-            )
+          if (
+            (codigo === 'Alfamar' && fecha === '2018-03-20T23:00:00.000Z') ||
+            (codigo === 'Ansara' && fecha === '2018-03-11T23:00:00.000Z') ||
+            (codigo === 'Beatriz' && fecha === '2018-11-01T23:00:00.000Z') ||
+            (codigo === 'BioSitges' && fecha === '2018-07-16T22:00:00.000Z') ||
+            (codigo === 'Carla Penna' && fecha === '2019-03-19T23:00:00.000Z')
+          ) {
+            porcentajes[idDistribuidor] = PrecioDescontado;
+          } else {
+            if (porcentaje) {
               porcentajes[idDistribuidor] = porcentaje;
+            }
           }
           const pct = porcentajes[idDistribuidor];
           return Promise.all([
