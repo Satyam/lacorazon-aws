@@ -16,16 +16,31 @@ const Nav = () => (
         Gastos
       </NavLink>
     </NavItem>
-    <NavItem>
-      <NavLink tag={Link} to="/distribuidores">
+    {/*
+    --- Distribuidores */}
+    <UncontrolledDropdown nav inNavbar>
+      <DropdownToggle nav caret>
         Distribuidores
-      </NavLink>
-    </NavItem>
+      </DropdownToggle>
+      <DropdownMenu right>
+        <DropdownItem tag={Link} to="/distribuidores">
+          Listado
+        </DropdownItem>
+        <DropdownItem tag={Link} to="/sumario/porDistribuidor">
+          Sumario por distribuidor
+        </DropdownItem>
+        <DropdownItem tag={Link} to="/distribuidor/new">
+          Crear nuevo
+        </DropdownItem>
+      </DropdownMenu>
+    </UncontrolledDropdown>
     <NavItem>
       <NavLink tag={Link} to="/ventas">
         Ventas
       </NavLink>
     </NavItem>
+    {/*
+     ---Vendedores  */}
     <UncontrolledDropdown nav inNavbar>
       <DropdownToggle nav caret>
         Vendedores
