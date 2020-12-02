@@ -8,11 +8,6 @@ import './index.css';
 import App from 'App';
 import * as serviceWorker from './serviceWorker';
 
-// if (process.env.NODE_ENV !== 'production') {
-//   const whyDidYouRender = require('@welldone-software/why-did-you-render');
-//   whyDidYouRender(React);
-// }
-
 ReactDOM.render(
   <React.StrictMode>
     <App />
