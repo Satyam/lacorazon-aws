@@ -30,13 +30,13 @@ export const CONFLICTO_EN_UPDATE = 'Actualización cruzada en update';
 export class DbError<F> extends Error {
   path: string;
   operation: string;
-  field?: F;
+  field: F;
   value?: any;
   constructor(
     message: string,
     path: string,
     operation: string,
-    field?: F,
+    field: F,
     value?: any
   ) {
     super(message);
@@ -104,12 +104,7 @@ export const dbTable = <
     },
     useList: (sortField, equalTo) => {
       if (typeof equalTo !== 'undefined' && typeof sortField === 'undefined')
-        throw new DbError<keyof ItemType>(
-          FALTA_ORDER_BY,
-          path,
-          'useList',
-          sortField
-        );
+        throw new DbError(FALTA_ORDER_BY, path, 'useList', sortField);
       let ref: firebase.database.Query = db.ref(path);
       if (sortField) ref = ref.orderByChild(sortField);
       if (equalTo) ref = ref.equalTo(equalTo);
