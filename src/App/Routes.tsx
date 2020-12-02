@@ -17,6 +17,9 @@ import SumarioVendedores from 'App/sumarios/PorVendedor';
 import SumarioDistribuidores from 'App/sumarios/PorDistribuidor';
 import SumarioCaja from 'App/sumarios/Caja';
 import Profile from 'App/Profile';
+import ListVendedores from 'App/vendedores/ListVendedores';
+import ShowVendedor from 'App/vendedores/ShowVendedor';
+import EditVendedor from 'App/vendedores/EditVendedor';
 
 // import PrivateRoute from './PrivateRoute';
 /* Update:
@@ -76,6 +79,20 @@ const Routes = () => (
     <Route path="/sumario/caja/:year?">
       <SumarioCaja />
     </Route>
+    <Route path="/vendedores">
+      <ListVendedores />
+    </Route>
+    <Switch>
+      <Route path="/vendedor/new">
+        <EditVendedor />
+      </Route>
+      <Route path="/vendedor/edit/:idVendedor">
+        <EditVendedor />
+      </Route>
+      <Route path="/vendedor/:idVendedor">
+        <ShowVendedor />
+      </Route>
+    </Switch>
 
     <Route path="/profile">
       <Profile />

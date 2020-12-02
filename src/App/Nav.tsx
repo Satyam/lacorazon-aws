@@ -28,6 +28,22 @@ const Nav = () => (
     </NavItem>
     <UncontrolledDropdown nav inNavbar>
       <DropdownToggle nav caret>
+        Vendedores
+      </DropdownToggle>
+      <DropdownMenu right>
+        <DropdownItem tag={Link} to="/vendedores">
+          Listado
+        </DropdownItem>
+        <DropdownItem tag={Link} to="/sumario/porVendedor">
+          Sumario por vendedor
+        </DropdownItem>
+        <DropdownItem tag={Link} to="/vendedor/new">
+          Crear nuevo
+        </DropdownItem>
+      </DropdownMenu>
+    </UncontrolledDropdown>
+    <UncontrolledDropdown nav inNavbar>
+      <DropdownToggle nav caret>
         Sumarios
       </DropdownToggle>
       <DropdownMenu right>
