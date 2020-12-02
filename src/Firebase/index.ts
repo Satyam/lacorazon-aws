@@ -96,7 +96,9 @@ export const dbTable = <
   const itemRef = (id: string) => db.ref(`${path}/${id}`);
   return {
     useItem: (id) => {
-      const [item, loading, error] = useObjectVal<DbType>(itemRef(id));
+      const [item, loading, error] = useObjectVal<DbType>(itemRef(id), {
+        keyField,
+      });
 
       if (loading || error || typeof item === 'undefined')
         return [undefined, loading, error];
