@@ -21,6 +21,7 @@ import {
   deleteDistribuidor,
   CLAVE_DUPLICADA,
   FALTA_NOMBRE,
+  DbError,
 } from './common';
 
 // Types
@@ -74,34 +75,44 @@ const EditDistribuidor: React.FC = () => {
   };
 
   const onSubmit: SubmitHandler<ShortDistribuidor> = async (
-    values,
-    formMethods
+    values
   ): Promise<void> => {
     if (idDistribuidor && distribuidor) {
       openLoading('Actualizando Distribuidor');
-      await updateDistribuidor(idDistribuidor, values, distribuidor);
+      try {
+        await updateDistribuidor(idDistribuidor, values, distribuidor);
+      } catch (err) {
+        if (err instanceof DbError) {
+          methods.setError(err.field, {
+            type: err.message,
+            message: `Este campo ha sido cambiado por otro usuario a ${err.value}`,
+          });
+        } else throw err;
+      }
     } else {
       openLoading('Creando distribuidor');
       try {
         const idDistribuidor = await createDistribuidor(values);
         history.replace(`/distribuidor/edit/${idDistribuidor}`);
       } catch (err) {
-        switch (err.message) {
-          case CLAVE_DUPLICADA:
-            methods.setError('nombre', {
-              type: 'duplicado',
-              message: 'Ese nombre, o uno muy parecido, ya existe',
-            });
-            break;
-          case FALTA_NOMBRE:
-            methods.setError('nombre', {
-              type: 'missing',
-              message: 'Falta indicar el nombre',
-            });
-            break;
-          default:
-            throw err;
-        }
+        if (err instanceof DbError) {
+          switch (err.message) {
+            case CLAVE_DUPLICADA:
+              methods.setError('nombre', {
+                type: 'duplicado',
+                message: 'Ese nombre, o uno muy parecido, ya existe',
+              });
+              break;
+            case FALTA_NOMBRE:
+              methods.setError('nombre', {
+                type: 'missing',
+                message: 'Falta indicar el nombre',
+              });
+              break;
+            default:
+              throw err;
+          }
+        } else throw err;
       }
     }
     closeLoading();

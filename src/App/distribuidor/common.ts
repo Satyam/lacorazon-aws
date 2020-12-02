@@ -1,7 +1,7 @@
 import { dbTable } from 'Firebase';
 import slugify from 'slugify';
 
-export { CLAVE_DUPLICADA } from 'Firebase';
+export { CLAVE_DUPLICADA, DbError } from 'Firebase';
 
 export const FALTA_NOMBRE = 'Falta nombre';
 
