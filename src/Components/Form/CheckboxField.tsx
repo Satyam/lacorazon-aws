@@ -1,11 +1,11 @@
 import React from 'react';
 import { LabelInputBox, LabelInputBoxProps } from './LabelBox';
 import { Input, InputProps } from 'reactstrap';
-import { ValidationRules } from 'react-hook-form';
+import { RegisterOptions } from 'react-hook-form';
 
 export type CheckboxFieldProps = LabelInputBoxProps &
   InputProps & {
-    validation?: ValidationRules;
+    validation?: RegisterOptions;
   };
 
 export const CheckboxField: React.FC<CheckboxFieldProps> = ({

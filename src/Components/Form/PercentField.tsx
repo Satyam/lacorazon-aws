@@ -1,11 +1,11 @@
 import React from 'react';
 import { LabelInputBox, LabelInputBoxProps } from './LabelBox';
-import { Controller, ValidationRules } from 'react-hook-form';
+import { Controller, RegisterOptions } from 'react-hook-form';
 import { Input, InputProps, InputGroup, InputGroupAddon } from 'reactstrap';
 
 export type PercentFieldProps = LabelInputBoxProps &
   InputProps & {
-    validation?: ValidationRules;
+    validation?: RegisterOptions;
   };
 
 export const PercentField: React.FC<PercentFieldProps> = ({

@@ -2,11 +2,11 @@ import React from 'react';
 import { LabelInputBox, LabelInputBoxProps } from './LabelBox';
 
 import { Input, InputProps, InputGroup, InputGroupAddon } from 'reactstrap';
-import { ValidationRules } from 'react-hook-form';
+import { RegisterOptions } from 'react-hook-form';
 import { useIntl } from 'Providers/Intl';
 export type CurrencyFieldProps = LabelInputBoxProps &
   InputProps & {
-    validation?: ValidationRules;
+    validation?: RegisterOptions;
   };
 
 export const CurrencyField: React.FC<CurrencyFieldProps> = ({

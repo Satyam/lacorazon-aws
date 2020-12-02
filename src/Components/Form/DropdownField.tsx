@@ -2,11 +2,11 @@ import React from 'react';
 import { LabelInputBox, LabelInputBoxProps } from './LabelBox';
 
 import { Input, InputProps } from 'reactstrap';
-import { ValidationRules } from 'react-hook-form';
+import { RegisterOptions } from 'react-hook-form';
 
 export type DropdownFieldProps = LabelInputBoxProps &
   InputProps & {
-    validation?: ValidationRules;
+    validation?: RegisterOptions;
     optValue?: string;
     optLabel?: string;
     options:

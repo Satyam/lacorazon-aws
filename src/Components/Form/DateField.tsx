@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { LabelInputBox, LabelInputBoxProps } from './LabelBox';
-import { Controller, ValidationRules } from 'react-hook-form';
+import { Controller, RegisterOptions } from 'react-hook-form';
 import ReactDatePicker, { ReactDatePickerProps } from 'react-datepicker';
 
 import 'react-datepicker/dist/react-datepicker.css';
@@ -9,7 +9,7 @@ import classNames from 'classnames';
 import { useIntl } from 'Providers/Intl';
 
 export type DateFieldProps = LabelInputBoxProps & {
-  validation?: ValidationRules;
+  validation?: RegisterOptions;
   minDate?: Date;
   maxDate?: Date;
 } & Omit<ReactDatePickerProps, 'onChange'>;
