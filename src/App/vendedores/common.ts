@@ -1,7 +1,6 @@
 import { dbTable } from 'Firebase';
-import slugify from 'slugify';
 
-export { CLAVE_DUPLICADA } from 'Firebase';
+export { CLAVE_DUPLICADA, DbError } from 'Firebase';
 
 export const FALTA_NOMBRE = 'Falta nombre';
 
@@ -14,12 +13,13 @@ export const useVendedor = useItem;
 
 export const useVendedores = () => useList('nombre');
 
-export const createVendedor = async (
-  values: Partial<VendedorType>
-): Promise<ID> => {
-  if (values.nombre) {
-    const idVendedor = slugify(values.nombre, { lower: true });
-    await dbCreateWithKey(idVendedor, values);
+export const createVendedor = async ({
+  idVendedor,
+  nombre,
+  email,
+}: VendedorType): Promise<ID> => {
+  if (nombre) {
+    await dbCreateWithKey(idVendedor, { nombre, email });
     return idVendedor;
   } else {
     throw new Error(FALTA_NOMBRE);
