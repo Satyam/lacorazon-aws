@@ -25,7 +25,34 @@ export const logout = () => {
 
 export const CLAVE_DUPLICADA = 'Clave Duplicada';
 export const FALTA_ORDER_BY = 'Para usar equalTo debe especificarse orderBy';
+export const CONFLICTO_EN_UPDATE = 'Actualización cruzada en update';
 
+export class DbError<F> extends Error {
+  path: string;
+  operation: string;
+  field?: F;
+  value?: any;
+  constructor(
+    message: string,
+    path: string,
+    operation: string,
+    field?: F,
+    value?: any
+  ) {
+    super(message);
+    this.path = path;
+    this.operation = operation;
+    this.field = field;
+    this.value = value;
+    this.name = 'DbError';
+  }
+  toString() {
+    return `${super.toString()} 
+    on: [${this.path}] when doing: ${this.operation}
+    field: [${this.field}]
+    value: [${this.value.toString()}]`;
+  }
+}
 export const dbTable = <
   ItemType extends Record<string, any>,
   DbType extends Record<string, any>
@@ -77,7 +104,12 @@ export const dbTable = <
     },
     useList: (sortField, equalTo) => {
       if (typeof equalTo !== 'undefined' && typeof sortField === 'undefined')
-        throw new Error(FALTA_ORDER_BY);
+        throw new DbError<keyof ItemType>(
+          FALTA_ORDER_BY,
+          path,
+          'useList',
+          sortField
+        );
       let ref: firebase.database.Query = db.ref(path);
       if (sortField) ref = ref.orderByChild(sortField);
       if (equalTo) ref = ref.equalTo(equalTo);
@@ -96,7 +128,13 @@ export const dbTable = <
       const ref = itemRef(id);
       const duplicate = await ref.once('value');
       if (duplicate.exists()) {
-        throw new Error(CLAVE_DUPLICADA);
+        throw new DbError<keyof ItemType>(
+          CLAVE_DUPLICADA,
+          path,
+          'dbCreateWithKey',
+          keyField,
+          id
+        );
       } else {
         await ref.set(toDb(newValues));
       }
@@ -108,9 +146,16 @@ export const dbTable = <
         const dirtyFields = Object.keys(updatedValues).filter((name) =>
           name === keyField ? false : updatedValues[name] !== orgValues[name]
         );
-        if (dirtyFields.some((name) => dbValues[name] !== orgValues[name])) {
-          return;
-        }
+        dirtyFields.forEach((name) => {
+          if (dbValues[name] !== orgValues[name])
+            throw new DbError<keyof ItemType>(
+              CONFLICTO_EN_UPDATE,
+              path,
+              'dbUpdate',
+              name,
+              dbValues[name]
+            );
+        });
         return Object.assign(dbValues, updatedValues);
       }),
     dbDelete: (id) => itemRef(id).remove(),
