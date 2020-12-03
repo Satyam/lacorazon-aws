@@ -20,6 +20,8 @@ import Profile from 'App/Profile';
 import ListVendedores from 'App/vendedores/ListVendedores';
 import ShowVendedor from 'App/vendedores/ShowVendedor';
 import EditVendedor from 'App/vendedores/EditVendedor';
+import ListadoPendientes from 'App/facturacion/ListadoPendientes';
+import PorFacturar from 'App/facturacion/PorFacturar';
 
 // import PrivateRoute from './PrivateRoute';
 /* Update:
@@ -54,6 +56,12 @@ const Routes = () => (
       </Route>
       <Route path="/distribuidor/:idDistribuidor">
         <ShowDistribuidor />
+      </Route>
+      <Route path="/pendientesFacturar">
+        <ListadoPendientes />
+      </Route>
+      <Route path="/facturar/:idDistribuidor">
+        <PorFacturar />
       </Route>
     </Switch>
     <Route path="/ventas/:year?">

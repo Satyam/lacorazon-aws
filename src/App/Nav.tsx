@@ -32,6 +32,9 @@ const Nav = () => (
         <DropdownItem tag={Link} to="/distribuidor/new">
           Crear nuevo
         </DropdownItem>
+        <DropdownItem tag={Link} to="/pendientesFacturar">
+          Pendientes de Cobro
+        </DropdownItem>
       </DropdownMenu>
     </UncontrolledDropdown>
     <NavItem>

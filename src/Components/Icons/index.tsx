@@ -13,7 +13,10 @@ import {
   FaExclamationTriangle,
   FaRegCheckSquare,
   FaRegSquare,
+  FaFileInvoiceDollar,
+  FaInfoCircle,
 } from 'react-icons/fa';
+import { AiOutlineDollarCircle } from 'react-icons/ai';
 
 import styles from './styles.module.css';
 import { Link } from 'react-router-dom';
@@ -25,7 +28,9 @@ export type MyButtonProps = {
 
 const cx = classNames.bind(styles);
 
-export const MyButton: React.FC<MyButtonProps & { Icon: React.ReactType }> = ({
+export const MyButton: React.FC<
+  MyButtonProps & { Icon: React.ElementType }
+> = ({
   Icon,
   href,
   children,
@@ -46,7 +51,7 @@ export const MyButton: React.FC<MyButtonProps & { Icon: React.ReactType }> = ({
 );
 
 export const Icon: React.FC<{
-  Component: React.ReactType;
+  Component: React.ElementType;
   color?: BootstrapColor;
   isButton?: boolean;
   disabled?: boolean;
@@ -203,3 +208,30 @@ export const ButtonSet: React.FC<{
 
 export const Checkmark: React.FC<{ value?: Boolean }> = ({ value = false }) =>
   value ? <FaRegCheckSquare /> : <FaRegSquare />;
+
+export const ButtonIconInvoice: React.FC<MyButtonProps> = ({
+  children,
+  color = 'secondary',
+  title = 'Facturar',
+  ...props
+}) => (
+  <MyButton Icon={FaFileInvoiceDollar} color={color} title={title} {...props}>
+    {children}
+  </MyButton>
+);
+
+export const ButtonIconCobrar: React.FC<MyButtonProps> = ({
+  children,
+  color = 'secondary',
+  title = 'Cobrar',
+  ...props
+}) => (
+  <MyButton Icon={AiOutlineDollarCircle} color={color} title={title} {...props}>
+    {children}
+  </MyButton>
+);
+
+export const IconInfo: React.FC<{ color?: BootstrapColor }> = ({
+  color = 'info',
+  ...props
+}) => <Icon Component={FaInfoCircle} color={color} {...props} />;
