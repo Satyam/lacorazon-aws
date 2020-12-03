@@ -48,7 +48,8 @@ const EditDistribuidor: React.FC = () => {
   const { openLoading, closeLoading, confirmDelete } = useModals();
 
   const methods = useForm<ShortDistribuidor>({
-    defaultValues: distribuidorSchema.default(),
+    // @ts-ignore  until an update for @types/yup comes along
+    defaultValues: distribuidorSchema.getDefault(),
     resolver: yupResolver(distribuidorSchema),
   });
 

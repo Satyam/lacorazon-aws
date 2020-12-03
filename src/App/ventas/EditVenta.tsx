@@ -47,7 +47,8 @@ export default function EditVenta() {
   const [venta, loading, error] = useVenta(idVenta);
 
   const methods = useForm<ShortVenta>({
-    defaultValues: ventaSchema.default(),
+    // @ts-ignore  until an update for @types/yup comes along
+    defaultValues: ventaSchema.getDefault(),
     resolver: yupResolver(ventaSchema),
   });
 

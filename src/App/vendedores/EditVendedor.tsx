@@ -38,7 +38,7 @@ const EditVendedor: React.FC = () => {
   const { openLoading, closeLoading, confirmDelete } = useModals();
 
   const methods = useForm<VendedorType>({
-    // @ts-ignore
+    // @ts-ignore  until an update for @types/yup comes along
     defaultValues: vendedorSchema.getDefault(),
     resolver: yupResolver(vendedorSchema),
   });

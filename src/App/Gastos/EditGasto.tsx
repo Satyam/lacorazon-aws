@@ -48,8 +48,8 @@ export default function EditGasto() {
   const isNew: boolean = !idGasto;
   const [gasto, loading, error] = useGasto(idGasto);
   const methods = useForm<ShortGasto>({
-    defaultValues: gastoSchema.default(),
-    // @ts-ignore
+    // @ts-ignore  until an update for @types/yup comes along
+    defaultValues: gastoSchema.getDefault(),
     resolver: yupResolver(gastoSchema),
   });
 
