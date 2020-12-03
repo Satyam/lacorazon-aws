@@ -26,7 +26,7 @@ export const logout = () => {
 export const CLAVE_DUPLICADA = 'Clave Duplicada';
 export const FALTA_ORDER_BY = 'Para usar equalTo debe especificarse orderBy';
 export const CONFLICTO_EN_UPDATE = 'Actualización cruzada en update';
-
+export const TABLE_IS_EMPTY = 'La tabla está vacía';
 export class DbError<F> extends Error {
   path: string;
   operation: string;
@@ -62,11 +62,17 @@ export const dbTable = <
   fromDb: (item: DbType) => ItemType = (item) => item as ItemType,
   toDb: (item: Partial<ItemType>) => Partial<DbType> = (item) => item as DbType
 ): {
-  useItem: (id: ID) => [ItemType | undefined, boolean, any];
+  useItem: (
+    id: ID
+  ) => [ItemType | undefined, boolean, DbError<keyof ItemType> | undefined];
   useList: (
     sortField?: string,
     equalTo?: any
-  ) => [ItemType[] | undefined, boolean, any];
+  ) => [
+    ItemType[] | undefined,
+    boolean,
+    DbError<keyof ItemType | undefined> | undefined
+  ];
   dbCreate: (newValues: Partial<ItemType>) => Promise<ID>;
   dbCreateWithKey: (id: ID, newValues: Partial<ItemType>) => Promise<void>;
   /**
@@ -100,9 +106,21 @@ export const dbTable = <
         keyField,
       });
 
-      if (loading || error || typeof item === 'undefined')
-        return [undefined, loading, error];
-      return [memoizedItem(item), loading, error];
+      if (error)
+        return [
+          undefined,
+          loading,
+          new DbError<keyof ItemType>(
+            error.toString(),
+            path,
+            'useItem',
+            keyField,
+            id
+          ),
+        ];
+      if (loading || typeof item === 'undefined')
+        return [undefined, loading, undefined];
+      return [memoizedItem(item), loading, undefined];
     },
     useList: (sortField, equalTo) => {
       if (typeof equalTo !== 'undefined' && typeof sortField === 'undefined')
@@ -111,11 +129,32 @@ export const dbTable = <
       if (sortField) ref = ref.orderByChild(sortField);
       if (equalTo) ref = ref.equalTo(equalTo);
       const [list, loading, error] = useListVals<DbType>(ref, { keyField });
-
-      if (loading || error) return [undefined, loading, error];
+      if (error)
+        return [
+          undefined,
+          loading,
+          new DbError<keyof ItemType | undefined>(
+            error.toString(),
+            path,
+            'useList',
+            sortField,
+            equalTo
+          ),
+        ];
+      if (loading) return [undefined, loading, undefined];
       if (typeof list === 'undefined')
-        return [list, loading, new Error('La tabla está vacía')];
-      return [memoizedList(list), loading, error];
+        return [
+          list,
+          loading,
+          new DbError<keyof ItemType | undefined>(
+            TABLE_IS_EMPTY,
+            path,
+            'useList',
+            sortField,
+            equalTo
+          ),
+        ];
+      return [memoizedList(list), loading, undefined];
     },
     dbCreate: async (newValues) => {
       const outRef = await db.ref(path).push(toDb(newValues));
