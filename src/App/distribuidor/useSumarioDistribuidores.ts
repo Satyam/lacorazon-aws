@@ -149,7 +149,7 @@ const useAcumFacturacion = (): [
 };
 
 export const useSumarioDistribuidores = (): [
-  sumarioDistribuidores: Record<ID, SumarioPorDistribuidor> | undefined,
+  sumarioDistribuidores: SumarioPorDistribuidor[] | undefined,
   loading: boolean,
   error?: Error | string
 ] => {
@@ -178,56 +178,58 @@ export const useSumarioDistribuidores = (): [
       .filter((value, index, self) => self.indexOf(value) === index);
 
     return [
-      idDistribuidores.reduce<Record<ID, SumarioPorDistribuidor>>(
-        (sumario, idDistribuidor) => {
-          const consigna = acumConsigna[idDistribuidor];
-          const facturacion = acumFacturacion[idDistribuidor];
-          let porFacturar = 0;
-          let porCobrar = 0;
+      Object.values(
+        idDistribuidores.reduce<Record<ID, SumarioPorDistribuidor>>(
+          (sumario, idDistribuidor) => {
+            const consigna = acumConsigna[idDistribuidor];
+            const facturacion = acumFacturacion[idDistribuidor];
+            let porFacturar = 0;
+            let porCobrar = 0;
 
-          if (consigna && facturacion) {
-            const porcentaje = facturacion?.porcentaje || 0;
-            if (porcentaje > 1) {
-              porFacturar =
-                (consigna.vendidos - consigna.cantFacturados) * porcentaje;
-            } else {
-              porFacturar =
-                PVP *
-                (consigna.vendidos - consigna.cantFacturados) *
-                (1 - porcentaje);
-            }
-            porFacturar -= facturacion.cobrado;
-            if (porFacturar < 0) porFacturar = 0;
-            porCobrar =
-              (facturacion.facturado || porFacturar) - facturacion.cobrado;
-            if (porCobrar < 0) porCobrar = 0;
-          }
-          return {
-            ...sumario,
-            [idDistribuidor]: Object.assign(
-              {
-                idDistribuidor: '',
-                nombre: '',
-                entregados: 0,
-                vendidos: 0,
-                devueltos: 0,
-                cantFacturados: 0,
-                existencias: 0,
-                facturado: 0,
-                porcentaje: 0,
-                cobrado: 0,
-              },
-              distribuidores[idDistribuidor],
-              consigna,
-              facturacion,
-              {
-                porFacturar,
-                porCobrar,
+            if (consigna && facturacion) {
+              const porcentaje = facturacion?.porcentaje || 0;
+              if (porcentaje > 1) {
+                porFacturar =
+                  (consigna.vendidos - consigna.cantFacturados) * porcentaje;
+              } else {
+                porFacturar =
+                  PVP *
+                  (consigna.vendidos - consigna.cantFacturados) *
+                  (1 - porcentaje);
               }
-            ),
-          };
-        },
-        {}
+              porFacturar -= facturacion.cobrado;
+              if (porFacturar < 0) porFacturar = 0;
+              porCobrar =
+                (facturacion.facturado || porFacturar) - facturacion.cobrado;
+              if (porCobrar < 0) porCobrar = 0;
+            }
+            return {
+              ...sumario,
+              [idDistribuidor]: Object.assign(
+                {
+                  idDistribuidor: '',
+                  nombre: '',
+                  entregados: 0,
+                  vendidos: 0,
+                  devueltos: 0,
+                  cantFacturados: 0,
+                  existencias: 0,
+                  facturado: 0,
+                  porcentaje: 0,
+                  cobrado: 0,
+                },
+                distribuidores[idDistribuidor],
+                consigna,
+                facturacion,
+                {
+                  porFacturar,
+                  porCobrar,
+                }
+              ),
+            };
+          },
+          {}
+        )
       ),
       false,
       undefined,

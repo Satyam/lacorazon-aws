@@ -12,11 +12,13 @@ import {
 import { useIntl } from 'Providers/Intl';
 
 const SumarioDistribuidores: React.FC = () => {
-  const [sumario = {}, loading, error] = useSumarioDistribuidores();
+  const [
+    sumarioDistribuidores = [],
+    loading,
+    error,
+  ] = useSumarioDistribuidores();
   const { formatCurrency } = useIntl();
   if (error) return <ErrorAlert error={error}>Cargando datos</ErrorAlert>;
-
-  const sumarioDistribuidores = Object.values(sumario);
 
   const totales = sumarioDistribuidores.reduce<SumarioPorDistribuidor>(
     (totales, sumario) => ({
