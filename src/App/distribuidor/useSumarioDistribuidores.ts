@@ -22,6 +22,7 @@ type AcumFacturacion = {
   facturado: number;
   porcentaje: number;
   cobrado: number;
+  idVendedor: ID;
 };
 
 export type SumarioPorDistribuidor = Distribuidor &
@@ -125,7 +126,10 @@ const useAcumFacturacion = (): [
 
     return [
       facturaciones.reduce<Record<ID, AcumFacturacion>>(
-        (acum, { idDistribuidor, porcentaje, facturado = 0, cobrado = 0 }) => {
+        (
+          acum,
+          { idDistribuidor, porcentaje, facturado = 0, cobrado = 0, idVendedor }
+        ) => {
           const sumario: AcumFacturacion = acum[idDistribuidor] || {
             facturado: 0,
             porcentaje: 0,
@@ -136,6 +140,7 @@ const useAcumFacturacion = (): [
           sumario.porcentaje = pct;
           sumario.facturado += facturado;
           sumario.cobrado += cobrado;
+          sumario.idVendedor = idVendedor || sumario.idVendedor;
           return {
             ...acum,
             [idDistribuidor]: sumario,

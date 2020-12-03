@@ -43,6 +43,7 @@ const SumarioDistribuidores: React.FC = () => {
       existencias: 0,
       cantFacturados: 0,
       facturado: 0,
+      idVendedor: '',
       porFacturar: 0,
       porcentaje: 0,
       cobrado: 0,
