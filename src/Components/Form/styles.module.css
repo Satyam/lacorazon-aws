@@ -6,3 +6,12 @@
   background-color: var(--light);
   border: none;
 }
+
+.radioUl {
+  list-style-type: none;
+  border: silver solid thin;
+  border-radius: 0.25rem;
+  padding-top: 0.4rem;
+  padding-bottom: 0.4rem;
+  margin-bottom: 0;
+}
