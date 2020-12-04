@@ -25,21 +25,24 @@ import {
 } from './common';
 
 // Types
-type ShortDistribuidor = Omit<DistribuidorType, 'idDistribuidor'>;
 
-const distribuidorSchema = yup.object().shape<ShortDistribuidor>({
-  nombre: yup.string().required().trim().default(''),
-  localidad: yup.string().trim().default(''),
-  contacto: yup.string().trim().default(''),
-  telefono: yup
-    .string()
-    .trim()
-    .matches(/[\d\s\-()]+/, { excludeEmptyString: true })
-    .default(''),
-  email: yup.string().trim().email().default(''),
-  direccion: yup.string().trim().default(''),
-  nif: yup.string().trim().default(''),
-});
+const distribuidorSchema = yup
+  .object({
+    nombre: yup.string().defined().trim().default(''),
+    localidad: yup.string().trim().default(''),
+    contacto: yup.string().trim().default(''),
+    telefono: yup
+      .string()
+      .trim()
+      .matches(/[\d\s\-()]+/, { excludeEmptyString: true })
+      .default(''),
+    email: yup.string().trim().email().default(''),
+    direccion: yup.string().trim().default(''),
+    nif: yup.string().trim().default(''),
+  })
+  .defined();
+
+type DistribuidorFormType = yup.Asserts<typeof distribuidorSchema>;
 
 const EditDistribuidor: React.FC = () => {
   const { idDistribuidor } = useParams<{ idDistribuidor: ID }>();
@@ -47,8 +50,7 @@ const EditDistribuidor: React.FC = () => {
   const history = useHistory();
   const { openLoading, closeLoading, confirmDelete } = useModals();
 
-  const methods = useForm<ShortDistribuidor>({
-    // @ts-ignore  until an update for @types/yup comes along
+  const methods = useForm<DistribuidorFormType>({
     defaultValues: distribuidorSchema.getDefault(),
     resolver: yupResolver(distribuidorSchema),
   });
@@ -75,7 +77,7 @@ const EditDistribuidor: React.FC = () => {
     );
   };
 
-  const onSubmit: SubmitHandler<ShortDistribuidor> = async (
+  const onSubmit: SubmitHandler<DistribuidorFormType> = async (
     values
   ): Promise<void> => {
     if (idDistribuidor && distribuidor) {

@@ -24,30 +24,22 @@ import { useDistribuidor } from 'App/distribuidor/common';
 import { DropdownVendedores } from 'App/vendedores/gadgets';
 import { DropdownIVA, calculoIVA } from 'App/iva/gadgets';
 
-type FacturaType = {
-  idDistribuidor: ID;
-  fecha: Date;
-  idVendedor: ID;
-  importe: number;
-  porcentaje: number;
-  cantidad: number;
-  iva: number;
-};
-const facturaSchema = yup.object().shape<FacturaType>({
+const facturaSchema = yup.object({
   fecha: yup
     .date()
     .required()
     .default(() => new Date()),
   concepto: yup.string().trim().default(''),
-  // @ts-ignore
   idVendedor: yup.string().nullable().default(null),
   cantidad: yup.number().required(),
   precioFijo: yup.boolean().default(false),
   porcentaje: yup.number().required(),
   importe: yup.number().required().default(0),
-  // @ts-ignore
   iva: yup.number().default(0.04),
 });
+
+type FacturaFormType = yup.Asserts<typeof facturaSchema>;
+
 export default function PorFacturar() {
   const history = useHistory<{
     importe: number;
@@ -59,22 +51,20 @@ export default function PorFacturar() {
   const [distribuidor, loading, error] = useDistribuidor(idDistribuidor);
   const { formatCurrency } = useIntl();
   const { state } = history.location;
-  const defaultValues = {
-    // @ts-ignore  until an update for @types/yup comes along
-    ...facturaSchema.getDefault(),
-    ...state,
-    idVendedor: state.idvendedor,
-  };
-  const methods = useForm<FacturaType>({
-    // @ts-ignore  until an update for @types/yup comes along
-    defaultValues,
+
+  const methods = useForm<FacturaFormType>({
+    defaultValues: {
+      ...facturaSchema.getDefault(),
+      ...state,
+      idVendedor: state.idvendedor,
+    },
     resolver: yupResolver(facturaSchema),
   });
 
   if (error)
     return <ErrorAlert error={error}>Cargando distribuidor</ErrorAlert>;
   if (loading) return <Loading>Cargando distribuidor</Loading>;
-  const onSubmit: SubmitHandler<FacturaType> = async (
+  const onSubmit: SubmitHandler<FacturaFormType> = async (
     values
   ): Promise<void> => {
     if (idDistribuidor && distribuidor) {

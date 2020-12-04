@@ -7,15 +7,15 @@ import {
   DropdownFieldProps,
 } from 'Components/Form/DropdownField';
 export const cuentas: Record<ID, CuentaType> = {
-  ctaRaed: {
-    idCuenta: 'ctaRaed',
-    descr: 'Cuenta Raed',
-    color: 'lightgreen',
-  },
   efvoRoxy: {
     idCuenta: 'efvoRoxy',
     descr: 'Efectivo Roxy',
     color: 'orange',
+  },
+  ctaRaed: {
+    idCuenta: 'ctaRaed',
+    descr: 'Cuenta Raed',
+    color: 'lightgreen',
   },
 };
 

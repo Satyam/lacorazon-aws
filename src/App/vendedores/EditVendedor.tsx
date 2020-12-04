@@ -24,12 +24,13 @@ import {
   DbError,
 } from './common';
 
-const vendedorSchema = yup.object().shape<VendedorType>({
+const vendedorSchema = yup.object({
   idVendedor: yup.string().required().trim(),
   nombre: yup.string().required().trim().default(''),
-  // @ts-ignore
   email: yup.string().trim().email().default(''),
 });
+
+type VendedorFormType = yup.Asserts<typeof vendedorSchema>;
 
 const EditVendedor: React.FC = () => {
   const { idVendedor } = useParams<{ idVendedor: ID }>();
@@ -37,8 +38,7 @@ const EditVendedor: React.FC = () => {
   const history = useHistory();
   const { openLoading, closeLoading, confirmDelete } = useModals();
 
-  const methods = useForm<VendedorType>({
-    // @ts-ignore  until an update for @types/yup comes along
+  const methods = useForm<VendedorFormType>({
     defaultValues: vendedorSchema.getDefault(),
     resolver: yupResolver(vendedorSchema),
   });
@@ -60,7 +60,7 @@ const EditVendedor: React.FC = () => {
     });
   };
 
-  const onSubmit: SubmitHandler<VendedorType> = async (
+  const onSubmit: SubmitHandler<VendedorFormType> = async (
     values
   ): Promise<void> => {
     if (idVendedor && vendedor) {

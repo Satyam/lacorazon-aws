@@ -21,34 +21,28 @@ import Page from 'Components/Page';
 import { useIntl } from 'Providers/Intl';
 import { useModals } from 'Providers/Modals';
 
+import { cuentas } from 'App/cuentas/gadgets';
 import { useGasto, updateGasto, createGasto, deleteGasto } from './common';
 
-type ShortGasto = Omit<GastoType, 'idGasto'>;
-
-const gastoSchema = yup.object().shape<ShortGasto>({
-  // @ts-ignore
+const gastoSchema = yup.object({
   fecha: yup
     .date()
     .required()
     .default(() => new Date()),
   concepto: yup.string().trim().required().default(''),
-  // @ts-ignore
-  idVendedor: yup.string().nullable().default(null),
-  // @ts-ignore
-  importe: yup.number().nullable().default(0),
-  // @ts-ignore
-  cuenta: yup.string().nullable().default(null),
-  // @ts-ignore
-  iva: yup.number().nullable().min(0).default(0),
+  importe: yup.number().required().default(0),
+  cuenta: yup.string().required().default(Object.keys(cuentas)[0]),
+  iva: yup.number().min(0).default(0),
 });
+
+type GastoFormType = yup.Asserts<typeof gastoSchema>;
 
 export default function EditGasto() {
   const history = useHistory();
   const { idGasto } = useParams<{ idGasto: ID }>();
   const isNew: boolean = !idGasto;
   const [gasto, loading, error] = useGasto(idGasto);
-  const methods = useForm<ShortGasto>({
-    // @ts-ignore  until an update for @types/yup comes along
+  const methods = useForm<GastoFormType>({
     defaultValues: gastoSchema.getDefault(),
     resolver: yupResolver(gastoSchema),
   });
@@ -64,7 +58,7 @@ export default function EditGasto() {
   if (error) return <ErrorAlert error={error}>Cargando gasto</ErrorAlert>;
   if (loading) return <Loading>Cargando gasto</Loading>;
 
-  const onSubmit: SubmitHandler<ShortGasto> = async (values) => {
+  const onSubmit: SubmitHandler<GastoFormType> = async (values) => {
     if (idGasto && gasto) {
       openLoading('Actualizando Gasto');
       await updateGasto(idGasto, values, gasto);

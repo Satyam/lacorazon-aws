@@ -24,30 +24,26 @@ import { useModals } from 'Providers/Modals';
 
 import { useVenta, updateVenta, createVenta, deleteVenta } from './common';
 
-type ShortVenta = Omit<VentaType, 'idVenta'>;
-
-const ventaSchema = yup.object().shape<ShortVenta>({
-  // @ts-ignore
+const ventaSchema = yup.object({
   fecha: yup
     .date()
     .required()
     .default(() => new Date()),
   concepto: yup.string().trim().required().default(''),
-  // @ts-ignore
   cantidad: yup.number().integer().default(1),
   precioUnitario: yup.number().default(10),
-  // @ts-ignore
   iva: yup.boolean().default(false),
   idVendedor: yup.string().default(null),
 });
+
+type VentaFormType = yup.Asserts<typeof ventaSchema>;
 
 export default function EditVenta() {
   const history = useHistory();
   const { idVenta } = useParams<{ idVenta: ID }>();
   const [venta, loading, error] = useVenta(idVenta);
 
-  const methods = useForm<ShortVenta>({
-    // @ts-ignore  until an update for @types/yup comes along
+  const methods = useForm<VentaFormType>({
     defaultValues: ventaSchema.getDefault(),
     resolver: yupResolver(ventaSchema),
   });
@@ -62,7 +58,7 @@ export default function EditVenta() {
   if (error) return <ErrorAlert error={error}>Cargando ventas</ErrorAlert>;
   if (loading) return <Loading>Cargando venta</Loading>;
 
-  const onSubmit: SubmitHandler<ShortVenta> = async (values) => {
+  const onSubmit: SubmitHandler<VentaFormType> = async (values) => {
     if (idVenta && venta) {
       openLoading('Actualizando Venta');
       await updateVenta(idVenta, values, venta);
