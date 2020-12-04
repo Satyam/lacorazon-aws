@@ -13,6 +13,7 @@ import {
   DateField,
   PercentField,
   CurrencyField,
+  RadioField,
 } from 'Components/Form';
 import { ButtonIconAdd, ButtonIconDelete, ButtonSet } from 'Components/Icons';
 import Page from 'Components/Page';
@@ -52,12 +53,14 @@ export default function PorFacturar() {
   const { formatCurrency } = useIntl();
   const { state } = history.location;
 
+  const defaultValues = {
+    ...facturaSchema.getDefault(),
+    ...state,
+    idVendedor: state.idvendedor,
+    precioFijo: state.porcentaje > 1,
+  };
   const methods = useForm<FacturaFormType>({
-    defaultValues: {
-      ...facturaSchema.getDefault(),
-      ...state,
-      idVendedor: state.idvendedor,
-    },
+    defaultValues,
     resolver: yupResolver(facturaSchema),
   });
 
@@ -71,7 +74,12 @@ export default function PorFacturar() {
     }
   };
 
-  const { importe, iva } = methods.watch(['importe', 'iva']);
+  const { importe, iva, precioFijo } = methods.watch([
+    'importe',
+    'iva',
+    'precioFijo',
+  ]);
+  console.log({ precioFijo });
   const { importeIva, importeSinIva } = calculoIVA(importe, iva);
   return (
     <Page
@@ -82,12 +90,11 @@ export default function PorFacturar() {
         <Alert color="danger">El distribuidor no existe o fue borrado</Alert>
       ) : (
         <Form onSubmit={methods.handleSubmit(onSubmit)}>
-          <LabeledText label="Nombre">{distribuidor?.nombre}</LabeledText>
-          <LabeledText label="Dirección">{distribuidor?.direccion}</LabeledText>
-          <LabeledText label="NIF">{distribuidor?.nif}</LabeledText>
-          <LabeledText label="Contacto">{distribuidor?.contacto}</LabeledText>
-          <LabeledText label="Teléfono">{distribuidor?.telefono}</LabeledText>
-          <LabeledText label="eMail">{distribuidor?.email}</LabeledText>
+          <LabeledText label="Distribuidor" style={{ height: 'inherit' }}>
+            <h3>{distribuidor?.nombre}</h3>
+            <pre>{distribuidor?.direccion}</pre>
+            <div>NIF: {distribuidor?.nif}</div>
+          </LabeledText>
           <DateField label="fecha" name="fecha" methods={methods} />
           <DropdownVendedores
             label="Vendedor"
@@ -95,11 +102,29 @@ export default function PorFacturar() {
             methods={methods}
           />
           <CurrencyField label="Importe" name="importe" methods={methods} />
-          <PercentField
-            label="Porcentaje distribuidor"
-            name="porcentaje"
+          <RadioField
+            label="Términos comisión"
+            name="precioFijo"
+            options={[
+              { label: 'Porcentaje', value: false },
+              { label: 'Precio Fijo', value: true },
+            ]}
             methods={methods}
           />
+          {precioFijo ? (
+            <CurrencyField
+              label="Precio distribuidor"
+              name="porcentaje"
+              methods={methods}
+            />
+          ) : (
+            <PercentField
+              label="Porcentaje distribuidor"
+              name="porcentaje"
+              methods={methods}
+            />
+          )}
+
           <TextField label="Cantidad" name="cantidad" methods={methods} />
           <DropdownIVA label="IVA" name="iva" methods={methods} />
           <LabeledText label="Importe IVA">
@@ -108,9 +133,6 @@ export default function PorFacturar() {
           <LabeledText label="Importe Sin IVA">
             {formatCurrency(importeSinIva)}
           </LabeledText>
-
-          <h3>{idDistribuidor}</h3>
-          <pre>{JSON.stringify(history.location.state, null, 2)}</pre>
         </Form>
       )}
     </Page>
