@@ -16,7 +16,7 @@ type intlType = {
   formatDate: (date?: Date, formatStr?: string) => string;
   currency: string;
   setCurrency: (currency: string) => void;
-  formatCurrency: (amount?: number) => string;
+  formatCurrency: (amount?: number, plain?: boolean) => string;
   currencySign: string;
   currencySignPrepend: boolean;
   currencyDecimals: number;
@@ -65,6 +65,11 @@ export const IntlProvider: React.FC<{
       '€',
     ];
     setDefaultLocale(locale);
+    const currencyDecimals = sampleParts[3].length;
+    const plainCurrencyFormatter = new Intl.NumberFormat(locale, {
+      style: 'decimal',
+      minimumFractionDigits: currencyDecimals,
+    });
 
     return {
       locales: Object.keys(localeTables),
@@ -78,11 +83,15 @@ export const IntlProvider: React.FC<{
           : '',
       currency,
       setCurrency,
-      formatCurrency: (value?: number) =>
-        value ? currFormatter.format(value) : '',
+      formatCurrency: (value?: number, plain: boolean = false) =>
+        value
+          ? plain
+            ? plainCurrencyFormatter.format(value)
+            : currFormatter.format(value)
+          : '',
       currencySign: sampleParts[1] || sampleParts[4],
       currencySignPrepend: !!sampleParts[1],
-      currencyDecimals: sampleParts[3].length,
+      currencyDecimals,
     };
   }, [locale, currency]);
 
