@@ -47,6 +47,7 @@ export const RadioField: React.FC<RadioFieldProps> = ({
                     id={id}
                     innerRef={ref}
                     disabled={opt.disabled}
+                    defaultChecked={value === opt.value}
                     onChange={(ev) => onChange(opt.value)}
                     onBlur={onBlur}
                     {...rest}
