@@ -39,13 +39,9 @@ export const CurrencyField: React.FC<CurrencyFieldProps> = ({
                     onChange(parseFloat(ev.target.value.replace(',', '.')))
                   }
                   onBlur={onBlur}
-                  ref={ref}
                   defaultValue={formatCurrency(value, true)}
                   invalid={hasError}
                   id={id}
-                  innerRef={
-                    validation ? methods.register(validation) : methods.register
-                  }
                   {...rest}
                 />
               );
@@ -53,7 +49,6 @@ export const CurrencyField: React.FC<CurrencyFieldProps> = ({
             name={name}
             control={methods.control}
             rules={validation}
-            defaultValue={methods.getValues(name)}
           />
           {!currencySignPrepend && (
             <InputGroupAddon addonType="append">{currencySign}</InputGroupAddon>
