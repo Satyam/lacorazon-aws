@@ -6,6 +6,7 @@ export const configs: ConfigType = {
   IVALibros: 0.04,
   comisionInterna: 0.25,
   IVAs: [0, 0.04, 0.1, 0.21],
+  precioDescontado: 10,
 };
 
 type Keys = keyof ConfigType;
