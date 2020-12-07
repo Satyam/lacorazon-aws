@@ -93,9 +93,11 @@ declare global {
     idVendedor: ID;
     porcentaje: number;
     facturado: number;
+    iva: number;
     nroFactura: string;
     cobrado: number;
     cuenta: string;
+    cantidad: number;
   };
 
   type ConfigType = {
