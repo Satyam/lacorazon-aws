@@ -22,6 +22,7 @@ import ShowVendedor from 'App/vendedores/ShowVendedor';
 import EditVendedor from 'App/vendedores/EditVendedor';
 import ListadoPendientes from 'App/facturacion/ListadoPendientes';
 import PorFacturar from 'App/facturacion/PorFacturar';
+import ShowFactura from 'App/facturacion/ShowFactura';
 
 // import PrivateRoute from './PrivateRoute';
 /* Update:
@@ -101,7 +102,11 @@ const Routes = () => (
         <ShowVendedor />
       </Route>
     </Switch>
-
+    <Switch>
+      <Route path="/factura/:idFactura">
+        <ShowFactura />
+      </Route>
+    </Switch>
     <Route path="/profile">
       <Profile />
     </Route>
