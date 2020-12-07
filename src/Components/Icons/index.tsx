@@ -50,14 +50,13 @@ export const MyButton: React.FC<
   </Button>
 );
 
-export const Icon: React.FC<{
+export type IconProps = React.ImgHTMLAttributes<HTMLImageElement> & {
   Component: React.ElementType;
   color?: BootstrapColor;
   isButton?: boolean;
   disabled?: boolean;
-  className?: string;
-  onClick?: React.EventHandler<any>;
-}> = ({
+};
+export const Icon: React.FC<IconProps> = ({
   Component,
   color,
   isButton,
@@ -77,7 +76,7 @@ export const Icon: React.FC<{
   />
 );
 
-export const IconAdd: React.FC<{ color?: BootstrapColor }> = ({
+export const IconAdd: React.FC<Omit<IconProps, 'Component'>> = ({
   color = 'primary',
   ...props
 }) => <Icon Component={FaPlusCircle} {...props} />;
@@ -93,7 +92,7 @@ export const ButtonIconAdd: React.FC<MyButtonProps> = ({
   </MyButton>
 );
 
-export const IconDelete: React.FC<{ color?: BootstrapColor }> = ({
+export const IconDelete: React.FC<Omit<IconProps, 'Component'>> = ({
   color = 'danger',
   ...props
 }) => <Icon Component={FaRegTrashAlt} {...props} />;
@@ -109,7 +108,7 @@ export const ButtonIconDelete: React.FC<MyButtonProps> = ({
   </MyButton>
 );
 
-export const IconEdit: React.FC<{ color?: BootstrapColor }> = ({
+export const IconEdit: React.FC<Omit<IconProps, 'Component'>> = ({
   color = 'secondary',
   ...props
 }) => <Icon Component={FaRegEdit} {...props} />;
@@ -125,10 +124,10 @@ export const ButtonIconEdit: React.FC<MyButtonProps> = ({
   </MyButton>
 );
 
-export const IconView: React.FC<{ color?: BootstrapColor }> = ({
+export const IconView: React.FC<Omit<IconProps, 'Component'>> = ({
   color = 'info',
   ...props
-}) => <Icon Component={FaEye} {...props} />;
+}) => <Icon Component={FaEye} color={color} {...props} />;
 
 export const ButtonIconView: React.FC<MyButtonProps> = ({
   children,
@@ -141,10 +140,10 @@ export const ButtonIconView: React.FC<MyButtonProps> = ({
   </MyButton>
 );
 
-export const IconCheck: React.FC<{ color?: BootstrapColor }> = ({
+export const IconCheck: React.FC<Omit<IconProps, 'Component'>> = ({
   color = 'success',
   ...props
-}) => <Icon Component={FaCheckCircle} {...props} />;
+}) => <Icon Component={FaCheckCircle} color={color} {...props} />;
 
 export const ButtonIconCheck: React.FC<MyButtonProps> = ({
   children,
@@ -156,10 +155,10 @@ export const ButtonIconCheck: React.FC<MyButtonProps> = ({
   </MyButton>
 );
 
-export const IconNotCheck: React.FC<{ color?: BootstrapColor }> = ({
+export const IconNotCheck: React.FC<Omit<IconProps, 'Component'>> = ({
   color = 'danger',
   ...props
-}) => <Icon Component={FaTimesCircle} {...props} />;
+}) => <Icon Component={FaTimesCircle} color={color} {...props} />;
 
 export const ButtonIconNotCheck: React.FC<MyButtonProps> = ({
   children,
@@ -171,10 +170,10 @@ export const ButtonIconNotCheck: React.FC<MyButtonProps> = ({
   </MyButton>
 );
 
-export const IconCalendar: React.FC<{ color?: BootstrapColor }> = ({
+export const IconCalendar: React.FC<Omit<IconProps, 'Component'>> = ({
   color = 'secondary',
   ...props
-}) => <Icon Component={FaCalendarAlt} {...props} />;
+}) => <Icon Component={FaCalendarAlt} color={color} {...props} />;
 
 export const ButtonIconCalendar: React.FC<MyButtonProps> = ({
   children,
@@ -187,12 +186,12 @@ export const ButtonIconCalendar: React.FC<MyButtonProps> = ({
   </MyButton>
 );
 
-export const IconWarning: React.FC<{ color?: BootstrapColor }> = ({
+export const IconWarning: React.FC<Omit<IconProps, 'Component'>> = ({
   color = 'warning',
   ...props
-}) => <Icon Component={FaExclamationTriangle} {...props} />;
+}) => <Icon Component={FaExclamationTriangle} color={color} {...props} />;
 
-export const IconStop: React.FC<{ color?: BootstrapColor }> = ({
+export const IconStop: React.FC<Omit<IconProps, 'Component'>> = ({
   color = 'danger',
   ...props
 }) => <Icon Component={FaExclamationCircle} {...props} />;
@@ -231,7 +230,7 @@ export const ButtonIconCobrar: React.FC<MyButtonProps> = ({
   </MyButton>
 );
 
-export const IconInfo: React.FC<{ color?: BootstrapColor }> = ({
+export const IconInfo: React.FC<Omit<IconProps, 'Component'>> = ({
   color = 'info',
   ...props
 }) => <Icon Component={FaInfoCircle} color={color} {...props} />;
