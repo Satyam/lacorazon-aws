@@ -1,10 +1,11 @@
 import React from 'react';
 import { Alert } from 'reactstrap';
 
-export type ErrorAlertError =
-  | Error
-  | string
-  | Array<Error | string | undefined>;
+export type ErrorAlertError = any;
+// | Error
+// | string
+// | Array<Error | string | undefined>;
+//
 export const ErrorAlert: React.FC<{ error?: ErrorAlertError }> = ({
   error,
   children,
