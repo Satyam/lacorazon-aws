@@ -11,7 +11,8 @@ const { useItem, useList, dbCreateWithKey, dbDelete, dbUpdate } = dbTable<
 
 export const useVendedor = useItem;
 
-export const useVendedores = () => useList('nombre');
+export const useVendedores = (sortField?: string, equalTo?: any) =>
+  useList(sortField || 'nombre', equalTo);
 
 export const createVendedor = async ({
   idVendedor,

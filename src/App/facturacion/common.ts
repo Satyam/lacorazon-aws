@@ -17,7 +17,8 @@ const { useItem, useList, dbCreate, dbDelete, dbUpdate } = dbTable<
 );
 
 export const useFacturacion = useItem;
-export const useFacturaciones = () => useList('fecha');
+export const useFacturaciones = (sortField?: string, equalTo?: any) =>
+  useList(sortField || 'fecha', equalTo);
 export const createFacturacion = dbCreate;
 export const updateFacturacion = dbUpdate;
 export const deleteFacturacion = dbDelete;

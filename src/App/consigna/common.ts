@@ -17,7 +17,8 @@ const { useItem, useList, dbCreate, dbDelete, dbUpdate } = dbTable<
 );
 
 export const useConsigna = useItem;
-export const useConsignas = () => useList('fecha');
+export const useConsignas = (sortField?: string, equalTo?: any) =>
+  useList(sortField || 'fecha', equalTo);
 export const createConsigna = dbCreate;
 export const updateConsigna = dbUpdate;
 export const deleteConsigna = dbDelete;

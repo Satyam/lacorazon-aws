@@ -12,7 +12,8 @@ const { useItem, useList, dbCreateWithKey, dbDelete, dbUpdate } = dbTable<
 
 export const useDistribuidor = useItem;
 
-export const useDistribuidores = () => useList('nombre');
+export const useDistribuidores = (sortField?: string, equalTo?: any) =>
+  useList(sortField || 'nombre', equalTo);
 
 export const createDistribuidor = async (
   values: Partial<DistribuidorType>

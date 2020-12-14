@@ -18,7 +18,8 @@ const { useItem, useList, dbCreate, dbDelete, dbUpdate } = dbTable<
 
 export const useGasto = useItem;
 
-export const useGastos = () => useList('fecha');
+export const useGastos = (sortField?: string, equalTo?: any) =>
+  useList(sortField || 'fecha', equalTo);
 
 export const createGasto = dbCreate;
 
