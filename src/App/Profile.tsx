@@ -19,7 +19,7 @@ const Profile = () => {
     );
   return (
     <>
-      <img src={user.photoURL} alt="Profile" />
+      {user.photoURL && <img src={user.photoURL} alt="Profile" />}
 
       <h2>{user.displayName}</h2>
       <p>{user.email}</p>
