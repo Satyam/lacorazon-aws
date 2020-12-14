@@ -16,7 +16,7 @@ export const WithRole: React.FC<{
   alt?: React.ReactNode;
 }> = ({ children, role, alerta, ofreceLogin, alt }) => {
   const [authUser, loading, error]: [
-    firebase.User | null,
+    firebase.User | undefined,
     boolean,
     any
   ] = useAuthState(auth);
