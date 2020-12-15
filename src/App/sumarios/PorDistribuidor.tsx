@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { Link } from 'react-router-dom';
 import { Table } from 'reactstrap';
 import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
@@ -55,7 +55,14 @@ const SumarioDistribuidores: React.FC = () => {
     const porcentaje = sumario.porcentaje;
     return (
       <tr key={idDistribuidor}>
-        <td>{sumario.nombre}</td>
+        <td>
+          <Link
+            title={`Ver detalle:\n  ${sumario.nombre}`}
+            to={`/distribuidor/${idDistribuidor}`}
+          >
+            {sumario.nombre}
+          </Link>
+        </td>
         <td align="right">{sumario.entregados}</td>
         <td align="right">{sumario.vendidos}</td>
         <td align="right">{sumario.devueltos}</td>
