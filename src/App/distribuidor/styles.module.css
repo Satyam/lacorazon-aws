@@ -2,3 +2,8 @@
   white-space: pre-line;
   font-size: small;
 }
+
+.noDots {
+  list-style-type: none;
+  padding-inline-start: 1rem;
+}
