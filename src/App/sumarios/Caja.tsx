@@ -16,7 +16,7 @@ import { ShowDistribuidor } from 'App/distribuidor/gadgets';
 import { useIntl } from 'Providers/Intl';
 import { cuentas, ShowCuenta } from 'App/cuentas/gadgets';
 import classnames from 'classnames';
-
+import { yearTabs } from 'Components/utils';
 enum Origen {
   Venta = 'Venta',
   Distribuidor = 'Distribuidor',
@@ -51,8 +51,6 @@ const useAcumVentas = (): [
     if (error) return [undefined, false, error];
     if (loading) return [undefined, loading];
 
-    if (typeof ventas === 'undefined')
-      return [undefined, false, 'Tabla de ventas está vacía'];
     const factorPrecioSinIva = 1 + configs.IVALibros;
 
     return [
@@ -89,8 +87,6 @@ const useAcumGastos = (): [
     if (error) return [undefined, false, error];
     if (loading) return [undefined, loading];
 
-    if (typeof gastos === 'undefined')
-      return [undefined, false, 'Tabla de gastos está vacía'];
     return [
       gastos.map(({ importe, iva = 0, ...rest }) => {
         var importeSinIVA = importe / (1 + iva);
@@ -120,8 +116,7 @@ const useAcumFacturacion = (): [
   return useMemo(() => {
     if (error) return [undefined, false, error];
     if (loading) return [undefined, loading];
-    if (typeof facturaciones === 'undefined')
-      return [undefined, false, 'Tabla de facturaciones está vacía'];
+
     const factorPrecioSinIva = 1 + configs.IVALibros;
 
     return [
@@ -199,17 +194,7 @@ const SumarioCaja: React.FC = () => {
       return entrada;
     });
 
-  const years = [];
-  let minYear = 0;
-  let maxYear = 1;
-  if (entradas.length) {
-    minYear = entradas[0].fecha.getFullYear();
-    maxYear = entradas[entradas.length - 1].fecha.getFullYear();
-  }
-  for (let y = minYear; y <= maxYear; y++) {
-    years.push(y);
-  }
-  const activeYear = year ? parseInt(year, 10) : maxYear;
+  const [years, activeYear] = yearTabs(entradas, year);
 
   const rowSumario = (sumario: EntradaDeCaja) => {
     return (

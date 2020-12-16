@@ -7,7 +7,6 @@ import {
   Nav,
   NavItem,
   NavLink,
-  Alert,
 } from 'reactstrap';
 
 import classnames from 'classnames';
@@ -23,7 +22,7 @@ import { ErrorAlert } from 'Components/ErrorAlert';
 import Page from 'Components/Page';
 import { useModals } from 'Providers/Modals';
 import { ShowVendedor } from 'App/vendedores/gadgets';
-
+import { yearTabs } from 'Components/utils';
 import { useVentas, deleteVenta } from './common';
 import { ShowCuenta } from 'App/cuentas/gadgets';
 
@@ -42,19 +41,7 @@ const ListVentas: React.FC<{
 
   if (error) return <ErrorAlert error={error}>Cargando ventas</ErrorAlert>;
 
-  if (typeof ventas === 'undefined')
-    return <Alert color="danger">Tabla de ventas está vacía</Alert>;
-
-  const minYear = ventas[0].fecha.getFullYear();
-  const maxYear = ventas[ventas.length - 1].fecha.getFullYear();
-  const years = [];
-  if (Array.isArray(ventas)) {
-    for (let y = minYear; y <= maxYear; y++) {
-      years.push(y);
-    }
-  }
-
-  const activeYear: number = year ? parseInt(year, 10) : maxYear;
+  const [years, activeYear] = yearTabs(ventas, year);
   const onAdd: React.MouseEventHandler<HTMLButtonElement> = (ev) => {
     ev.stopPropagation();
     history.push('/venta/new');
@@ -163,7 +150,7 @@ const ListVentas: React.FC<{
             </tr>
           </thead>
           <tbody>
-            {(ventas || [])
+            {ventas
               .filter(
                 (venta: VentaType) => venta.fecha.getFullYear() === activeYear
               )

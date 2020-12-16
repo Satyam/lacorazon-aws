@@ -26,7 +26,7 @@ import { ShowVendedor } from 'App/vendedores/gadgets';
 import { ShowDistribuidor } from 'App/distribuidor/gadgets';
 import { useFacturaciones, deleteFacturacion } from './common';
 import { ShowCuenta } from 'App/cuentas/gadgets';
-
+import { yearTabs } from 'Components/utils';
 const fourDigits = /\d{4}/;
 
 const ListFacturaciones: React.FC<{
@@ -46,20 +46,11 @@ const ListFacturaciones: React.FC<{
     return <ErrorAlert error={error}>Cargando facturaciones</ErrorAlert>;
 
   let activeYear: number | undefined;
-  const years: number[] = [];
+  let years: number[] = [];
 
   let distribuidorFilter: string | undefined;
   if (!year || fourDigits.test(year)) {
-    if (facturaciones.length) {
-      const minYear = facturaciones[0].fecha.getFullYear();
-      const maxYear = facturaciones[
-        facturaciones.length - 1
-      ].fecha.getFullYear();
-      for (let y = minYear; y <= maxYear; y++) {
-        years.push(y);
-      }
-      activeYear = year ? parseInt(year, 10) : maxYear;
-    }
+    [years, activeYear] = yearTabs(facturaciones, year);
   } else {
     distribuidorFilter = year;
   }
@@ -223,7 +214,7 @@ const ListFacturaciones: React.FC<{
             </tr>
           </thead>
           <tbody>
-            {(facturaciones || [])
+            {facturaciones
               .filter((f: FacturacionType) => {
                 if (activeYear) return f.fecha.getFullYear() === activeYear;
                 if (distribuidorFilter)

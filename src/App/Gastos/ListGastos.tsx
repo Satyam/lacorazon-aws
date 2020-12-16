@@ -21,7 +21,7 @@ import { Loading } from 'Components/Modals';
 import { ErrorAlert } from 'Components/ErrorAlert';
 import Page from 'Components/Page';
 import { useModals } from 'Providers/Modals';
-
+import { yearTabs } from 'Components/utils';
 import { useGastos, deleteGasto } from './common';
 import { ShowCuenta } from 'App/cuentas/gadgets';
 import { ShowIVA, calculoIVA } from 'App/iva/gadgets';
@@ -36,19 +36,8 @@ const ListGastos: React.FC<{}> = () => {
   const { confirmDelete } = useModals();
   if (error) return <ErrorAlert error={error}>Cargando gastos</ErrorAlert>;
 
-  if (error) return <ErrorAlert error={error}>Cargando gastos</ErrorAlert>;
-  if (typeof gastos === 'undefined') return null;
+  const [years, activeYear] = yearTabs(gastos, year);
 
-  const minYear = gastos[0].fecha.getFullYear();
-  const maxYear = gastos[gastos.length - 1].fecha.getFullYear();
-  const years = [];
-  if (Array.isArray(gastos)) {
-    for (let y = minYear; y <= maxYear; y++) {
-      years.push(y);
-    }
-  }
-
-  const activeYear: number = year ? parseInt(year, 10) : maxYear;
   const onAdd: React.MouseEventHandler<HTMLButtonElement> = (ev) => {
     ev.stopPropagation();
     history.push('/gasto/new');
@@ -148,7 +137,7 @@ const ListGastos: React.FC<{}> = () => {
             </tr>
           </thead>
           <tbody>
-            {(gastos || [])
+            {gastos
               .filter(
                 (gasto: GastoType) => gasto.fecha.getFullYear() === activeYear
               )
