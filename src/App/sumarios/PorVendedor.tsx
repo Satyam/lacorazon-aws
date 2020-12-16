@@ -45,8 +45,6 @@ const useInitVendedores = (): [
   return useMemo(() => {
     if (error) return [undefined, false, error];
     if (loading) return [undefined, loading];
-    if (typeof vendedores === 'undefined')
-      return [undefined, false, 'Tabla de distribuidores está vacía'];
     return [
       vendedores.reduce<Record<ID, Vendedor>>(
         (vvs, v) => ({
@@ -71,8 +69,6 @@ const useAcumComisionesPagadas = (): [
   return useMemo(() => {
     if (error) return [undefined, false, error];
     if (loading) return [undefined, loading];
-    if (typeof comisiones === 'undefined')
-      return [undefined, false, 'Tabla de comisiones está vacía'];
     return [
       comisiones.reduce<Record<ID, AcumComisionesPagadas>>(
         (comisiones, { idVendedor, importe }) => {
@@ -98,8 +94,7 @@ const useAcumVentas = (): [
   return useMemo(() => {
     if (error) return [undefined, false, error];
     if (loading) return [undefined, false];
-    if (typeof ventas === 'undefined')
-      return [undefined, false, 'Tabla de comisiones está vacía'];
+
     const { comisionInterna } = configs;
     return [
       ventas.reduce<Record<ID, AcumVentas>>(
@@ -145,8 +140,7 @@ const useAcumFacturacion = (): [
   return useMemo(() => {
     if (error) return [undefined, false, error];
     if (loading) return [undefined, loading];
-    if (typeof facturaciones === 'undefined')
-      return [undefined, false, 'Tabla de facturaciones está vacía'];
+
     const { comisionInterna } = configs;
     return [
       facturaciones

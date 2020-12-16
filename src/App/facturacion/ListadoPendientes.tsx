@@ -132,7 +132,7 @@ muestra a la izquierda`}
             <th />
           </tr>
         </thead>
-        <tbody>{(pendientes || []).map(rowPendiente)}</tbody>
+        <tbody>{pendientes.map(rowPendiente)}</tbody>
       </Table>
     </Page>
   );

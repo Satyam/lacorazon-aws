@@ -68,11 +68,7 @@ export const dbTable = <
   useList: (
     sortField?: string,
     equalTo?: any
-  ) => [
-    ItemType[] | undefined,
-    boolean,
-    DbError<keyof ItemType | undefined> | undefined
-  ];
+  ) => [ItemType[], boolean, DbError<keyof ItemType | undefined> | undefined];
   dbCreate: (newValues: Partial<ItemType>) => Promise<ID>;
   dbCreateWithKey: (id: ID, newValues: Partial<ItemType>) => Promise<void>;
   /**
@@ -109,7 +105,7 @@ export const dbTable = <
       if (error)
         return [
           undefined,
-          loading,
+          false,
           new DbError<keyof ItemType>(
             error.toString(),
             path,
@@ -118,9 +114,8 @@ export const dbTable = <
             id
           ),
         ];
-      if (loading || typeof item === 'undefined')
-        return [undefined, loading, undefined];
-      return [memoizedItem(item), loading, undefined];
+      if (loading) return [undefined, true, undefined];
+      return [memoizedItem(item), false, undefined];
     },
     useList: (sortField, equalTo) => {
       if (typeof equalTo !== 'undefined' && typeof sortField === 'undefined')
@@ -128,11 +123,13 @@ export const dbTable = <
       let ref: firebase.database.Query = db.ref(path);
       if (sortField) ref = ref.orderByChild(sortField);
       if (equalTo) ref = ref.equalTo(equalTo);
-      const [list, loading, error] = useListVals<DbType>(ref, { keyField });
+      const [list = [], loading, error] = useListVals<DbType>(ref, {
+        keyField,
+      });
       if (error)
         return [
-          undefined,
-          loading,
+          [],
+          false,
           new DbError<keyof ItemType | undefined>(
             error.toString(),
             path,
@@ -141,19 +138,7 @@ export const dbTable = <
             equalTo
           ),
         ];
-      if (loading) return [undefined, loading, undefined];
-      if (typeof list === 'undefined')
-        return [
-          list,
-          loading,
-          new DbError<keyof ItemType | undefined>(
-            TABLE_IS_EMPTY,
-            path,
-            'useList',
-            sortField,
-            equalTo
-          ),
-        ];
+      if (loading) return [[], true, undefined];
       return [memoizedList(list), loading, undefined];
     },
     dbCreate: async (newValues) => {

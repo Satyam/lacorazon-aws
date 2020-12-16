@@ -42,8 +42,6 @@ const useInitDistribuidores = (): [
   return useMemo(() => {
     if (error) return [undefined, false, error];
     if (loading) return [undefined, loading];
-    if (typeof distribuidores === 'undefined')
-      return [undefined, false, 'Tabla de distribuidores está vacía'];
     return [
       distribuidores.reduce<Record<ID, Distribuidor>>(
         (vvs, v) => ({
@@ -69,8 +67,7 @@ const useAcumConsigna = (): [
   return useMemo(() => {
     if (error) return [undefined, false, error];
     if (loading) return [undefined, loading];
-    if (typeof consignas === 'undefined')
-      return [undefined, true, 'Tabla de consignas está vacía'];
+
     return [
       consignas.reduce<Record<ID, AcumConsigna>>(
         (acum, { idDistribuidor, cantidad, movimiento }) => {
@@ -120,8 +117,7 @@ const useAcumFacturacion = (): [
   return useMemo(() => {
     if (error) return [undefined, false, error];
     if (loading) return [undefined, loading];
-    if (typeof facturaciones === 'undefined')
-      return [undefined, true, 'Tabla de facturaciones está vacía'];
+
     const porcentajes: Record<ID, number> = {};
 
     return [

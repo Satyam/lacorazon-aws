@@ -85,7 +85,7 @@ export default function ListVendedores() {
             <th />
           </tr>
         </thead>
-        <tbody>{(vendedores || []).map(rowVendedor)}</tbody>
+        <tbody>{vendedores.map(rowVendedor)}</tbody>
       </Table>
     </Page>
   );

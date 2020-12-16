@@ -153,21 +153,10 @@ const ShowDetalle: React.FC<{ distribuidor: DistribuidorType }> = ({
   if (errorC) return <ErrorAlert error={errorC}>Cargando Consigna</ErrorAlert>;
 
   if (loadingC) return <Loading>Cargando Consigna</Loading>;
-  if (typeof consignas === 'undefined')
-    return (
-      <ErrorAlert error={'Tabla de consignas está vacía'}>
-        Cargando Consigna
-      </ErrorAlert>
-    );
+
   if (errorF)
     return <ErrorAlert error={errorF}>Cargando facturación</ErrorAlert>;
   if (loadingF) return <Loading>Cargando facturación</Loading>;
-  if (typeof facturaciones === 'undefined')
-    return (
-      <ErrorAlert error={'Tabla de facturaciones está vacía'}>
-        Cargando facturación
-      </ErrorAlert>
-    );
   return (
     <>
       <h3>Detalle de operaciones</h3>

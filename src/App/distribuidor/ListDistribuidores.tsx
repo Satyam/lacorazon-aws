@@ -102,7 +102,7 @@ export default function ListDistribuidores() {
             <th />
           </tr>
         </thead>
-        <tbody>{(distribuidores || []).map(rowDistribuidor)}</tbody>
+        <tbody>{distribuidores.map(rowDistribuidor)}</tbody>
       </Table>
     </Page>
   );
