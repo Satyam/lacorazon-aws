@@ -1,15 +1,7 @@
 import React from 'react';
 import { useHistory, useParams, Link } from 'react-router-dom';
-import {
-  Table,
-  ButtonGroup,
-  TabContent,
-  Nav,
-  NavItem,
-  NavLink,
-} from 'reactstrap';
+import { Table, ButtonGroup, TabContent } from 'reactstrap';
 
-import classnames from 'classnames';
 import {
   ButtonIconAdd,
   ButtonIconEdit,
@@ -26,8 +18,8 @@ import { ShowVendedor } from 'App/vendedores/gadgets';
 import { ShowDistribuidor } from 'App/distribuidor/gadgets';
 import { useFacturaciones, deleteFacturacion } from './common';
 import { ShowCuenta } from 'App/cuentas/gadgets';
-import { yearTabs } from 'Components/utils';
-const fourDigits = /\d{4}/;
+import { yearTabs, yearRegExp } from 'Components/utils';
+import { YearTabs } from 'Components/gadgets';
 
 const ListFacturaciones: React.FC<{
   idVendedor?: string;
@@ -49,7 +41,7 @@ const ListFacturaciones: React.FC<{
   let years: number[] = [];
 
   let distribuidorFilter: string | undefined;
-  if (!year || fourDigits.test(year)) {
+  if (!year || yearRegExp.test(year)) {
     [years, activeYear] = yearTabs(facturaciones, year);
   } else {
     distribuidorFilter = year;
@@ -176,22 +168,7 @@ const ListFacturaciones: React.FC<{
       }
     >
       {loading && <Loading>Cargando facturaciones</Loading>}
-      {activeYear && (
-        <Nav tabs>
-          {years.map((y) => (
-            <NavItem key={y}>
-              <NavLink
-                className={classnames({ active: activeYear === y })}
-                onClick={() => {
-                  history.replace(`/facturaciones/${y}`);
-                }}
-              >
-                {y}
-              </NavLink>
-            </NavItem>
-          ))}
-        </Nav>
-      )}
+      <YearTabs activeYear={activeYear} years={years} />
       <TabContent>
         <Table striped hover size="sm" responsive bordered>
           <thead>

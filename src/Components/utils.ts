@@ -21,6 +21,8 @@ export const byField = (name: string) => (
   return 0;
 };
 
+export const yearRegExp = /y(\d{4})y/;
+
 export const yearTabs = (
   list: { fecha: Date }[],
   year: string
@@ -35,6 +37,7 @@ export const yearTabs = (
       years.push(y);
     }
   }
-  const activeYear: number = year ? parseInt(year, 10) : maxYear;
+  const yearMatch = yearRegExp.exec(year);
+  const activeYear: number = yearMatch ? parseInt(yearMatch[1], 10) : maxYear;
   return [years, activeYear];
 };

@@ -1,15 +1,7 @@
 import React from 'react';
 import { useHistory, useParams, Link } from 'react-router-dom';
-import {
-  Table,
-  ButtonGroup,
-  TabContent,
-  Nav,
-  NavItem,
-  NavLink,
-} from 'reactstrap';
+import { Table, ButtonGroup, TabContent } from 'reactstrap';
 
-import classnames from 'classnames';
 import {
   ButtonIconEdit,
   ButtonIconDelete,
@@ -22,6 +14,7 @@ import { ErrorAlert } from 'Components/ErrorAlert';
 import Page from 'Components/Page';
 import { useModals } from 'Providers/Modals';
 import { yearTabs } from 'Components/utils';
+import { YearTabs } from 'Components/gadgets';
 import { useGastos, deleteGasto } from './common';
 import { ShowCuenta } from 'App/cuentas/gadgets';
 import { ShowIVA, calculoIVA } from 'App/iva/gadgets';
@@ -108,20 +101,7 @@ const ListGastos: React.FC<{}> = () => {
       }
     >
       {loading && <Loading>Cargando gastos</Loading>}
-      <Nav tabs>
-        {years.map((y) => (
-          <NavItem key={y}>
-            <NavLink
-              className={classnames({ active: activeYear === y })}
-              onClick={() => {
-                history.replace(`/gastos/${y}`);
-              }}
-            >
-              {y}
-            </NavLink>
-          </NavItem>
-        ))}
-      </Nav>
+      <YearTabs activeYear={activeYear} years={years} />
       <TabContent>
         <Table striped hover size="sm" responsive bordered>
           <thead>

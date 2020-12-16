@@ -1,15 +1,7 @@
 import React from 'react';
 import { useHistory, useParams, Link } from 'react-router-dom';
-import {
-  Table,
-  ButtonGroup,
-  TabContent,
-  Nav,
-  NavItem,
-  NavLink,
-} from 'reactstrap';
+import { Table, ButtonGroup, TabContent } from 'reactstrap';
 
-import classnames from 'classnames';
 import {
   ButtonIconAdd,
   ButtonIconEdit,
@@ -23,6 +15,7 @@ import Page from 'Components/Page';
 import { useModals } from 'Providers/Modals';
 import { ShowVendedor } from 'App/vendedores/gadgets';
 import { yearTabs } from 'Components/utils';
+import { YearTabs } from 'Components/gadgets';
 import { useVentas, deleteVenta } from './common';
 import { ShowCuenta } from 'App/cuentas/gadgets';
 
@@ -120,20 +113,7 @@ const ListVentas: React.FC<{
       }
     >
       {loading && <Loading>Cargando ventas</Loading>}
-      <Nav tabs>
-        {years.map((y) => (
-          <NavItem key={y}>
-            <NavLink
-              className={classnames({ active: activeYear === y })}
-              onClick={() => {
-                history.replace(`/ventas/${y}`);
-              }}
-            >
-              {y}
-            </NavLink>
-          </NavItem>
-        ))}
-      </Nav>
+      <YearTabs activeYear={activeYear} years={years} />
       <TabContent>
         <Table striped hover size="sm" responsive bordered>
           <thead>

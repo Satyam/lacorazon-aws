@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 
-import { Table, TabContent, Nav, NavItem, NavLink } from 'reactstrap';
-import { useParams, useHistory } from 'react-router-dom';
+import { Table, TabContent } from 'reactstrap';
+import { useParams } from 'react-router-dom';
 
 import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
@@ -15,8 +15,8 @@ import { ShowVendedor } from 'App/vendedores/gadgets';
 import { ShowDistribuidor } from 'App/distribuidor/gadgets';
 import { useIntl } from 'Providers/Intl';
 import { cuentas, ShowCuenta } from 'App/cuentas/gadgets';
-import classnames from 'classnames';
 import { yearTabs } from 'Components/utils';
+import { YearTabs } from 'Components/gadgets';
 enum Origen {
   Venta = 'Venta',
   Distribuidor = 'Distribuidor',
@@ -146,7 +146,6 @@ const useAcumFacturacion = (): [
 };
 
 const SumarioCaja: React.FC = () => {
-  const history = useHistory();
   const { year } = useParams<{ year: string }>();
   const [acumVentas = [], loadingVentas, errorVentas] = useAcumVentas();
   const [acumGastos = [], loadingGastos, errorGastos] = useAcumGastos();
@@ -265,20 +264,7 @@ Si es negativo es que Hacienda os debe a vosotros`}
           </tbody>
         </Table>
 
-        <Nav tabs>
-          {years.map((y) => (
-            <NavItem key={y}>
-              <NavLink
-                className={classnames({ active: activeYear === y })}
-                onClick={() => {
-                  history.replace(`/sumario/caja/${y}`);
-                }}
-              >
-                {y}
-              </NavLink>
-            </NavItem>
-          ))}
-        </Nav>
+        <YearTabs activeYear={activeYear} years={years} />
         <TabContent>
           <Table striped hover size="sm" responsive bordered>
             <thead>
