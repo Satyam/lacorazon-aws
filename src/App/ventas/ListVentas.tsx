@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory, useParams, Link } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import { Table, ButtonGroup, TabContent } from 'reactstrap';
 
 import {
@@ -14,7 +14,6 @@ import { ErrorAlert } from 'Components/ErrorAlert';
 import Page from 'Components/Page';
 import { useModals } from 'Providers/Modals';
 import { ShowVendedor } from 'App/vendedores/gadgets';
-import { yearTabs } from 'Components/utils';
 import { YearTabs } from 'Components/gadgets';
 import { useVentas, deleteVenta } from './common';
 import { ShowCuenta } from 'App/cuentas/gadgets';
@@ -25,7 +24,6 @@ const ListVentas: React.FC<{
   wide?: boolean;
 }> = ({ idVendedor, nombreVendedor, wide }) => {
   const history = useHistory();
-  const { year } = useParams<{ year: string }>();
 
   const [ventas, loading, error] = useVentas();
 
@@ -34,7 +32,6 @@ const ListVentas: React.FC<{
 
   if (error) return <ErrorAlert error={error}>Cargando ventas</ErrorAlert>;
 
-  const [years, activeYear] = yearTabs(ventas, year);
   const onAdd: React.MouseEventHandler<HTMLButtonElement> = (ev) => {
     ev.stopPropagation();
     history.push('/venta/new');
@@ -113,31 +110,35 @@ const ListVentas: React.FC<{
       }
     >
       {loading && <Loading>Cargando ventas</Loading>}
-      <YearTabs activeYear={activeYear} years={years} />
-      <TabContent>
-        <Table striped hover size="sm" responsive bordered>
-          <thead>
-            <tr>
-              <th>Fecha</th>
-              <th>Concepto</th>
-              {!idVendedor && <th>Vendedor</th>}
-              <th>Cantidad</th>
-              <th>Precio Unitario</th>
-              <th>IVA</th>
-              <th>Precio Total</th>
-              <th>Cuenta</th>
-              <th />
-            </tr>
-          </thead>
-          <tbody>
-            {ventas
-              .filter(
-                (venta: VentaType) => venta.fecha.getFullYear() === activeYear
-              )
-              .map(rowVenta)}
-          </tbody>
-        </Table>
-      </TabContent>
+      <YearTabs list={ventas}>
+        {(activeYear: number) => (
+          <TabContent>
+            <Table striped hover size="sm" responsive bordered>
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Concepto</th>
+                  {!idVendedor && <th>Vendedor</th>}
+                  <th>Cantidad</th>
+                  <th>Precio Unitario</th>
+                  <th>IVA</th>
+                  <th>Precio Total</th>
+                  <th>Cuenta</th>
+                  <th />
+                </tr>
+              </thead>
+              <tbody>
+                {ventas
+                  .filter(
+                    (venta: VentaType) =>
+                      venta.fecha.getFullYear() === activeYear
+                  )
+                  .map(rowVenta)}
+              </tbody>
+            </Table>
+          </TabContent>
+        )}
+      </YearTabs>
     </Page>
   );
 };

@@ -18,15 +18,14 @@ import { ShowVendedor } from 'App/vendedores/gadgets';
 import { ShowDistribuidor } from 'App/distribuidor/gadgets';
 import { useFacturaciones, deleteFacturacion } from './common';
 import { ShowCuenta } from 'App/cuentas/gadgets';
-import { yearTabs, yearRegExp } from 'Components/utils';
-import { YearTabs } from 'Components/gadgets';
+import { YearTabs, hasYear } from 'Components/gadgets';
 
 const ListFacturaciones: React.FC<{
   idVendedor?: string;
   nombreVendedor?: string;
   wide?: boolean;
 }> = ({ idVendedor, nombreVendedor, wide }) => {
-  const history = useHistory();
+  const history = useHistory<null>();
   const { year } = useParams<{ year: string }>();
 
   const [facturaciones = [], loading, error] = useFacturaciones();
@@ -37,15 +36,8 @@ const ListFacturaciones: React.FC<{
   if (error)
     return <ErrorAlert error={error}>Cargando facturaciones</ErrorAlert>;
 
-  let activeYear: number | undefined;
-  let years: number[] = [];
-
-  let distribuidorFilter: string | undefined;
-  if (!year || yearRegExp.test(year)) {
-    [years, activeYear] = yearTabs(facturaciones, year);
-  } else {
-    distribuidorFilter = year;
-  }
+  const distribuidorFilter: string | undefined =
+    year && !hasYear(history.location.pathname) ? year : undefined;
 
   const onAdd: React.MouseEventHandler<HTMLButtonElement> = (ev) => {
     ev.stopPropagation();
@@ -168,40 +160,43 @@ const ListFacturaciones: React.FC<{
       }
     >
       {loading && <Loading>Cargando facturaciones</Loading>}
-      <YearTabs activeYear={activeYear} years={years} />
-      <TabContent>
-        <Table striped hover size="sm" responsive bordered>
-          <thead>
-            <tr>
-              <th>Distribuidor</th>
-              <th>Fecha</th>
-              <th>Concepto</th>
-              <th>Vendedor</th>
-              <th>
-                Porcentaje /<br />
-                Precio
-              </th>
-              <th>Cantidad</th>
-              <th>Nro. Factura</th>
-              <th>IVA</th>
-              <th>Facturado</th>
-              <th>Cobrado</th>
-              <th>Cuenta</th>
-              <th />
-            </tr>
-          </thead>
-          <tbody>
-            {facturaciones
-              .filter((f: FacturacionType) => {
-                if (activeYear) return f.fecha.getFullYear() === activeYear;
-                if (distribuidorFilter)
-                  return f.idDistribuidor === distribuidorFilter;
-                return true;
-              })
-              .map(rowFacturacion)}
-          </tbody>
-        </Table>
-      </TabContent>
+      <YearTabs list={distribuidorFilter ? undefined : facturaciones}>
+        {(activeYear?: number) => (
+          <TabContent>
+            <Table striped hover size="sm" responsive bordered>
+              <thead>
+                <tr>
+                  <th>Distribuidor</th>
+                  <th>Fecha</th>
+                  <th>Concepto</th>
+                  <th>Vendedor</th>
+                  <th>
+                    Porcentaje /<br />
+                    Precio
+                  </th>
+                  <th>Cantidad</th>
+                  <th>Nro. Factura</th>
+                  <th>IVA</th>
+                  <th>Facturado</th>
+                  <th>Cobrado</th>
+                  <th>Cuenta</th>
+                  <th />
+                </tr>
+              </thead>
+              <tbody>
+                {facturaciones
+                  .filter((f: FacturacionType) => {
+                    if (activeYear) return f.fecha.getFullYear() === activeYear;
+                    if (distribuidorFilter)
+                      return f.idDistribuidor === distribuidorFilter;
+                    return true;
+                  })
+                  .map(rowFacturacion)}
+              </tbody>
+            </Table>
+          </TabContent>
+        )}
+      </YearTabs>
     </Page>
   );
 };

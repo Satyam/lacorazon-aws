@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory, useParams, Link } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import { Table, ButtonGroup, TabContent } from 'reactstrap';
 
 import {
@@ -13,7 +13,6 @@ import { Loading } from 'Components/Modals';
 import { ErrorAlert } from 'Components/ErrorAlert';
 import Page from 'Components/Page';
 import { useModals } from 'Providers/Modals';
-import { yearTabs } from 'Components/utils';
 import { YearTabs } from 'Components/gadgets';
 import { useGastos, deleteGasto } from './common';
 import { ShowCuenta } from 'App/cuentas/gadgets';
@@ -21,15 +20,12 @@ import { ShowIVA, calculoIVA } from 'App/iva/gadgets';
 
 const ListGastos: React.FC<{}> = () => {
   const history = useHistory();
-  const { year } = useParams<{ year: string }>();
 
   const [gastos, loading, error] = useGastos();
 
   const { formatDate, formatCurrency } = useIntl();
   const { confirmDelete } = useModals();
   if (error) return <ErrorAlert error={error}>Cargando gastos</ErrorAlert>;
-
-  const [years, activeYear] = yearTabs(gastos, year);
 
   const onAdd: React.MouseEventHandler<HTMLButtonElement> = (ev) => {
     ev.stopPropagation();
@@ -101,30 +97,34 @@ const ListGastos: React.FC<{}> = () => {
       }
     >
       {loading && <Loading>Cargando gastos</Loading>}
-      <YearTabs activeYear={activeYear} years={years} />
-      <TabContent>
-        <Table striped hover size="sm" responsive bordered>
-          <thead>
-            <tr>
-              <th>Fecha</th>
-              <th>Concepto</th>
-              <th>Importe</th>
-              <th>Cuenta</th>
-              <th>IVA%</th>
-              <th>Importe IVA</th>
-              <th>Importe sin IVA</th>
-              <th />
-            </tr>
-          </thead>
-          <tbody>
-            {gastos
-              .filter(
-                (gasto: GastoType) => gasto.fecha.getFullYear() === activeYear
-              )
-              .map(rowGasto)}
-          </tbody>
-        </Table>
-      </TabContent>
+      <YearTabs list={gastos}>
+        {(activeYear: number) => (
+          <TabContent>
+            <Table striped hover size="sm" responsive bordered>
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Concepto</th>
+                  <th>Importe</th>
+                  <th>Cuenta</th>
+                  <th>IVA%</th>
+                  <th>Importe IVA</th>
+                  <th>Importe sin IVA</th>
+                  <th />
+                </tr>
+              </thead>
+              <tbody>
+                {gastos
+                  .filter(
+                    (gasto: GastoType) =>
+                      gasto.fecha.getFullYear() === activeYear
+                  )
+                  .map(rowGasto)}
+              </tbody>
+            </Table>
+          </TabContent>
+        )}
+      </YearTabs>
     </Page>
   );
 };
