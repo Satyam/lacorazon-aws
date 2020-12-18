@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHistory, Link } from 'react-router-dom';
-import { Table, ButtonGroup, TabContent } from 'reactstrap';
+import { Table, ButtonGroup } from 'reactstrap';
 
 import {
   ButtonIconEdit,
@@ -99,30 +99,27 @@ const ListGastos: React.FC<{}> = () => {
       {loading && <Loading>Cargando gastos</Loading>}
       <YearTabs list={gastos}>
         {(activeYear: number) => (
-          <TabContent>
-            <Table striped hover size="sm" responsive bordered>
-              <thead>
-                <tr>
-                  <th>Fecha</th>
-                  <th>Concepto</th>
-                  <th>Importe</th>
-                  <th>Cuenta</th>
-                  <th>IVA%</th>
-                  <th>Importe IVA</th>
-                  <th>Importe sin IVA</th>
-                  <th />
-                </tr>
-              </thead>
-              <tbody>
-                {gastos
-                  .filter(
-                    (gasto: GastoType) =>
-                      gasto.fecha.getFullYear() === activeYear
-                  )
-                  .map(rowGasto)}
-              </tbody>
-            </Table>
-          </TabContent>
+          <Table striped hover size="sm" responsive bordered>
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Concepto</th>
+                <th>Importe</th>
+                <th>Cuenta</th>
+                <th>IVA%</th>
+                <th>Importe IVA</th>
+                <th>Importe sin IVA</th>
+                <th />
+              </tr>
+            </thead>
+            <tbody>
+              {gastos
+                .filter(
+                  (gasto: GastoType) => gasto.fecha.getFullYear() === activeYear
+                )
+                .map(rowGasto)}
+            </tbody>
+          </Table>
         )}
       </YearTabs>
     </Page>

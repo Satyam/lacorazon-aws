@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHistory, useParams, Link } from 'react-router-dom';
-import { Table, ButtonGroup, TabContent } from 'reactstrap';
+import { Table, ButtonGroup } from 'reactstrap';
 
 import {
   ButtonIconAdd,
@@ -162,39 +162,37 @@ const ListFacturaciones: React.FC<{
       {loading && <Loading>Cargando facturaciones</Loading>}
       <YearTabs list={distribuidorFilter ? undefined : facturaciones}>
         {(activeYear?: number) => (
-          <TabContent>
-            <Table striped hover size="sm" responsive bordered>
-              <thead>
-                <tr>
-                  <th>Distribuidor</th>
-                  <th>Fecha</th>
-                  <th>Concepto</th>
-                  <th>Vendedor</th>
-                  <th>
-                    Porcentaje /<br />
-                    Precio
-                  </th>
-                  <th>Cantidad</th>
-                  <th>Nro. Factura</th>
-                  <th>IVA</th>
-                  <th>Facturado</th>
-                  <th>Cobrado</th>
-                  <th>Cuenta</th>
-                  <th />
-                </tr>
-              </thead>
-              <tbody>
-                {facturaciones
-                  .filter((f: FacturacionType) => {
-                    if (activeYear) return f.fecha.getFullYear() === activeYear;
-                    if (distribuidorFilter)
-                      return f.idDistribuidor === distribuidorFilter;
-                    return true;
-                  })
-                  .map(rowFacturacion)}
-              </tbody>
-            </Table>
-          </TabContent>
+          <Table striped hover size="sm" responsive bordered>
+            <thead>
+              <tr>
+                <th>Distribuidor</th>
+                <th>Fecha</th>
+                <th>Concepto</th>
+                <th>Vendedor</th>
+                <th>
+                  Porcentaje /<br />
+                  Precio
+                </th>
+                <th>Cantidad</th>
+                <th>Nro. Factura</th>
+                <th>IVA</th>
+                <th>Facturado</th>
+                <th>Cobrado</th>
+                <th>Cuenta</th>
+                <th />
+              </tr>
+            </thead>
+            <tbody>
+              {facturaciones
+                .filter((f: FacturacionType) => {
+                  if (activeYear) return f.fecha.getFullYear() === activeYear;
+                  if (distribuidorFilter)
+                    return f.idDistribuidor === distribuidorFilter;
+                  return true;
+                })
+                .map(rowFacturacion)}
+            </tbody>
+          </Table>
         )}
       </YearTabs>
     </Page>

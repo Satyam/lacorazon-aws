@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 
-import { Table, TabContent } from 'reactstrap';
+import { Table } from 'reactstrap';
 
 import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
@@ -261,32 +261,30 @@ Si es negativo es que Hacienda os debe a vosotros`}
 
         <YearTabs list={entradas}>
           {(activeYear: number) => (
-            <TabContent>
-              <Table striped hover size="sm" responsive bordered>
-                <thead>
-                  <tr>
-                    <th>Fecha</th>
-                    <th>Origen</th>
-                    <th>Referencia</th>
-                    <th>Concepto</th>
-                    <th>Total (IVA incluido)</th>
-                    <th>Cuenta</th>
-                    <th>IVA</th>
-                    <th>Importe (sin IVA)</th>
-                    <th>Saldo</th>
-                    <th>IVA Acum</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {entradas
-                    .filter(
-                      (entrada: EntradaDeCaja) =>
-                        entrada.fecha.getFullYear() === activeYear
-                    )
-                    .map(rowSumario)}
-                </tbody>
-              </Table>
-            </TabContent>
+            <Table striped hover size="sm" responsive bordered>
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Origen</th>
+                  <th>Referencia</th>
+                  <th>Concepto</th>
+                  <th>Total (IVA incluido)</th>
+                  <th>Cuenta</th>
+                  <th>IVA</th>
+                  <th>Importe (sin IVA)</th>
+                  <th>Saldo</th>
+                  <th>IVA Acum</th>
+                </tr>
+              </thead>
+              <tbody>
+                {entradas
+                  .filter(
+                    (entrada: EntradaDeCaja) =>
+                      entrada.fecha.getFullYear() === activeYear
+                  )
+                  .map(rowSumario)}
+              </tbody>
+            </Table>
           )}
         </YearTabs>
       </>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHistory, Link } from 'react-router-dom';
-import { Table, ButtonGroup, TabContent } from 'reactstrap';
+import { Table, ButtonGroup } from 'reactstrap';
 
 import {
   ButtonIconAdd,
@@ -112,31 +112,28 @@ const ListVentas: React.FC<{
       {loading && <Loading>Cargando ventas</Loading>}
       <YearTabs list={ventas}>
         {(activeYear: number) => (
-          <TabContent>
-            <Table striped hover size="sm" responsive bordered>
-              <thead>
-                <tr>
-                  <th>Fecha</th>
-                  <th>Concepto</th>
-                  {!idVendedor && <th>Vendedor</th>}
-                  <th>Cantidad</th>
-                  <th>Precio Unitario</th>
-                  <th>IVA</th>
-                  <th>Precio Total</th>
-                  <th>Cuenta</th>
-                  <th />
-                </tr>
-              </thead>
-              <tbody>
-                {ventas
-                  .filter(
-                    (venta: VentaType) =>
-                      venta.fecha.getFullYear() === activeYear
-                  )
-                  .map(rowVenta)}
-              </tbody>
-            </Table>
-          </TabContent>
+          <Table striped hover size="sm" responsive bordered>
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Concepto</th>
+                {!idVendedor && <th>Vendedor</th>}
+                <th>Cantidad</th>
+                <th>Precio Unitario</th>
+                <th>IVA</th>
+                <th>Precio Total</th>
+                <th>Cuenta</th>
+                <th />
+              </tr>
+            </thead>
+            <tbody>
+              {ventas
+                .filter(
+                  (venta: VentaType) => venta.fecha.getFullYear() === activeYear
+                )
+                .map(rowVenta)}
+            </tbody>
+          </Table>
         )}
       </YearTabs>
     </Page>
