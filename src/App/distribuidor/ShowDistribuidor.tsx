@@ -142,11 +142,11 @@ const ShowDetalle: React.FC<{ distribuidor: DistribuidorType }> = ({
       </tr>
     );
   };
-  const [consignas, loadingC, errorC] = useConsignas(
+  const [consignas = [], loadingC, errorC] = useConsignas(
     'idDistribuidor',
     distribuidor.idDistribuidor
   );
-  const [facturaciones, loadingF, errorF] = useFacturaciones(
+  const [facturaciones = [], loadingF, errorF] = useFacturaciones(
     'idDistribuidor',
     distribuidor.idDistribuidor
   );

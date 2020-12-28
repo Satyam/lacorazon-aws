@@ -5,7 +5,6 @@ import 'firebase/database';
 
 import config from './firebase.config';
 import { useObjectVal, useListVals } from 'react-firebase-hooks/database';
-import memoize from 'memoize-one';
 
 firebase.initializeApp(config);
 
@@ -53,6 +52,18 @@ export class DbError<F> extends Error {
     value: [${this.value.toString()}]`;
   }
 }
+
+export type UseItemType<T> = [
+  T | undefined,
+  boolean,
+  DbError<keyof T> | undefined
+];
+export type UseListType<T> = [
+  T[] | undefined,
+  boolean,
+  DbError<keyof T | undefined> | undefined
+];
+
 export const dbTable = <
   ItemType extends Record<string, any>,
   DbType extends Record<string, any>
@@ -62,13 +73,8 @@ export const dbTable = <
   fromDb: (item: DbType) => ItemType = (item) => item as ItemType,
   toDb: (item: Partial<ItemType>) => Partial<DbType> = (item) => item as DbType
 ): {
-  useItem: (
-    id: ID
-  ) => [ItemType | undefined, boolean, DbError<keyof ItemType> | undefined];
-  useList: (
-    sortField?: string,
-    equalTo?: any
-  ) => [ItemType[], boolean, DbError<keyof ItemType | undefined> | undefined];
+  useItem: (id: ID) => UseItemType<ItemType>;
+  useList: (sortField?: string, equalTo?: any) => UseListType<ItemType>;
   dbCreate: (newValues: Partial<ItemType>) => Promise<ID>;
   dbCreateWithKey: (id: ID, newValues: Partial<ItemType>) => Promise<void>;
   /**
@@ -89,33 +95,24 @@ export const dbTable = <
   ) => Promise<ItemType>;
   dbDelete: (id: ID) => Promise<void>;
 } => {
-  const memoizedItem = memoize(
-    (item: DbType | undefined) => item && fromDb(item)
-  );
-
-  const memoizedList = memoize((list: DbType[]) => list.map(fromDb));
-
   const itemRef = (id: string) => db.ref(`${path}/${id}`);
   return {
     useItem: (id) => {
-      const [item, loading, error] = useObjectVal<DbType>(itemRef(id), {
+      const result = useObjectVal<ItemType>(itemRef(id), {
         keyField,
-      });
+        transform: fromDb,
+      }) as UseItemType<ItemType>;
+      if (typeof result[2] !== 'undefined') {
+        result[2] = new DbError<keyof ItemType>(
+          result[2].toString(),
+          path,
+          'useItem',
+          keyField,
+          id
+        );
+      }
 
-      if (error)
-        return [
-          undefined,
-          false,
-          new DbError<keyof ItemType>(
-            error.toString(),
-            path,
-            'useItem',
-            keyField,
-            id
-          ),
-        ];
-      if (loading) return [undefined, true, undefined];
-      return [memoizedItem(item), false, undefined];
+      return result;
     },
     useList: (sortField, equalTo) => {
       if (typeof equalTo !== 'undefined' && typeof sortField === 'undefined')
@@ -123,23 +120,21 @@ export const dbTable = <
       let ref: firebase.database.Query = db.ref(path);
       if (sortField) ref = ref.orderByChild(sortField);
       if (equalTo) ref = ref.equalTo(equalTo);
-      const [list = [], loading, error] = useListVals<DbType>(ref, {
+      const result = useListVals<ItemType>(ref, {
         keyField,
-      });
-      if (error)
-        return [
-          [],
-          false,
-          new DbError<keyof ItemType | undefined>(
-            error.toString(),
-            path,
-            'useList',
-            sortField,
-            equalTo
-          ),
-        ];
-      if (loading) return [[], true, undefined];
-      return [memoizedList(list), loading, undefined];
+        transform: fromDb,
+      }) as UseListType<ItemType>;
+      if (typeof result[2] !== 'undefined') {
+        result[2] = new DbError<keyof ItemType | undefined>(
+          result[2].toString(),
+          path,
+          'useList',
+          sortField,
+          equalTo
+        );
+      }
+
+      return result;
     },
     dbCreate: async (newValues) => {
       const outRef = await db.ref(path).push(toDb(newValues));

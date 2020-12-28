@@ -18,7 +18,7 @@ import styles from './styles.module.css';
 
 export default function ListDistribuidores() {
   const history = useHistory();
-  const [distribuidores, loading, error] = useDistribuidores();
+  const [distribuidores = [], loading, error] = useDistribuidores();
 
   const { confirmDelete } = useModals();
 

@@ -43,7 +43,7 @@ const useAcumVentas = (): [
   loading: boolean,
   error?: any
 ] => {
-  const [ventas, loading, error] = useVentas();
+  const [ventas = [], loading, error] = useVentas();
 
   return useMemo(() => {
     if (error) return [undefined, false, error];
@@ -79,7 +79,7 @@ const useAcumGastos = (): [
   loading: boolean,
   error?: any
 ] => {
-  const [gastos, loading, error] = useGastos();
+  const [gastos = [], loading, error] = useGastos();
 
   return useMemo(() => {
     if (error) return [undefined, false, error];
@@ -109,7 +109,7 @@ const useAcumFacturacion = (): [
   loading: boolean,
   error?: any
 ] => {
-  const [facturaciones, loading, error] = useFacturaciones();
+  const [facturaciones = [], loading, error] = useFacturaciones();
 
   return useMemo(() => {
     if (error) return [undefined, false, error];

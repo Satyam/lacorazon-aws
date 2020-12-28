@@ -37,7 +37,7 @@ const useInitDistribuidores = (): [
   loading: boolean,
   error?: Error | string
 ] => {
-  const [distribuidores, loading, error] = useDistribuidores();
+  const [distribuidores = [], loading, error] = useDistribuidores();
 
   return useMemo(() => {
     if (error) return [undefined, false, error];
@@ -63,7 +63,7 @@ const useAcumConsigna = (): [
   loading: boolean,
   error?: Error | string
 ] => {
-  const [consignas, loading, error] = useConsignas();
+  const [consignas = [], loading, error] = useConsignas();
   return useMemo(() => {
     if (error) return [undefined, false, error];
     if (loading) return [undefined, loading];
@@ -113,7 +113,7 @@ const useAcumFacturacion = (): [
   loading: boolean,
   error?: Error | string
 ] => {
-  const [facturaciones, loading, error] = useFacturaciones();
+  const [facturaciones = [], loading, error] = useFacturaciones();
   return useMemo(() => {
     if (error) return [undefined, false, error];
     if (loading) return [undefined, loading];

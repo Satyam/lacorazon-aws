@@ -17,7 +17,7 @@ import { deleteVendedor, useVendedores } from './common';
 
 export default function ListVendedores() {
   const history = useHistory();
-  const [vendedores, loading, error] = useVendedores();
+  const [vendedores = [], loading, error] = useVendedores();
 
   const { confirmDelete } = useModals();
 

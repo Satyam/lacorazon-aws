@@ -21,7 +21,7 @@ import { ShowIVA, calculoIVA } from 'App/iva/gadgets';
 const ListGastos: React.FC<{}> = () => {
   const history = useHistory();
 
-  const [gastos, loading, error] = useGastos();
+  const [gastos = [], loading, error] = useGastos();
 
   const { formatDate, formatCurrency } = useIntl();
   const { confirmDelete } = useModals();

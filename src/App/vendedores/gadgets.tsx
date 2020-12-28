@@ -19,7 +19,7 @@ export const DropdownVendedores: React.FC<DropdownVendedoresType> = ({
   methods,
   ...rest
 }) => {
-  const [vendedores, loading, error] = useVendedores();
+  const [vendedores = [], loading, error] = useVendedores();
 
   if (error) return <ErrorAlert error={error}>Cargando vendedores</ErrorAlert>;
   if (loading) return <img src={icon} alt="loading ..." />;

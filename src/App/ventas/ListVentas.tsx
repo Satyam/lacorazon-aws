@@ -25,7 +25,7 @@ const ListVentas: React.FC<{
 }> = ({ idVendedor, nombreVendedor, wide }) => {
   const history = useHistory();
 
-  const [ventas, loading, error] = useVentas();
+  const [ventas = [], loading, error] = useVentas();
 
   const { formatDate, formatCurrency } = useIntl();
   const { confirmDelete } = useModals();

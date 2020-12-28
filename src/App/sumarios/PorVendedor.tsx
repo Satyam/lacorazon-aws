@@ -41,7 +41,7 @@ const useInitVendedores = (): [
   loading: boolean,
   error?: Error | string
 ] => {
-  const [vendedores, loading, error] = useVendedores();
+  const [vendedores = [], loading, error] = useVendedores();
   return useMemo(() => {
     if (error) return [undefined, false, error];
     if (loading) return [undefined, loading];
@@ -65,7 +65,7 @@ const useAcumComisionesPagadas = (): [
   loading: boolean,
   error?: Error | string
 ] => {
-  const [comisiones, loading, error] = useComisiones();
+  const [comisiones = [], loading, error] = useComisiones();
   return useMemo(() => {
     if (error) return [undefined, false, error];
     if (loading) return [undefined, loading];
@@ -90,7 +90,7 @@ const useAcumVentas = (): [
   loading: boolean,
   error?: Error | string
 ] => {
-  const [ventas, loading, error] = useVentas();
+  const [ventas = [], loading, error] = useVentas();
   return useMemo(() => {
     if (error) return [undefined, false, error];
     if (loading) return [undefined, false];
@@ -136,7 +136,7 @@ const useAcumFacturacion = (): [
   loading: boolean,
   error?: Error | string
 ] => {
-  const [facturaciones, loading, error] = useFacturaciones();
+  const [facturaciones = [], loading, error] = useFacturaciones();
   return useMemo(() => {
     if (error) return [undefined, false, error];
     if (loading) return [undefined, loading];
