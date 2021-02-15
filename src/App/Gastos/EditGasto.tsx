@@ -18,7 +18,7 @@ import { ButtonIconAdd, ButtonIconDelete, ButtonSet } from '@satyam/react-form';
 import { Loading } from 'Components/Modals';
 import { ErrorAlert } from 'Components/ErrorAlert';
 import Page from 'Components/Page';
-import { useIntl } from 'Providers/Intl';
+import { useIntl } from '@satyam/react-form';
 import { useModals } from 'Providers/Modals';
 
 import { cuentas } from 'App/cuentas/gadgets';

@@ -12,7 +12,7 @@ import { useFacturaciones } from 'App/facturacion/common';
 import configs from 'App/config/';
 import { ShowVendedor } from 'App/vendedores/gadgets';
 import { ShowDistribuidor } from 'App/distribuidor/gadgets';
-import { useIntl } from 'Providers/Intl';
+import { useIntl } from '@satyam/react-form';
 import { cuentas, ShowCuenta } from 'App/cuentas/gadgets';
 import { YearTabs } from 'Components/gadgets';
 enum Origen {

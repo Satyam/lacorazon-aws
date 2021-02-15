@@ -21,7 +21,7 @@ import { Loading } from 'Components/Modals';
 import { useModals } from 'Providers/Modals';
 
 import { ErrorAlert } from 'Components/ErrorAlert';
-import { useIntl } from 'Providers/Intl';
+import { useIntl } from '@satyam/react-form';
 import { useDistribuidor } from 'App/distribuidor/common';
 import { useFacturaciones, createFacturacion } from 'App/facturacion/common';
 import { DropdownVendedores } from 'App/vendedores/gadgets';

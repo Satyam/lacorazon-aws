@@ -7,7 +7,7 @@ import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
 import { ErrorAlert } from 'Components/ErrorAlert';
 import { Alert } from 'reactstrap';
-import { useIntl } from 'Providers/Intl';
+import { useIntl } from '@satyam/react-form';
 
 import { useFacturacion } from './common';
 import { LabeledCuentas } from 'App/cuentas/gadgets';

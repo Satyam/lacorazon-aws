@@ -6,7 +6,7 @@ import { LabeledText } from '@satyam/react-form';
 import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
 import { ErrorAlert } from 'Components/ErrorAlert';
-import { useIntl } from 'Providers/Intl';
+import { useIntl } from '@satyam/react-form';
 import { byFecha } from 'Components/utils';
 import { useDistribuidor } from './common';
 import { useConsignas } from 'App/consigna/common';

@@ -9,7 +9,7 @@ import {
   ButtonIconView,
   IconView,
 } from '@satyam/react-form';
-import { useIntl } from 'Providers/Intl';
+import { useIntl } from '@satyam/react-form';
 import { Loading } from 'Components/Modals';
 import { ErrorAlert } from 'Components/ErrorAlert';
 import Page from 'Components/Page';
