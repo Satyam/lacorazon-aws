@@ -14,8 +14,8 @@ import {
   PercentField,
   CurrencyField,
   RadioField,
-} from 'Components/Form';
-import { ButtonIconAdd, ButtonSet } from 'Components/Icons';
+} from '@satyam/react-form';
+import { ButtonIconAdd, ButtonSet } from '@satyam/react-form';
 import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
 import { useModals } from 'Providers/Modals';

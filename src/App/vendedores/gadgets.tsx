@@ -3,11 +3,8 @@ import { useVendedor, useVendedores } from './common';
 import { Link } from 'react-router-dom';
 import ErrorAlert from 'Components/ErrorAlert';
 import icon from 'Components/Modals/loading.gif';
-import {
-  DropdownField,
-  DropdownFieldProps,
-} from 'Components/Form/DropdownField';
-import { LabeledText, LabeledTextProps } from 'Components/Form/LabeledField';
+import { DropdownField, DropdownFieldProps } from '@satyam/react-form';
+import { LabeledText, LabeledTextProps } from '@satyam/react-form';
 
 export type DropdownVendedoresType = {
   idVendedor?: string;

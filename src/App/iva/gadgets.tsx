@@ -1,11 +1,8 @@
 import React, { DOMAttributes } from 'react';
 
-import { LabeledText, LabeledTextProps } from 'Components/Form/LabeledField';
+import { LabeledText, LabeledTextProps } from '@satyam/react-form';
 
-import {
-  DropdownField,
-  DropdownFieldProps,
-} from 'Components/Form/DropdownField';
+import { DropdownField, DropdownFieldProps } from '@satyam/react-form';
 
 import { configs } from 'App/config';
 export type DropdownIVAType = Omit<
@@ -23,13 +20,10 @@ export const DropdownIVA: React.FC<DropdownIVAType> = ({
       {...rest}
       name={name}
       methods={methods}
-      options={configs.IVAs.reduce(
-        (opts, iva) => ({
-          ...opts,
-          [iva]: `${iva * 100}%`,
-        }),
-        {}
-      )}
+      options={configs.IVAs.map((iva) => ({
+        value: iva,
+        label: `${iva * 100}%`,
+      }))}
     />
   );
 };

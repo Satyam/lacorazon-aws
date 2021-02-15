@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
-import { LabeledText } from 'Components/Form';
+import { LabeledText } from '@satyam/react-form';
 
 import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';

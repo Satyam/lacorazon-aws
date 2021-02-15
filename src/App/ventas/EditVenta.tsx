@@ -11,11 +11,11 @@ import {
   CheckboxField,
   CurrencyField,
   SubmitButton,
-} from 'Components/Form';
+} from '@satyam/react-form';
 import { DropdownVendedores } from 'App/vendedores/gadgets';
 import { DropdownCuentas } from 'App/cuentas/gadgets';
 
-import { ButtonIconAdd, ButtonIconDelete, ButtonSet } from 'Components/Icons';
+import { ButtonIconAdd, ButtonIconDelete, ButtonSet } from '@satyam/react-form';
 import { Loading } from 'Components/Modals';
 import { ErrorAlert } from 'Components/ErrorAlert';
 import Page from 'Components/Page';

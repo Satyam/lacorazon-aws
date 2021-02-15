@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
-import { LabeledText, LabeledCheckbox } from 'Components/Form';
+import { LabeledText, LabeledCheckbox } from '@satyam/react-form';
 import { LabeledVendedores } from 'App/vendedores/gadgets';
 import { LabeledCuentas } from 'App/cuentas/gadgets';
 import Page from 'Components/Page';

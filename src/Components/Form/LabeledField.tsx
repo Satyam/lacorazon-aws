@@ -2,7 +2,7 @@ import React, { DOMAttributes } from 'react';
 import { LabelBox, LabelBoxProps } from './LabelBox';
 
 import classNames from 'classnames/bind';
-import { Checkmark } from 'Components/Icons';
+import { Checkmark } from '@satyam/react-form';
 import styles from './styles.module.css';
 
 const cx = classNames.bind(styles);

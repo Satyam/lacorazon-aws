@@ -11,10 +11,10 @@ import {
   DateField,
   SubmitButton,
   LabeledText,
-} from 'Components/Form';
+} from '@satyam/react-form';
 import { DropdownCuentas } from 'App/cuentas/gadgets';
 import { DropdownIVA, calculoIVA } from 'App/iva/gadgets';
-import { ButtonIconAdd, ButtonIconDelete, ButtonSet } from 'Components/Icons';
+import { ButtonIconAdd, ButtonIconDelete, ButtonSet } from '@satyam/react-form';
 import { Loading } from 'Components/Modals';
 import { ErrorAlert } from 'Components/ErrorAlert';
 import Page from 'Components/Page';
@@ -92,7 +92,7 @@ export default function EditGasto() {
       heading={`${idGasto ? 'Edit' : 'Add'} Gasto`}
     >
       {idGasto && !gasto ? (
-        <Alert color="danger">La gasto no existe o fue borrada</Alert>
+        <Alert color="danger">El gasto no existe o fue borrado</Alert>
       ) : (
         <Form onSubmit={methods.handleSubmit(onSubmit)}>
           <DateField name="fecha" label="Fecha" methods={methods} />

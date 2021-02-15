@@ -10,7 +10,7 @@ import {
   ButtonIconCobrar,
   ButtonIconInvoice,
   IconInfo,
-} from 'Components/Icons';
+} from '@satyam/react-form';
 
 import { useIntl } from 'Providers/Intl';
 import {
