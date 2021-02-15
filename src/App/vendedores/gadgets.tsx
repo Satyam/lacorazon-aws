@@ -8,7 +8,7 @@ import { LabeledText, LabeledTextProps } from '@satyam/react-form';
 
 export type DropdownVendedoresType = {
   idVendedor?: string;
-} & Omit<DropdownFieldProps, 'options' | 'optLabel' | 'optValue'>;
+} & Omit<DropdownFieldProps, 'options'>;
 
 export const DropdownVendedores: React.FC<DropdownVendedoresType> = ({
   idVendedor,
@@ -26,9 +26,10 @@ export const DropdownVendedores: React.FC<DropdownVendedoresType> = ({
         {...rest}
         name={name}
         methods={methods}
-        options={vendedores}
-        optLabel="nombre"
-        optValue="idVendedor"
+        options={vendedores.map((v) => ({
+          value: v.idVendedor,
+          label: v.nombre,
+        }))}
       />
     );
   }

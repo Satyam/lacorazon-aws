@@ -18,7 +18,7 @@ export const cuentas: Record<ID, CuentaType> = {
 
 export type DropdownCuentasType = {
   idCuenta?: string;
-} & Omit<DropdownFieldProps, 'options' | 'optLabel' | 'optValue'>;
+} & Omit<DropdownFieldProps, 'options'>;
 
 export const DropdownCuentas: React.FC<DropdownCuentasType> = ({
   idCuenta,
@@ -31,9 +31,10 @@ export const DropdownCuentas: React.FC<DropdownCuentasType> = ({
       {...rest}
       name={name}
       methods={methods}
-      options={Object.values(cuentas)}
-      optLabel="descr"
-      optValue="idCuenta"
+      options={Object.values(cuentas).map((c) => ({
+        value: c.idCuenta,
+        label: c.descr,
+      }))}
     />
   );
 };

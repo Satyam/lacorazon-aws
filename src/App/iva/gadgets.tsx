@@ -5,10 +5,7 @@ import { LabeledText, LabeledTextProps } from '@satyam/react-form';
 import { DropdownField, DropdownFieldProps } from '@satyam/react-form';
 
 import { configs } from 'App/config';
-export type DropdownIVAType = Omit<
-  DropdownFieldProps,
-  'options' | 'optLabel' | 'optValue'
->;
+export type DropdownIVAType = Omit<DropdownFieldProps, 'options'>;
 
 export const DropdownIVA: React.FC<DropdownIVAType> = ({
   name,
