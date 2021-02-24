@@ -24,12 +24,23 @@ import styles from './styles.module.css';
 
 export const Navigation: React.FC = ({ children }) => {
   const [isOpen, setOpen] = useState(false);
-  const { locale, setLocale, locales } = useIntl();
+  const {
+    locale,
+    setLocale,
+    locales,
+    setCurrency,
+    getCurrencyForCountry,
+  } = useIntl();
 
   function toggle() {
     setOpen(!isOpen);
   }
-
+  const changeLocale = (l: string) => () => {
+    if (l !== locale) {
+      setLocale(l);
+      setCurrency(getCurrencyForCountry(l));
+    }
+  };
   return (
     <div>
       <Navbar expand="md" light className={styles.navbar}>
@@ -54,7 +65,7 @@ export const Navigation: React.FC = ({ children }) => {
                   <DropdownItem
                     key={l}
                     active={l === locale}
-                    onClick={() => setLocale(l)}
+                    onClick={changeLocale(l)}
                   >
                     {l}
                   </DropdownItem>
