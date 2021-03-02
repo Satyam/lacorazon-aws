@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from 'reactstrap';
-import { MyButtonProps } from 'Components/Icons';
+import { MyButtonProps } from '@bit/satyam.components.icons-and-buttons';
 import { UseFormMethods } from 'react-hook-form';
 
 export type SubmitButtonProps = MyButtonProps & {

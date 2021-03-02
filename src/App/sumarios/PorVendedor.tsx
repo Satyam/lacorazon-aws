@@ -10,7 +10,7 @@ import { useVentas } from 'App/ventas/common';
 import { useFacturaciones } from 'App/facturacion/common';
 import configs from 'App/config/';
 import { ShowVendedor } from 'App/vendedores/gadgets';
-import { useIntl } from 'Providers/Intl';
+import { useIntl } from '@bit/satyam.components.intl-provider';
 
 type Vendedor = {
   idVendedor: ID;

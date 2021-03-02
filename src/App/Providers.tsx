@@ -2,7 +2,7 @@ import React from 'react';
 
 // Router is, indeed, a context provider
 import { BrowserRouter as Router } from 'react-router-dom';
-import { IntlProvider } from 'Providers/Intl';
+import { IntlProvider } from '@bit/satyam.components.intl-provider';
 import { ModalsProvider } from 'Providers/Modals';
 
 const Providers: React.FC<{}> = ({ children }) => (

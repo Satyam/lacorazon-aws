@@ -6,7 +6,7 @@ import { LabeledText } from 'Components/Form';
 import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
 import { ErrorAlert } from 'Components/ErrorAlert';
-import { useIntl } from 'Providers/Intl';
+import { useIntl } from '@bit/satyam.components.intl-provider';
 import { byFecha } from 'Components/utils';
 import { useDistribuidor } from './common';
 import { useConsignas } from 'App/consigna/common';

@@ -7,8 +7,8 @@ import {
   ButtonIconEdit,
   ButtonIconDelete,
   Checkmark,
-} from 'Components/Icons';
-import { useIntl } from 'Providers/Intl';
+} from '@bit/satyam.components.icons-and-buttons';
+import { useIntl } from '@bit/satyam.components.intl-provider';
 import { Loading } from 'Components/Modals';
 import { ErrorAlert } from 'Components/ErrorAlert';
 import Page from 'Components/Page';

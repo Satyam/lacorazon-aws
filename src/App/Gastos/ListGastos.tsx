@@ -6,9 +6,9 @@ import {
   ButtonIconEdit,
   ButtonIconDelete,
   ButtonIconAdd,
-} from 'Components/Icons';
+} from '@bit/satyam.components.icons-and-buttons';
 
-import { useIntl } from 'Providers/Intl';
+import { useIntl } from '@bit/satyam.components.intl-provider';
 import { Loading } from 'Components/Modals';
 import { ErrorAlert } from 'Components/ErrorAlert';
 import Page from 'Components/Page';
