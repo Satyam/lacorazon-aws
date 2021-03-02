@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import firebase from 'firebase';
 import { auth, login, logout } from 'Firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import ErrorAlert from 'Components/ErrorAlert';
@@ -15,11 +14,7 @@ export const WithRole: React.FC<{
   ofreceLogin?: boolean;
   alt?: React.ReactNode;
 }> = ({ children, role, alerta, ofreceLogin, alt }) => {
-  const [authUser, loading, error]: [
-    firebase.User | undefined,
-    boolean,
-    any
-  ] = useAuthState(auth);
+  const [authUser, loading, error] = useAuthState(auth);
   const [claims, setClaims] = useState<
     Record<string, any> | undefined | null
   >();
