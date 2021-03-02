@@ -9,7 +9,7 @@ import {
   useSumarioDistribuidores,
   SumarioPorDistribuidor,
 } from 'App/distribuidor/useSumarioDistribuidores';
-import { useIntl } from '@bit/satyam.components.intl-provider';
+import { useIntl } from 'Providers/Intl';
 
 const SumarioDistribuidores: React.FC = () => {
   const [

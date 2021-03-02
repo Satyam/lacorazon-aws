@@ -14,15 +14,11 @@ import {
 } from 'Components/Form';
 import { DropdownCuentas } from 'App/cuentas/gadgets';
 import { DropdownIVA, calculoIVA } from 'App/iva/gadgets';
-import {
-  ButtonIconAdd,
-  ButtonIconDelete,
-  ButtonSet,
-} from '@bit/satyam.components.icons-and-buttons';
+import { ButtonIconAdd, ButtonIconDelete, ButtonSet } from 'Components/Icons';
 import { Loading } from 'Components/Modals';
 import { ErrorAlert } from 'Components/ErrorAlert';
 import Page from 'Components/Page';
-import { useIntl } from '@bit/satyam.components.intl-provider';
+import { useIntl } from 'Providers/Intl';
 import { useModals } from 'Providers/Modals';
 
 import { cuentas } from 'App/cuentas/gadgets';

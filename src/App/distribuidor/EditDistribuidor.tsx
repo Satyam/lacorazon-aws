@@ -8,11 +8,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 // My own library imports
 import { TextField, SubmitButton } from 'Components/Form';
-import {
-  ButtonIconAdd,
-  ButtonIconDelete,
-  ButtonSet,
-} from '@bit/satyam.components.icons-and-buttons';
+import { ButtonIconAdd, ButtonIconDelete, ButtonSet } from 'Components/Icons';
 import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
 import { ErrorAlert } from 'Components/ErrorAlert';

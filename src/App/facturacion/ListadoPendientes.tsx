@@ -10,9 +10,9 @@ import {
   ButtonIconCobrar,
   ButtonIconInvoice,
   IconInfo,
-} from '@bit/satyam.components.icons-and-buttons';
+} from 'Components/Icons';
 
-import { useIntl } from '@bit/satyam.components.intl-provider';
+import { useIntl } from 'Providers/Intl';
 import {
   useSumarioDistribuidores,
   SumarioPorDistribuidor,

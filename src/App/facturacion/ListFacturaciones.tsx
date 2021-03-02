@@ -8,8 +8,8 @@ import {
   ButtonIconDelete,
   ButtonIconView,
   IconView,
-} from '@bit/satyam.components.icons-and-buttons';
-import { useIntl } from '@bit/satyam.components.intl-provider';
+} from 'Components/Icons';
+import { useIntl } from 'Providers/Intl';
 import { Loading } from 'Components/Modals';
 import { ErrorAlert } from 'Components/ErrorAlert';
 import Page from 'Components/Page';

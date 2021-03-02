@@ -7,7 +7,7 @@ import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
 import { ErrorAlert } from 'Components/ErrorAlert';
 import { Alert } from 'reactstrap';
-import { useIntl } from '@bit/satyam.components.intl-provider';
+import { useIntl } from 'Providers/Intl';
 
 import { useGasto } from './common';
 import { LabeledCuentas } from 'App/cuentas/gadgets';

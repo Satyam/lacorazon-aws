@@ -17,7 +17,7 @@ import { Link } from 'react-router-dom';
 import { FaUser } from 'react-icons/fa';
 import firebase from 'firebase';
 import { login, logout } from 'Firebase';
-import { useIntl } from '@bit/satyam.components.intl-provider';
+import { useIntl } from 'Providers/Intl';
 import { WithRole, ADMIN, OPERADOR, VER } from 'App/users/gadgets';
 
 import styles from './styles.module.css';

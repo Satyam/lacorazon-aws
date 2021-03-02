@@ -6,7 +6,7 @@ import ReactDatePicker, { ReactDatePickerProps } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import classNames from 'classnames';
 
-import { useIntl } from '@bit/satyam.components.intl-provider';
+import { useIntl } from 'Providers/Intl';
 
 export type DateFieldProps = LabelInputBoxProps & {
   validation?: RegisterOptions;

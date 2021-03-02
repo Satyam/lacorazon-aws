@@ -15,16 +15,13 @@ import {
   CurrencyField,
   RadioField,
 } from 'Components/Form';
-import {
-  ButtonIconAdd,
-  ButtonSet,
-} from '@bit/satyam.components.icons-and-buttons';
+import { ButtonIconAdd, ButtonSet } from 'Components/Icons';
 import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
 import { useModals } from 'Providers/Modals';
 
 import { ErrorAlert } from 'Components/ErrorAlert';
-import { useIntl } from '@bit/satyam.components.intl-provider';
+import { useIntl } from 'Providers/Intl';
 import { useDistribuidor } from 'App/distribuidor/common';
 import { useFacturaciones, createFacturacion } from 'App/facturacion/common';
 import { DropdownVendedores } from 'App/vendedores/gadgets';
