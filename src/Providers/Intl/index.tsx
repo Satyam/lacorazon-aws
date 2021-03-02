@@ -2,10 +2,11 @@ import React, { createContext, useContext, useState, useMemo } from 'react';
 
 import { format } from 'date-fns';
 import { enUS, es } from 'date-fns/locale';
+import { getCurrency } from 'locale-currency';
 
 import { registerLocale, setDefaultLocale } from 'react-datepicker';
 
-const localeTables: { [index: string]: any } = { 'en-US': enUS, 'es-ES': es };
+const localeTables: Record<string, any> = { 'en-US': enUS, 'es-ES': es };
 
 Object.keys(localeTables).forEach((l) => registerLocale(l, localeTables[l]));
 
@@ -20,6 +21,7 @@ type intlType = {
   currencySign: string;
   currencySignPrepend: boolean;
   currencyDecimals: number;
+  getCurrencyForCountry: (locale: string) => string;
 };
 
 const notImplemented = () => {
@@ -31,41 +33,76 @@ const initialValues = {
   setLocale: notImplemented,
   locale: navigator.language,
   formatDate: notImplemented,
-  currency: 'EUR',
+  currency: getCurrency(navigator.language),
   setCurrency: notImplemented,
   formatCurrency: notImplemented,
   currencySign: '$',
   currencySignPrepend: true,
   currencyDecimals: 2,
+  getCurrencyForCountry: getCurrency,
 };
 
 export const IntlContext = createContext<intlType>(initialValues);
 
-const currRegExp = /(.*)\s*12(.)(\d*)\s*(.*)/;
-
 export const IntlProvider: React.FC<{
   locale?: string;
   currency?: string;
-}> = ({ locale: l = navigator.language, currency: c = 'EUR', children }) => {
+}> = ({ locale: l = navigator.language, currency: c, children }) => {
   const [locale, setLocale] = useState(l);
-  const [currency, setCurrency] = useState(c);
+  const [currency, setCurrency] = useState(
+    c || getCurrency(l || navigator.language)
+  );
 
   const ctx = useMemo<intlType>(() => {
+    // for DatePicker
+    setDefaultLocale(locale);
+
     const currFormatter = new Intl.NumberFormat(locale, {
       style: 'currency',
       currency,
     });
 
-    const sample = currFormatter.format(12.345);
-    const sampleParts = currRegExp.exec(sample) || [
-      '12,35 €',
-      '',
-      ',',
-      '35',
-      '€',
-    ];
-    setDefaultLocale(locale);
-    const currencyDecimals = sampleParts[3].length;
+    const {
+      currencyDecimals,
+      currencySign,
+      currencySignPrepend,
+    } = currFormatter.formatToParts(12.345).reduce<{
+      currencyDecimals: number;
+      currencySign: string;
+      currencySignPrepend: boolean;
+      // n is auxiliary, to be ignored
+      n: boolean;
+    }>(
+      (ps, { type, value }) => {
+        switch (type) {
+          case 'integer':
+            return {
+              ...ps,
+              n: true,
+            };
+          case 'fraction':
+            return {
+              ...ps,
+              currencyDecimals: value.length,
+            };
+          case 'currency':
+            return {
+              ...ps,
+              currencySign: value,
+              currencySignPrepend: !ps.n,
+            };
+          default:
+            return ps;
+        }
+      },
+      {
+        currencyDecimals: 0,
+        currencySign: '',
+        currencySignPrepend: false,
+        n: false,
+      }
+    );
+
     const plainCurrencyFormatter = new Intl.NumberFormat(locale, {
       style: 'decimal',
       minimumFractionDigits: currencyDecimals,
@@ -89,9 +126,10 @@ export const IntlProvider: React.FC<{
             ? plainCurrencyFormatter.format(value)
             : currFormatter.format(value)
           : '',
-      currencySign: sampleParts[1] || sampleParts[4],
-      currencySignPrepend: !!sampleParts[1],
+      getCurrencyForCountry: getCurrency,
       currencyDecimals,
+      currencySign,
+      currencySignPrepend,
     };
   }, [locale, currency]);
 

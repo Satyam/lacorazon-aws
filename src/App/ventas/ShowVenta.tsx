@@ -1,14 +1,14 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
-import { LabeledText, LabeledCheckbox } from '@satyam/react-form';
+import { LabeledText, LabeledCheckbox } from 'Components/Form';
 import { LabeledVendedores } from 'App/vendedores/gadgets';
 import { LabeledCuentas } from 'App/cuentas/gadgets';
 import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
 import { ErrorAlert } from 'Components/ErrorAlert';
 import { Alert } from 'reactstrap';
-import { useIntl } from '@satyam/react-form';
+import { useIntl } from 'Providers/Intl';
 
 import { useVenta } from './common';
 

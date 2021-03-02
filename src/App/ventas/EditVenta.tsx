@@ -11,15 +11,15 @@ import {
   CheckboxField,
   CurrencyField,
   SubmitButton,
-} from '@satyam/react-form';
+} from 'Components/Form';
 import { DropdownVendedores } from 'App/vendedores/gadgets';
 import { DropdownCuentas } from 'App/cuentas/gadgets';
 
-import { ButtonIconAdd, ButtonIconDelete, ButtonSet } from '@satyam/react-form';
+import { ButtonIconAdd, ButtonIconDelete, ButtonSet } from 'Components/Icons';
 import { Loading } from 'Components/Modals';
 import { ErrorAlert } from 'Components/ErrorAlert';
 import Page from 'Components/Page';
-import { useIntl } from '@satyam/react-form';
+import { useIntl } from 'Providers/Intl';
 import { useModals } from 'Providers/Modals';
 
 import { useVenta, updateVenta, createVenta, deleteVenta } from './common';

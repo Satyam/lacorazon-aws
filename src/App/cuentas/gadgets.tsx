@@ -1,8 +1,8 @@
 import React, { DOMAttributes } from 'react';
 import { Badge } from 'reactstrap';
 
-import { LabeledText, LabeledTextProps } from '@satyam/react-form';
-import { DropdownField, DropdownFieldProps } from '@satyam/react-form';
+import { LabeledText, LabeledTextProps } from 'Components/Form';
+import { DropdownField, DropdownFieldProps } from 'Components/Form';
 export const cuentas: Record<ID, CuentaType> = {
   efvoRoxy: {
     idCuenta: 'efvoRoxy',

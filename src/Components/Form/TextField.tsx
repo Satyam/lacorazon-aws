@@ -33,7 +33,7 @@ export const TextField: React.FC<TextFieldProps> = ({
     {({ name, id, hasError, methods }) => (
       <Input
         name={name}
-        type={type || (rows ? 'textarea' : 'text')}
+        type={type && type !== 'text' ? type : rows ? 'textarea' : 'text'}
         invalid={hasError}
         rows={rows}
         id={id}

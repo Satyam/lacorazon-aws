@@ -3,7 +3,7 @@ import { LabelInputBox, LabelInputBoxProps } from './LabelBox';
 
 import { Input, InputProps, InputGroup, InputGroupAddon } from 'reactstrap';
 import { RegisterOptions, Controller } from 'react-hook-form';
-import { useIntl } from '@satyam/react-form';
+import { useIntl } from 'Providers/Intl';
 export type CurrencyFieldProps = LabelInputBoxProps &
   InputProps & {
     validation?: RegisterOptions;

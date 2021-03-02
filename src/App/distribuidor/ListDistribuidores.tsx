@@ -6,7 +6,7 @@ import {
   ButtonIconAdd,
   ButtonIconEdit,
   ButtonIconDelete,
-} from '@satyam/react-form';
+} from 'Components/Icons';
 import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
 import { ErrorAlert } from 'Components/ErrorAlert';

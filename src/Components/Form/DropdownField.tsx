@@ -7,11 +7,7 @@ import { RegisterOptions } from 'react-hook-form';
 export type DropdownFieldProps = LabelInputBoxProps &
   InputProps & {
     validation?: RegisterOptions;
-    optValue?: string;
-    optLabel?: string;
-    options:
-      | Record<string, string | number>[]
-      | Record<string, string | number>;
+    options: Record<string, string | number>[];
     noOption?: boolean;
   };
 
@@ -26,8 +22,6 @@ export const DropdownField: React.FC<DropdownFieldProps> = ({
   validation,
   // for dropdown
   options,
-  optValue = 'id',
-  optLabel = 'nombre',
   noOption = false,
   ...rest
 }) => (
@@ -52,17 +46,11 @@ export const DropdownField: React.FC<DropdownFieldProps> = ({
             {' ----   '}
           </option>
         )}
-        {Array.isArray(options)
-          ? options.map((o) => (
-              <option key={o[optValue]} value={o[optValue]}>
-                {o[optLabel]}
-              </option>
-            ))
-          : Object.keys(options).map((key) => (
-              <option key={key} value={key}>
-                {options[key]}
-              </option>
-            ))}
+        {options.map((o) => (
+          <option key={o.value} value={o.value}>
+            {o.label}
+          </option>
+        ))}
       </Input>
     )}
   </LabelInputBox>

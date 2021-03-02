@@ -1,13 +1,13 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
-import { LabeledText } from '@satyam/react-form';
+import { LabeledText } from 'Components/Form';
 
 import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
 import { ErrorAlert } from 'Components/ErrorAlert';
 import { Alert } from 'reactstrap';
-import { useIntl } from '@satyam/react-form';
+import { useIntl } from 'Providers/Intl';
 
 import { useGasto } from './common';
 import { LabeledCuentas } from 'App/cuentas/gadgets';

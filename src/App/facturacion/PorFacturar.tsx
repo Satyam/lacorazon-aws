@@ -14,14 +14,14 @@ import {
   PercentField,
   CurrencyField,
   RadioField,
-} from '@satyam/react-form';
-import { ButtonIconAdd, ButtonSet } from '@satyam/react-form';
+} from 'Components/Form';
+import { ButtonIconAdd, ButtonSet } from 'Components/Icons';
 import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
 import { useModals } from 'Providers/Modals';
 
 import { ErrorAlert } from 'Components/ErrorAlert';
-import { useIntl } from '@satyam/react-form';
+import { useIntl } from 'Providers/Intl';
 import { useDistribuidor } from 'App/distribuidor/common';
 import { useFacturaciones, createFacturacion } from 'App/facturacion/common';
 import { DropdownVendedores } from 'App/vendedores/gadgets';

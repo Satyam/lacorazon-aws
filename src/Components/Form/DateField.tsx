@@ -6,7 +6,7 @@ import ReactDatePicker, { ReactDatePickerProps } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import classNames from 'classnames';
 
-import { useIntl } from '@satyam/react-form';
+import { useIntl } from 'Providers/Intl';
 
 export type DateFieldProps = LabelInputBoxProps & {
   validation?: RegisterOptions;
@@ -46,24 +46,6 @@ export const DateField: React.FC<DateFieldProps> = ({
       methods={methods}
     >
       {({ name, id, hasError, methods }) => {
-        let actualMin = minDate;
-        let actualMax = maxDate;
-
-        // if (validationSchema) {
-        //   const tests = validationSchema.fields[name].tests;
-        //   if (!actualMin) {
-        //     const minTest = tests.filter(t => t.TEST_NAME === 'min')[0];
-        //     if (minTest) {
-        //       actualMin = minTest.TEST.params.min;
-        //     }
-        //   }
-        //   if (!actualMax) {
-        //     const maxTest = tests.filter(t => t.TEST_NAME === 'max')[0];
-        //     if (maxTest) {
-        //       actualMax = maxTest.TEST.params.max;
-        //     }
-        //   }
-        // }
         return (
           <Controller
             render={({ onBlur, onChange, name, value, ref }) => {
@@ -80,8 +62,8 @@ export const DateField: React.FC<DateFieldProps> = ({
                   selected={value}
                   dateFormat="P"
                   id={id}
-                  minDate={actualMin}
-                  maxDate={actualMax}
+                  minDate={minDate}
+                  maxDate={maxDate}
                   {...rest}
                 />
               );

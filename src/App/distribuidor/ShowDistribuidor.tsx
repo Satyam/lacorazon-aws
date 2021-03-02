@@ -2,11 +2,11 @@ import React from 'react';
 import { Alert, Table } from 'reactstrap';
 import { useParams } from 'react-router-dom';
 
-import { LabeledText } from '@satyam/react-form';
+import { LabeledText } from 'Components/Form';
 import Page from 'Components/Page';
 import { Loading } from 'Components/Modals';
 import { ErrorAlert } from 'Components/ErrorAlert';
-import { useIntl } from '@satyam/react-form';
+import { useIntl } from 'Providers/Intl';
 import { byFecha } from 'Components/utils';
 import { useDistribuidor } from './common';
 import { useConsignas } from 'App/consigna/common';

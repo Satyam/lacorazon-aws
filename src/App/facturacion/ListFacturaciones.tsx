@@ -8,8 +8,8 @@ import {
   ButtonIconDelete,
   ButtonIconView,
   IconView,
-} from '@satyam/react-form';
-import { useIntl } from '@satyam/react-form';
+} from 'Components/Icons';
+import { useIntl } from 'Providers/Intl';
 import { Loading } from 'Components/Modals';
 import { ErrorAlert } from 'Components/ErrorAlert';
 import Page from 'Components/Page';

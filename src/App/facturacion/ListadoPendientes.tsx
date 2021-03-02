@@ -10,9 +10,9 @@ import {
   ButtonIconCobrar,
   ButtonIconInvoice,
   IconInfo,
-} from '@satyam/react-form';
+} from 'Components/Icons';
 
-import { useIntl } from '@satyam/react-form';
+import { useIntl } from 'Providers/Intl';
 import {
   useSumarioDistribuidores,
   SumarioPorDistribuidor,
