@@ -3,17 +3,6 @@ declare module '*.jpg';
 declare module '*.gif';
 
 declare global {
-  type BootstrapColor =
-    | 'primary'
-    | 'secondary'
-    | 'success'
-    | 'warning'
-    | 'danger'
-    | 'info'
-    | 'dark'
-    | 'light';
-  type BootstrapSize = 'sm' | 'md' | 'lg';
-
   type ID = string;
 
   type DistribuidorType = {

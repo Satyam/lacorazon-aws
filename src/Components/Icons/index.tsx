@@ -21,6 +21,17 @@ import { AiOutlineDollarCircle } from 'react-icons/ai';
 import styles from './styles.module.css';
 import { Link } from 'react-router-dom';
 
+export type BootstrapColor =
+  | 'primary'
+  | 'secondary'
+  | 'success'
+  | 'warning'
+  | 'danger'
+  | 'info'
+  | 'dark'
+  | 'light';
+export type BootstrapSize = 'sm' | 'md' | 'lg';
+
 export type MyButtonProps = {
   color?: BootstrapColor;
   href?: string;
